@@ -1,0 +1,2107 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cuaderno de obra GDC</title>
+<style>img{max-width:100%}</style>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<style>
+/* Sistema de diseño compartido con Concreto Armado 1 (UDEP): Clean SaaS / Shadcn UI */
+:root{
+  --ground:#f9fafb;
+  --surface:#ffffff;
+  --surface2:#f8fafc;
+  --hover:#f1f5f9;
+  --ink:#111827;
+  --ink2:#374151;
+  --muted:#6b7280;
+  --dim:#9ca3af;
+  --line:#e5e7eb;
+  --lineSoft:#f3f4f6;
+  --brand:#004b87;
+  --brandDeep:#003663;
+  --brandSoft:#e6f0f8;
+  --brandGlow:rgba(0,75,135,.12);
+  --good:#059669;
+  --goodText:#065f46;
+  --goodSoft:#ecfdf5;
+  --warn:#b45309;
+  --warnText:#92400e;
+  --warnSoft:#fffbeb;
+  --crit:#dc2626;
+  --critText:#991b1b;
+  --critSoft:#fef2f2;
+  --sh-xs:0 1px 2px 0 rgba(0,0,0,.05);
+  --sh-sm:0 1px 3px 0 rgba(0,0,0,.08),0 1px 2px -1px rgba(0,0,0,.08);
+  --sh-md:0 4px 6px -1px rgba(0,0,0,.07),0 2px 4px -2px rgba(0,0,0,.05);
+  --r-sm:6px; --r-md:8px; --r-lg:12px;
+  --body:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --cond:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --mono:"JetBrains Mono","SF Mono",Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink2);font-family:var(--body);font-size:14.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:24px;padding-block:0 64px}
+h1,h2,h3{margin:0;color:var(--ink);letter-spacing:-.01em;text-wrap:balance}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--brand)}
+:focus-visible{outline:none;box-shadow:0 0 0 3px var(--brandGlow);border-radius:var(--r-sm)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.eyebrow{font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.subtle{color:var(--muted);font-size:.83rem}
+[hidden]{display:none!important}
+
+/* ---- barra superior institucional ---- */
+.topbar{background:var(--surface);border-bottom:1px solid var(--line);box-shadow:var(--sh-xs);position:sticky;top:0;z-index:50}
+.topbar .wrap{padding-block:0}
+.brandrow{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding-block:12px}
+.udep{background:var(--brand);color:#fff;font-weight:700;font-size:.78rem;padding:6px 11px;border-radius:var(--r-sm);letter-spacing:.06em;box-shadow:var(--sh-xs)}
+.brandrow h1{font-size:1.02rem;font-weight:600}
+.sigla{font-family:var(--mono);font-size:.72rem;color:var(--brand);background:var(--brandSoft);border:1px solid rgba(0,75,135,.15);border-radius:9999px;padding:3px 10px;font-weight:600}
+.brandrow .subtle{flex-basis:100%;margin-top:-6px;padding-left:66px}
+
+.subhead .wrap{padding-block:0}
+.hitos{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;padding-block:18px 14px}
+.hito{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:10px 14px;box-shadow:var(--sh-xs)}
+.hito .k{font-size:.68rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.hito .v{font-family:var(--mono);font-size:1.05rem;font-weight:700;color:var(--brand);line-height:1.3;margin-top:2px}
+.hito .n{font-size:.78rem;color:var(--muted)}
+.hito.urg .v{color:var(--crit)}
+
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line)}
+.tab{background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;padding:10px 16px;white-space:nowrap;color:var(--muted);font-size:.875rem;font-weight:500;display:inline-flex;align-items:center;gap:8px;transition:color .15s,border-color .15s}
+.tab svg{width:16px;height:16px;flex:none}
+.tab:hover{color:var(--ink);border-bottom-color:#cbd5e1}
+.tab[aria-selected="true"]{color:var(--brand);border-bottom-color:var(--brand);font-weight:600}
+
+/* ---- tarjetas base ---- */
+.card,.unidad,.plan,.ej,.carta,.tile,.lista,.examen,.headline,.hito{transition:box-shadow .2s}
+.unidad{margin-top:22px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh-sm);overflow:hidden}
+.unidad-h{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;border:0;border-bottom:1px solid var(--lineSoft);padding:14px 18px;background:var(--surface2);width:100%;text-align:left}
+.unidad-h .cod{font-family:var(--mono);font-size:.78rem;color:var(--brand);font-weight:700;background:var(--brandSoft);border-radius:var(--r-sm);padding:3px 8px}
+.unidad-h h2{font-size:.98rem;font-weight:600;flex:1}
+.unidad-h .pct{font-family:var(--mono);font-size:.8rem;color:var(--muted);font-weight:600}
+.unidad-h .caret{font-family:var(--mono);font-size:1rem;color:var(--brand);width:16px;text-align:center}
+
+.fila{border-bottom:1px solid var(--lineSoft);background:var(--surface)}
+.fila:last-child{border-bottom:0}
+.fila-b{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;width:100%;text-align:left;background:none;border:0;padding:12px 18px;transition:background .15s}
+.fila-b:hover{background:var(--hover)}
+.fila-b .cod{font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+.fila-b .tit{font-weight:500;color:var(--ink)}
+.fila-b .sem{font-size:.7rem;letter-spacing:.04em;text-transform:uppercase;color:var(--dim);display:block;margin-top:1px}
+.medidor{display:flex;align-items:center;gap:8px}
+.barra{width:84px;height:6px;background:#e2e8f0;border-radius:9999px;overflow:hidden}
+.barra i{display:block;height:100%;background:var(--brand);border-radius:9999px}
+.medidor .p{font-family:var(--mono);font-size:.75rem;color:var(--muted);min-width:34px;text-align:right}
+.fila[data-open="true"]{background:var(--surface);box-shadow:inset 4px 0 0 var(--brand)}
+.fila[data-open="true"] .fila-b{background:var(--brandSoft)}
+
+.panel{padding:6px 18px 20px}
+.panel h3{font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+.panel ul{margin:0;padding-left:18px}
+.panel li{margin-bottom:5px}
+.panel-u{background:var(--surface);border-bottom:1px solid var(--lineSoft)}
+.panel-u .intro{margin:10px 0 0;max-width:76ch;color:var(--ink2)}
+.cita{margin:12px 0 0;padding:12px 14px;border-left:4px solid var(--brand);background:var(--surface2);border-radius:0 var(--r-md) var(--r-md) 0;font-style:italic;color:var(--ink2);max-width:72ch}
+.ruta{margin:0;padding-left:20px}
+.ruta>li{margin-bottom:9px}
+.ruta>li>b{font-weight:600;color:var(--ink)}
+.ruta ul{margin:3px 0 0;padding-left:16px}
+.ruta ul li{color:var(--ink2)}
+
+.chk{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+.chk li{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);margin:0;box-shadow:var(--sh-xs);transition:border-color .15s,background .15s}
+.chk li:hover{border-color:#cbd5e1;background:var(--surface2)}
+.chk button{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;width:100%;text-align:left;background:none;border:0;padding:10px 12px;line-height:1.5;border-radius:var(--r-md)}
+.mark{width:18px;height:18px;border:1.5px solid #cbd5e1;border-radius:4px;margin-top:2px;font-family:var(--mono);font-size:11px;font-weight:700;display:grid;place-items:center;color:transparent;flex:none;background:#fff}
+.chk li[data-s="1"]{border-color:rgba(217,119,6,.35);background:var(--warnSoft)}
+.chk li[data-s="1"] .mark{border-color:var(--warn);color:var(--warn)}
+.chk li[data-s="2"]{border-color:rgba(5,150,105,.3);background:var(--goodSoft)}
+.chk li[data-s="2"] .mark{border-color:var(--good);background:var(--good);color:#fff}
+.chk li[data-s="2"] .txt{color:var(--goodText)}
+.leyenda{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;font-size:.78rem;color:var(--muted)}
+.leyenda span{display:flex;align-items:center;gap:5px}
+.dot{width:10px;height:10px;border-radius:3px;border:1.5px solid #cbd5e1;background:#fff}
+.dot.e{background:var(--warnSoft);border-color:var(--warn)}
+.dot.d{background:var(--good);border-color:var(--good)}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.72rem;font-weight:600;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:9999px;padding:3px 10px;color:#475569;letter-spacing:.2px}
+.chip.pdf::before{content:"PDF ";color:var(--crit)}
+
+.linkrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{font-weight:600;font-size:.85rem;background:var(--brand);color:#fff;border:0;border-radius:var(--r-md);padding:9px 18px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;box-shadow:var(--sh-sm);transition:background .15s,box-shadow .15s,transform .1s}
+.btn:hover{background:var(--brandDeep);box-shadow:var(--sh-md)}
+.btn:active{transform:scale(.99)}
+.btn.ghost{background:var(--brandSoft);color:var(--brand);border:1px solid rgba(0,75,135,.2);box-shadow:none}
+.btn.ghost:hover{background:var(--brand);color:#fff}
+.btn.mini{padding:6px 12px;font-size:.78rem}
+input[type="url"],input[type="text"],textarea,select{font-family:var(--body);font-size:.85rem;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:var(--r-md);padding:8px 12px;width:100%;box-shadow:var(--sh-xs);transition:border-color .15s,box-shadow .15s}
+input:focus,textarea:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brandGlow);outline:none}
+select{height:38px;font-weight:500;cursor:pointer}
+textarea{min-height:76px;resize:vertical}
+
+/* ---- plan de práctica ---- */
+.plan{margin-top:22px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh-sm);padding:18px 20px 16px;border-top:4px solid var(--brand)}
+.plan-h h2{font-size:1.1rem;font-weight:600;margin-top:4px}
+.plan .cita{margin-top:12px;font-size:.88rem}
+.plan .cita a{display:block;margin-top:8px;font-style:normal;font-weight:600;font-size:.78rem;text-decoration:none}
+.bloques{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:14px}
+.bloque{background:var(--surface2);border:1px solid var(--line);border-left:4px solid var(--brand);border-radius:var(--r-md);padding:12px 14px 10px}
+.bloque-h{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin-bottom:6px}
+.bloque-h b{font-weight:600;color:var(--ink);font-size:.9rem}
+.bloque p{margin:0 0 10px;font-size:.83rem;color:var(--ink2)}
+.bloque .est{font-size:.72rem;padding:4px 10px}
+
+/* ---- banco de ejercicios ---- */
+.filtros{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:18px 0}
+.filtros select{width:auto;min-width:200px}
+.ej{border:1px solid var(--line);background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--sh-sm);margin-bottom:14px;overflow:hidden}
+.ej:hover{box-shadow:var(--sh-md)}
+.ej-h{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--lineSoft);background:var(--surface2)}
+.ej-h .org{font-family:var(--mono);font-size:.72rem;color:var(--muted);flex:1;min-width:140px}
+.tag{font-size:.7rem;font-weight:600;letter-spacing:.3px;padding:3px 10px;border-radius:9999px;border:1px solid;display:inline-flex;align-items:center}
+.tag.rec{color:var(--critText);border-color:rgba(220,38,38,.3);background:var(--critSoft)}
+.tag.ver{color:var(--goodText);border-color:rgba(5,150,105,.25);background:var(--goodSoft)}
+.tag.prop{color:var(--warnText);border-color:rgba(217,119,6,.3);background:var(--warnSoft)}
+.tag.ex{color:var(--brand);border-color:rgba(0,75,135,.2);background:var(--brandSoft)}
+.ej-body{padding:14px 16px}
+.ej-body p{margin:0 0 10px;color:var(--ink)}
+.ej-body ul{margin:0 0 8px;padding-left:18px}
+.sol{margin-top:14px;background:var(--surface2);border:1px solid var(--line);border-left:4px solid var(--brand);border-radius:var(--r-md);padding:14px 16px}
+.sol ol{margin:0;padding-left:20px}
+.sol li{margin-bottom:7px;font-size:.88rem}
+.resp{font-family:var(--mono);font-size:.95rem;font-weight:700;color:var(--brand);background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 14px;margin-top:12px;display:inline-block;box-shadow:var(--sh-xs)}
+.nota{font-size:.83rem;color:var(--warnText);background:var(--warnSoft);border:1px solid rgba(217,119,6,.25);border-radius:var(--r-md);padding:10px 14px;margin-top:12px;line-height:1.5}
+.estados{display:flex;gap:8px;flex-wrap:wrap;padding:10px 16px;border-top:1px solid var(--lineSoft);background:var(--surface)}
+.est{font-size:.78rem;font-weight:500;background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:6px 14px;color:var(--ink2);box-shadow:var(--sh-xs);transition:all .15s}
+.est:hover{background:var(--surface2);border-color:#cbd5e1}
+.est[aria-pressed="true"]{border-color:var(--good);background:var(--goodSoft);color:var(--goodText);font-weight:600}
+.est.f[aria-pressed="true"]{border-color:var(--crit);background:var(--critSoft);color:var(--critText)}
+
+/* ---- repaso ---- */
+.carta{border:1px solid var(--line);background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--sh-sm);padding:26px;min-height:190px;display:flex;flex-direction:column;justify-content:center;gap:12px}
+.carta .q{font-size:1.1rem;font-weight:500;color:var(--ink);line-height:1.55}
+.carta .a{border-top:1px solid var(--lineSoft);padding-top:12px;color:var(--ink2);background:var(--goodSoft);margin:0 -26px -26px;padding:14px 26px 22px;border-radius:0 0 var(--r-lg) var(--r-lg);color:var(--goodText)}
+.contador{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+
+/* ---- avance ---- */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:14px 16px;box-shadow:var(--sh-xs)}
+.tile .k{font-size:.68rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.tile .v{font-family:var(--mono);font-size:1.7rem;font-weight:700;color:var(--brand);line-height:1.1;margin-top:4px}
+.lista{border:1px solid var(--line);background:var(--surface);border-radius:var(--r-md);overflow:hidden;box-shadow:var(--sh-xs)}
+.lista .r{display:flex;gap:12px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--lineSoft)}
+.lista .r:last-child{border-bottom:0}
+.lista .r:hover{background:var(--surface2)}
+.lista .r .t{flex:1}
+.vacio{color:var(--muted);padding:14px 12px;font-style:italic}
+.marcas .r{text-decoration:none;color:inherit}
+.marcas .r:hover{background:var(--brandSoft)}
+.marcas .mm{color:var(--brand);font-weight:700;font-size:.78rem;min-width:52px}
+.marcas .go{color:var(--brand)}
+
+.tabla{width:100%;border-collapse:collapse;font-size:.85rem}
+.tabla th{background:var(--surface2);padding:11px 14px;text-align:left;font-weight:600;color:var(--muted);border-bottom:1px solid var(--line);border-top:1px solid var(--line);font-size:.72rem;text-transform:uppercase;letter-spacing:.3px}
+.tabla td{padding:11px 14px;border-bottom:1px solid var(--line)}
+.tabla tbody tr:hover{background:var(--surface2)}
+.tabla td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+.scroll-x{overflow-x:auto}
+
+/* ---- matriz qué cae ---- */
+.matriz{border-collapse:separate;border-spacing:3px;font-size:.82rem}
+.matriz th{font-size:.68rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:4px 6px;vertical-align:bottom}
+.matriz th.eje{text-align:left;text-transform:none;letter-spacing:0;font-size:.85rem;color:var(--ink);font-weight:500;min-width:200px}
+.matriz th .per{display:block;color:var(--ink);font-size:.75rem;font-family:var(--mono);text-transform:none;letter-spacing:0}
+.matriz td{padding:0;text-align:center}
+.celda{display:block;padding:8px 4px;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:.78rem;font-weight:600;background:var(--surface2);color:var(--dim);border-radius:var(--r-sm);min-width:46px;border:1px solid var(--lineSoft)}
+.celda.on{color:var(--ink);border-color:transparent}
+.celda.alto{color:#fff}
+.tot{display:flex;align-items:center;gap:8px;padding-left:6px}
+.tot .b{height:8px;background:var(--brand);border-radius:9999px;min-width:3px}
+.tot .v{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:.78rem;font-weight:600;color:var(--ink2);min-width:38px;text-align:right}
+.headline{background:var(--brandSoft);border:1px solid rgba(0,75,135,.2);border-radius:var(--r-lg);padding:18px 20px;margin-bottom:18px}
+.headline .big{font-family:var(--mono);font-size:2.1rem;font-weight:700;color:var(--brand);line-height:1.1}
+.headline p{margin:6px 0 0;color:var(--ink2);max-width:66ch}
+.examen{border:1px solid var(--line);background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--sh-xs);margin-bottom:10px;overflow:hidden}
+.examen summary{padding:12px 16px;cursor:pointer;display:flex;flex-wrap:wrap;gap:8px;align-items:center;list-style:none}
+.examen summary::-webkit-details-marker{display:none}
+.examen summary:hover{background:var(--surface2)}
+.examen summary h3{font-size:.92rem;font-weight:600;margin:0}
+.examen summary .f{font-family:var(--mono);font-size:.74rem;color:var(--muted);flex:1;min-width:120px}
+.examen .qs{padding:0 16px 14px;border-top:1px solid var(--lineSoft)}
+.examen .q{display:grid;grid-template-columns:58px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--lineSoft)}
+.examen .q:last-of-type{border-bottom:0}
+.examen .q .p{font-family:var(--mono);font-size:.78rem;color:var(--brand);font-weight:700;text-decoration:none}
+.examen .q a.p:hover{text-decoration:underline}
+.examen .q .e{font-size:.68rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);display:block;font-weight:600}
+
+/* ---- lo esencial ---- */
+.esen{max-width:860px;margin:0 auto}
+.esen-top{padding:26px 0 8px}
+.esen-top h2{font-size:1.5rem;font-weight:700;margin-top:4px}
+.esen-top p{color:var(--ink2);max-width:70ch;margin:8px 0 0}
+.esen-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh-sm);padding:20px 22px 18px;margin-top:18px}
+.esen-card.cert-3{border-top:4px solid var(--brand)}
+.esen-card.cert-2{border-top:4px solid #3b82f6}
+.esen-card.cert-1{border-top:4px solid #94a3b8}
+.esen-h{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-bottom:8px}
+.esen-h h3{font-size:1.02rem;font-weight:600;flex:1 1 320px}
+.cert{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:9999px;background:var(--brandSoft);color:var(--brand);border:1px solid rgba(0,75,135,.2)}
+.cert-2 .cert{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
+.cert-1 .cert{background:#f1f5f9;color:#475569;border-color:#e2e8f0}
+.esen .why{margin:0 0 14px;color:var(--ink2);font-size:.9rem;border-left:3px solid var(--line);padding-left:12px}
+.esen h4{font-size:.78rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+.formula{font-family:var(--mono);font-size:1.15rem;font-weight:700;color:var(--brand);background:var(--brandSoft);border:1px solid rgba(0,75,135,.2);border-radius:var(--r-md);padding:12px 16px;text-align:center;letter-spacing:.02em}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:6px 18px;margin-top:10px;font-size:.88rem}
+.kv div{padding:6px 0;border-bottom:1px solid var(--lineSoft)}
+.kv b{font-family:var(--mono);color:var(--brand);margin-right:6px}
+.kv .num{font-weight:700;color:var(--ink)}
+.pasos{margin:0;padding-left:22px}
+.pasos li{margin-bottom:9px;font-size:.9rem}
+.pasos .num{font-weight:600;background:var(--surface2);padding:1px 6px;border-radius:4px;font-size:.84rem}
+.trampas{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.trampas li{background:var(--warnSoft);border:1px solid rgba(217,119,6,.25);border-radius:var(--r-md);padding:8px 12px;font-size:.86rem;color:var(--warnText)}
+.trampas li::before{content:"⚠ ";font-size:.8rem}
+.esen .linkrow{margin-top:14px}
+.resp-modelo{border:1px solid var(--line);border-radius:var(--r-md);margin-bottom:8px;background:var(--surface);overflow:hidden}
+.resp-modelo summary{padding:11px 14px;font-weight:600;font-size:.9rem;color:var(--ink);cursor:pointer;list-style:none;display:flex;gap:8px;align-items:center;background:var(--surface2)}
+.resp-modelo summary::-webkit-details-marker{display:none}
+.resp-modelo summary::before{content:"+";font-family:var(--mono);color:var(--brand);font-weight:700;width:14px}
+.resp-modelo[open] summary::before{content:"−"}
+.resp-modelo>div{padding:4px 14px 12px;font-size:.88rem;color:var(--ink2)}
+.resp-modelo p{margin:8px 0 0}
+.dos{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:12px}
+.caja{background:var(--surface2);border:1px solid var(--line);border-left:4px solid var(--brand);border-radius:var(--r-md);padding:12px 14px}
+.caja h4{margin-top:0}
+.caja p{margin:0 0 8px;font-size:.87rem;color:var(--ink2)}
+.caja .tabla{font-size:.82rem;margin-bottom:8px;background:#fff}
+.caja .tabla td{padding:6px 8px}
+.caja .tabla td:first-child{font-weight:600;color:var(--ink)}
+.nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.nums div{display:flex;flex-direction:column;gap:2px;background:var(--surface2);border:1px solid var(--line);border-radius:var(--r-md);padding:10px 12px}
+.nums .num{font-size:1.25rem;font-weight:700;color:var(--brand)}
+.nums span:last-child{font-size:.8rem;color:var(--ink2)}
+.esen-pie{margin-top:18px;padding:16px 18px;background:var(--goodSoft);border:1px solid rgba(5,150,105,.25);border-radius:var(--r-lg);color:var(--goodText)}
+.esen-pie p{margin:0 0 8px;font-size:.9rem}
+.esen-pie .subtle{color:#3f6f5b}
+
+.sec{margin-top:26px}
+.sec>h2{font-size:1rem;font-weight:600;padding-bottom:10px;margin-bottom:14px;border-bottom:1px solid var(--line)}
+form#form-ej{border:1px solid var(--line)!important;background:var(--surface)!important;border-radius:var(--r-lg);box-shadow:var(--sh-sm);padding:18px!important}
+form#form-ej label{font-size:.8rem;font-weight:600;color:var(--ink2);display:grid;gap:6px}
+
+@media (max-width:560px){
+  .wrap{padding-inline:16px}
+  .fila-b{grid-template-columns:44px 1fr;row-gap:6px;padding-inline:14px}
+  .medidor{grid-column:1/-1;justify-content:flex-start}
+  .brandrow .subtle{padding-left:0}
+  .unidad-h,.panel{padding-inline:14px}
+}
+</style>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="brandrow">
+      <span class="udep">UDEP</span>
+      <h1>Gestión de la Construcción · Cuaderno de obra</h1>
+      <span class="sigla">02GDC · 2026-2</span>
+      <span class="subtle">Universidad de Piura · Facultad de Ingeniería · Mgtr. Ing. Gabriela Chávez</span>
+    </div>
+  </div>
+</header>
+<div class="subhead">
+  <div class="wrap">
+    <div class="hitos" id="hitos"></div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tab-esencial" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1z"/></svg>
+        Lo esencial · PC1</button>
+      <button class="tab" role="tab" id="tab-temario" aria-selected="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Temario</button>
+      <button class="tab" role="tab" id="tab-ejercicios" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h8M8 14h5"/></svg>
+        Banco de ejercicios</button>
+      <button class="tab" role="tab" id="tab-quecae" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>
+        Qué cae en exámenes</button>
+      <button class="tab" role="tab" id="tab-repaso" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Repaso rápido</button>
+      <button class="tab" role="tab" id="tab-avance" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Mi avance</button>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <section id="v-esencial" hidden></section>
+  <section id="v-temario"></section>
+
+  <section id="v-ejercicios" hidden>
+    <div class="filtros">
+      <select id="f-tema" aria-label="Filtrar por tema"></select>
+      <select id="f-estado" aria-label="Filtrar por estado">
+        <option value="">Todos los estados</option>
+        <option value="pendiente">Pendientes</option>
+        <option value="fallado">Fallados</option>
+        <option value="resuelto">Resueltos</option>
+      </select>
+      <button class="btn ghost mini" id="btn-nuevo">+ Agregar ejercicio</button>
+    </div>
+    <form id="form-ej" hidden style="border:1px solid var(--line);background:var(--surface);padding:14px;margin-bottom:16px;display:grid;gap:10px">
+      <label>Enunciado<textarea id="ne-enun" required></textarea></label>
+      <label>Tema<select id="ne-tema"></select></label>
+      <label>Origen (práctica, año, clase)<input type="text" id="ne-org" placeholder="PC1 2026-1"></label>
+      <label>Solución o procedimiento (opcional)<textarea id="ne-sol"></textarea></label>
+      <div class="linkrow">
+        <button class="btn mini" type="submit">Guardar</button>
+        <button class="btn ghost mini" type="button" id="ne-cancel">Cancelar</button>
+      </div>
+    </form>
+    <div id="lista-ej"></div>
+  </section>
+
+  <section id="v-quecae" hidden></section>
+
+  <section id="v-repaso" hidden>
+    <div class="sec">
+      <h2>Repaso rápido</h2>
+      <p class="subtle" style="margin-top:0">Las que falles vuelven a salir en esta misma sesión.</p>
+      <div class="carta" id="carta">
+        <div class="eyebrow" id="c-tema"></div>
+        <div class="q" id="c-q"></div>
+        <div class="a" id="c-a" hidden></div>
+      </div>
+      <div class="linkrow" style="margin-top:12px">
+        <button class="btn" id="c-ver">Ver respuesta</button>
+        <button class="btn ghost" id="c-mal" hidden>La fallé</button>
+        <button class="btn ghost" id="c-bien" hidden>La sabía</button>
+        <span class="contador" id="c-cont"></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="v-avance" hidden></section>
+</main>
+
+<script>
+const EVALS = [
+  {k:"Tareas (TA)", peso:15, nota:"Grupos de 2-3"},
+  {k:"MS Project (LAB)", peso:15, nota:"12-Nov", fecha:"2026-11-12"},
+  {k:"Prácticas (PC)", peso:30, nota:"1 anulable"},
+  {k:"Examen final (EF)", peso:40, nota:"Según cronograma"}
+];
+const PRACTICAS = ["2026-09-17","2026-10-15","2026-10-29"];
+
+const CURSO = [
+{id:"u1", cod:"1", titulo:"Introducción", temas:[
+  {id:"t11", cod:"1.1", titulo:"Presentación del curso", semana:"Sem 1",
+   pdfs:["1. Presentación del curso.pdf","Sílabo 02GDC 2026-2"],
+   objetivos:[
+     "Reconocer la estructura de evaluación del curso y sus pesos.",
+     "Identificar las reglas de puntos adicionales y de participación."],
+   check:[
+     "Sé de memoria los pesos: TA 15%, LAB 15%, PC 30%, EF 40%.",
+     "Sé que las notas de cada evaluación se redondean, pero los promedios de TA y PC no se redondean para el promedio final.",
+     "Sé que una práctica calificada es anulable.",
+     "Sé que los puntos adicionales del EF exigen participar en al menos el 70% de las actividades.",
+     "Sé que los puntos de práctica salen del foro de preguntas en Canvas."]}
+]},
+{id:"u2", cod:"2", titulo:"Gestión de proyectos aplicada a la ingeniería civil",
+ intro:"Los proyectos de ingeniería civil no son únicamente procesos constructivos físicos; son sistemas dinámicos de generación de valor que transforman la economía y la sociedad. En el Perú, el sector construcción impulsa el crecimiento nacional a través de obras públicas, inversiones mineras, mecanismos de Obras por Impuestos (OxI) y proyectos inmobiliarios; sin embargo, el éxito de un proyecto no depende exclusivamente del cálculo estructural o del rendimiento en campo, sino de la capacidad técnica y gerencial para articular el marco metodológico del PMI, gestionar estratégicamente a las partes interesadas, adaptar el ciclo de vida contractual adecuado y aplicar con rigor la Ley General de Contrataciones Públicas (Ley N° 32069).",
+ objetivos:[
+  "Analizar la estructura de gobernanza y generación de valor de un proyecto de ingeniería civil dentro de la jerarquía de portafolios, programas y proyectos bajo los estándares del PMI.",
+  "Evaluar el impacto del entorno externo (PESTLE) e interno en las obras de construcción en el Perú y priorizar estrategias de comunicación e involucramiento de interesados mediante matrices de involucramiento.",
+  "Diferenciar los ciclos de vida contractuales (especialmente Design-Bid-Build vs. Design-Build) y seleccionar el sistema de entrega de proyecto adecuado según el nivel de complejidad y la distribución de riesgos contractuales.",
+  "Describir las disposiciones de la Ley N° 32069 y su reglamento en la fase de ejecución contractual, identificando el proceso de contratación pública, modalidades de pago, mecanismos de garantización, adelantos, modificaciones y solución de controversias."],
+ ruta:[
+  {h:"Fundamentos del PMI", i:["Conceptos clave de proyecto, temporalidad, unicidad y alineación con la estrategia organizacional (portafolios, programas y operaciones). Áreas de la gestión de proyectos (PMBOK 2026) y procesos de gestión (PMBOK 2017)."]},
+  {h:"Entorno de la construcción", i:["Clasificación de proyectos de construcción.","Análisis del entorno externo (PESTLE) e interno en proyectos de edificación e infraestructura."]},
+  {h:"Gestión estratégica de stakeholders y sostenibilidad", i:["Identificación y clasificación de interesados internos y externos en proyectos públicos y privados.","Formulación de la Matriz de Involucramiento.","Impacto ambiental, licencias sociales y gestión de la huella urbana."]},
+  {h:"Ciclos de vida del proyecto y contratación pública en Perú", i:["Fases del ciclo de vida (concepto, viabilidad, diseño, construcción, operación y desmantelamiento) e interfaces contractuales.","Ley N° 32069 y su Reglamento: proceso de contratación, Pladicop, modalidades de pago, sistemas de entrega de proyectos.","Dinámica de garantías (carta fianza / retención), adelanto directo y de materiales, adicionales y deductivos de obra, recepción y liquidación de contrato."]}],
+ check:[
+  "¿Puedo explicar la diferencia entre un Portafolio, un Programa y un Proyecto según la guía PMBOK y cómo generan valor organizacional?",
+  "¿Puedo explicar qué es la gestión de proyectos y su importancia?",
+  "¿Identifico las áreas de enfoque de la gestión de proyectos según la guía PMBOK (2026)?",
+  "¿Sé cómo identificar y clasificar a los interesados de un proyecto constructivo y construir una matriz de involucramiento para gestionarlos?",
+  "¿Comprendo las diferencias operativas y de riesgo entre un esquema contractual Design-Bid-Build (DBB) y Design-Build (DB)?",
+  "¿Conozco el proceso de contratación de obra pública con el Estado peruano bajo la Ley N° 32069 y su reglamento?",
+  "¿Identifico los sistemas de entrega y las modalidades de pago bajo la Ley N° 32069 y su reglamento?",
+  "¿Identifico los mecanismos de garantía (carta fianza / retención), adelantos y solución de controversias bajo la Ley N° 32069 y su reglamento?"],
+ temas:[
+  {id:"t21", cod:"2.1", titulo:"Introducción y fundamentos de gestión de proyectos", semana:"Sem 1",
+   pdfs:["2.1. Fundamentos GDP.pdf"],
+   objetivos:[
+     "Definir proyecto y distinguir sus seis características.",
+     "Ubicar el proyecto dentro del sistema de generación de valor (portafolio, programa, subproyecto, paquete de trabajo, actividad).",
+     "Reconocer las áreas de conocimiento del PMBOK y los grupos de proceso."],
+   check:[
+     "Puedo dar la definición de proyecto del PMI 2026: iniciativa temporal en un contexto único, emprendida para generar valor.",
+     "Enumero las 6 características: temporalidad, unicidad, objetivos, descomposición en actividades, restricciones y participación multidisciplinaria.",
+     "Sé las 5 razones por las que un proyecto finaliza (objetivos logrados, imposibles, sin recursos, cambio de prioridades, o la necesidad ya no existe).",
+     "Ordeno la jerarquía portafolio → programa → proyecto → subproyecto → paquete de trabajo → actividad, con su nivel (estratégico, operativo, táctico, ejecución).",
+     "Distingo programa (proyectos relacionados) de portafolio (programas + proyectos + operaciones).",
+     "Nombro las 10 áreas de conocimiento del PMBOK 2017.",
+     "Describo qué ocurre en cada grupo de proceso: inicio, planificación, ejecución, seguimiento y control, cierre."]},
+  {id:"t22", cod:"2.2.1", titulo:"Proyectos de construcción", semana:"Sem 2-3",
+   pdfs:["2.2.1. Proyectos de construcción.pdf"],
+   objetivos:[
+     "Diferenciar el entorno interno y externo de un proyecto de construcción.",
+     "Clasificar proyectos por dirección de construcción y por tipo de propietario.",
+     "Contrastar la producción por proyectos con la producción tradicional."],
+   check:[
+     "Enumero los 6 factores del entorno externo: político, económico, social, técnico, legal y medioambiental.",
+     "Enumero los elementos del entorno interno: cultura/estructura/gobernanza, activos, infraestructura y software, recursos.",
+     "Clasifico proyectos horizontales (carreteras, canales, puentes, túneles) frente a verticales (edificaciones).",
+     "Distingo obra pública (fondos públicos, propietario estatal) de obra privada.",
+     "Explico por qué en construcción la secuencia es licitación → contrato → producción → entrega, y no promoción → venta.",
+     "Sé argumentar si la elaboración de un expediente técnico o de una oferta es un proyecto, indicando punto de partida y entregable.",
+     "Explico por qué la validación del diseño suele hacerse en obra."]},
+  {id:"t23", cod:"2.2.2", titulo:"Partes interesadas (Stakeholders)", semana:"Sem 2-3",
+   pdfs:["2.2.2. Stakeholders.pdf","Taller _3 Stakeholder incómodo - FMT.pdf"],
+   objetivos:[
+     "Identificar y clasificar a los interesados de un proyecto de construcción.",
+     "Construir el registro de interesados y la matriz de involucramiento.",
+     "Definir estrategias de involucramiento alineadas a una situación concreta."],
+   check:[
+     "Doy la definición: persona, grupo u organización que se ve afectado, afecta o se percibe afectado por el proyecto.",
+     "Distingo los 4 atributos y no los confundo: poder (influir en decisiones), interés (compromiso con el entregable), influencia (modificar el comportamiento de otros) e impacto (generar cambios en la planificación y ejecución).",
+     "Enumero los 7 procesos de gestión de interesados del PMI 2026.",
+     "Lleno una matriz de involucramiento con participación actual vs. deseada, influencia, impacto y estrategias.",
+     "Sé que la expectativa de valor se redacta desde la óptica del interesado, no del contratista.",
+     "Doy ejemplos de afectación por la construcción (ruido, polvo, accesos) y por el proyecto (expropiación, reubicación).",
+     "Explico la diferencia entre sostenibilidad y responsabilidad social en obra pública."]},
+  {id:"t24", cod:"2.2.3", titulo:"Ciclo de vida del proyecto", semana:"Sem 2-3",
+   pdfs:["2.2.3. Ciclo de vida del proyecto.pdf"],
+   objetivos:[
+     "Describir las fases del ciclo de vida y su relación con los contratos.",
+     "Relacionar el nivel de incertidumbre con el momento de las decisiones."],
+   check:[
+     "Explico por qué la incertidumbre es máxima al inicio y por qué eso obliga a repartir riesgos en el contrato.",
+     "Argumento qué se gana involucrando al contratista desde etapas tempranas.",
+     "Dibujo el ciclo DBB (Diseño – Licitación – Construcción) y lo comparo con DB (Diseño – Construcción).",
+     "Explico por qué las fases pueden modificarse en contenido, costo y duración durante el proyecto."]},
+  {id:"t25", cod:"2.2.4", titulo:"Contratación de obra pública", semana:"Sem 2-3",
+   pdfs:["2.2.4. Contratación.pdf","Taller _1 Radiografía del proyecto - FMT.pdf","Taller _2 Distribución de riesgos - FMT.pdf"],
+   objetivos:[
+     "Recorrer el proceso de contratación pública bajo la Ley N.º 32069.",
+     "Elegir el sistema de entrega y la modalidad de pago según la complejidad del proyecto.",
+     "Identificar garantías, adelantos y mecanismos de solución de controversias."],
+   check:[
+     "Nombro las 3 etapas: actuaciones preparatorias, selección y ejecución contractual, con su producto final (expediente de contratación, adjudicación, liquidación).",
+     "Explico el principio de valor por el dinero: no contratar solo por el menor precio.",
+     "Distingo los sistemas de entrega DBB, DB, IPD, CM-agente, CM-at-Risk, EPC, APP y ejecución directa, y a qué complejidad corresponde cada uno.",
+     "Explico las 4 modalidades de pago: suma alzada, precio unitario, esquema mixto y costo reembolsable, y cuándo conviene cada una.",
+     "Diferencio licitación pública (bienes y obras) de concurso público (servicios y consultorías).",
+     "Explico la garantía de fiel cumplimiento y sus dos formas: carta fianza y retención (obras > 60 días y monto < 5 millones).",
+     "Distingo el adelanto directo del adelanto para materiales e insumos.",
+     "Ordeno los mecanismos de solución de controversias: JPRD, conciliación y arbitraje, y qué resuelve cada uno.",
+     "Enumero las condiciones para el inicio del plazo: comunicación del supervisor, entrega de adelantos, firma de JPRD y entrega del terreno."]}
+]},
+{id:"u3", cod:"3", titulo:"Planificación del alcance",
+ intro:"En esta unidad abordaremos la fase crítica de la gestión de proyectos de construcción: la planificación del alcance. El correcto dimensionamiento y descomposición del trabajo es la base indispensable sobre la cual se estructuran el presupuesto (costo) y el cronograma (tiempo) del proyecto, entre otros aspectos.",
+ objetivos:[
+  "Comprender los fundamentos y principios de la planificación de proyectos en ingeniería civil, diferenciando claramente el alcance del producto (características técnicas) del alcance del proyecto (trabajo total para entregarlo).",
+  "Identificar la correspondencia técnica y legal entre los componentes del Expediente Técnico peruano (planos, especificaciones técnicas, memoria descriptiva) y los instrumentos de gestión definidos por el PMI (declaración del alcance, EDT, diccionario de la EDT).",
+  "Aplicar la técnica de descomposición jerárquica para elaborar una Estructura de Descomposición del Trabajo (EDT), aplicándola a proyectos reales de edificación o infraestructura."],
+ ruta:[
+  {h:"Fundamentos de la planificación del proyecto", i:["Conceptos clave: plan de gestión, línea base y procesos de las áreas de enfoque de inicio y planificación."]},
+  {h:"Planificación del alcance", i:["Diferencia fundamental entre requisitos, alcance del producto y alcance del proyecto.","Mapeo del Expediente Técnico de obra como línea base del alcance.","Definición del alcance en obra pública: consultas y observaciones en licitación, Requerimientos de Información (RDI) y cuaderno de obra."]},
+  {h:"Modificaciones de alcance", i:["Variaciones contractuales del alcance bajo la Ley de Contrataciones del Estado: mayores metrados, adicionales de obra y deductivos vinculantes."]}],
+ normativa:["Ley General de Contrataciones Públicas (Ley N° 32069) y sus reglamentos.","Norma Técnica Metrados para Obras de Edificación y Habilitaciones Urbanas (RM 013-2010-VIVIENDA)."],
+ check:[
+  "¿Puedo explicar la diferencia entre el alcance del producto y el alcance del proyecto usando un ejemplo de obras civiles (un puente, un hospital o un colegio)?",
+  "¿Identifico qué documentos de contrato, incluyendo el Expediente Técnico, contienen información del alcance del producto y del proyecto?",
+  "¿Comprendo cómo se define el alcance de un proyecto en la fase de construcción?",
+  "¿Sé construir un árbol EDT/WBS para asegurar que no queden partidas u obras provisionales fuera del alcance?",
+  "¿Tengo clara la diferencia entre un Mayor Metrado y una Prestación Adicional de Obra según la Ley de Contrataciones del Estado?",
+  "¿Comprendo por qué es importante la planificación del alcance para planificar otros aspectos del proyecto como el costo, tiempo, adquisiciones, etc.?"],
+ temas:[
+  {id:"t31", cod:"3.1", titulo:"Planificación del proyecto", semana:"Sem 4",
+   pdfs:["3.1. Planificación del proyecto.pdf"],
+   objetivos:[
+     "Definir la planificación como proceso iterativo que fija una línea base.",
+     "Relacionar las preguntas clave de la planificación con sus áreas."],
+   check:[
+     "Asocio cada pregunta con su área: por qué → motivo, qué hay que hacer → alcance, cuándo → cronograma, cuánto costará → presupuesto, quién → equipo, qué puede ocurrir → riesgos.",
+     "Explico las 3 características de la planificación: iterativa, define línea base y es continua.",
+     "Digo qué es el Plan de Gestión del Proyecto y por qué es un documento dinámico.",
+     "Dibujo el triángulo del proyecto (alcance, tiempo, costo) y lo amplío al diamante de Lester.",
+     "Ordeno las áreas de enfoque de inicio y planificación: formalizar, identificar interesados, recopilar requisitos, definir alcance, crear EDT, definir y secuenciar actividades, estimar recursos y duraciones, cronograma, estimar costos, presupuesto y línea base.",
+     "Nombro al menos 5 beneficios de planificar."]},
+  {id:"t32", cod:"3.2", titulo:"Planificación del alcance", semana:"Sem 4",
+   pdfs:["3.2 Planificación del alcance.pdf"],
+   objetivos:[
+     "Elaborar la declaración del alcance y la EDT.",
+     "Distinguir alcance del producto y alcance del proyecto."],
+   check:[
+     "Enumero los 6 criterios de un requisito: claro, conciso, verificable, consistente, completo y trazable.",
+     "Distingo alcance del producto (características y funciones) de alcance del proyecto (trabajo para entregarlo).",
+     "Enumero los 6 componentes de la declaración del alcance: descripción del producto, entregables, criterios de aceptación, exclusiones, restricciones y supuestos.",
+     "Defino EDT como descomposición jerárquica del alcance total del trabajo.",
+     "Explico los 4 principios de la EDT: regla del 100%, elementos mutuamente exclusivos, orientada a entregables y base para costo y tiempo.",
+     "Nombro criterios de desglose (espacial, fases, funciones, entregables) y sé combinarlos por niveles.",
+     "Doy ejemplos de técnicas de recopilación de requisitos: entrevistas, encuestas, focus group, técnicas grupales de creatividad, análisis de documentos."]},
+  {id:"t33", cod:"3.2b", titulo:"Alcance en el proyecto constructivo y obra pública", semana:"Sem 4",
+   pdfs:["3.2 Planificación del alcance - Obra pública.pdf"],
+   objetivos:[
+     "Traducir los conceptos del PMI a los documentos reales del expediente técnico.",
+     "Clasificar las variaciones del alcance en obra pública."],
+   check:[
+     "Traduzco cada concepto PMI a su documento: recopilar requisitos → consultas y observaciones al ET; declaración del alcance → memoria descriptiva y especificaciones técnicas; EDT → itemizado de partidas; diccionario de la EDT → especificaciones técnicas y APU.",
+     "Sé que el Expediente Técnico es la línea base del alcance.",
+     "Identifico dónde aparecen los RDI según la fase: licitación (consultas y observaciones), adjudicación (informe de revisión del ET) y ejecución (cuaderno de obra).",
+     "Distingo mayores/menores metrados, obra adicional y deductivo vinculante, y sé que el adicional requiere expediente técnico adicional y resolución previa.",
+     "Sé que la EDT en obra pública se organiza por especialidades, alineada a la Norma Técnica de Metrados."]}
+]},
+{id:"u4", cod:"4", titulo:"Planificación del costo",
+ cita:"Un presupuesto no es una estimación pasiva del costo; es la estrategia operativa, financiera y legal que determina la viabilidad y el éxito de una obra.",
+ intro:"En la gestión de proyectos de infraestructura y edificación, controlar el costo exige comprender la física de los recursos y la normativa técnica y laboral vigente en el Perú. Esta unidad se enfoca en estructurar presupuestos para obras, calcular el costo de los materiales puestos en obra, el costo real de la mano de obra bajo el régimen especial de Construcción Civil (CAPECO/FTCCP) y la hora-máquina de los equipos, así como los costos indirectos, y elaborar la Fórmula Polinómica de Reajuste para la actualización de precios en las contrataciones públicas peruanas.",
+ objetivos:[
+  "Estructurar la composición de un presupuesto de obra según el alcance técnico, diferenciando el costo directo (mano de obra, materiales, equipos) del costo indirecto (gastos generales fijos, variables y utilidad).",
+  "Determinar el costo de hora-máquina (HM) diferenciando los costos de posesión y de operación, así como el precio del material puesto en obra (PMPO) considerando fletes y mermas.",
+  "Calcular el costo real de la hora-hombre (HH) aplicando la tabla salarial vigente del régimen laboral de Construcción Civil, considerando remuneración básica, BUC, BAE, aportes patronales y beneficios sociales peruanos.",
+  "Formular y evaluar la Fórmula Polinómica de Reajuste de Precios aplicando la normativa vigente y utilizando los Índices Unificados de Precios de la Construcción (IUPC) emitidos por el INEI para el cálculo de reajustes en valorizaciones."],
+ ruta:[
+  {h:"Presupuesto: introducción", i:["Componentes del costo directo y los costos indirectos del presupuesto, y estructura del documento incluido en un Expediente Técnico."]},
+  {h:"Estimación de costos de los recursos", i:["Precio del material puesto en obra.","Costo hora-máquina para obras por contrata y por administración directa.","Costo hora-hombre, distinguiendo el cálculo para la elaboración del Expediente Técnico del de los ajustes de la planificación durante la ejecución.","Liquidación del trabajador de construcción civil."]},
+  {h:"Estimación de costos indirectos", i:["Desagregación de los gastos generales del proyecto.","Estimación de la utilidad."]},
+  {h:"Fórmula polinómica", i:["Composición matemática del presupuesto de la obra."]}],
+ check:[
+  "¿Sé diferenciar la estructura de un presupuesto de una obra por contrata respecto de una por administración directa?",
+  "¿Sé cómo calcular el costo unitario del material puesto en obra?",
+  "¿Sé cómo calcular el costo hora-máquina para una obra por contrata y para una obra por administración directa?",
+  "¿Domino el cálculo del costo hora-hombre para la formulación de Expedientes Técnicos?",
+  "¿Sé calcular el costo hora-hombre en condiciones de trabajo distintas a las habituales (horas extras, trabajo los domingos, etc.)?",
+  "¿Identifico la diferencia entre el cálculo del costo hora-hombre y el cálculo de la liquidación de un trabajador de construcción civil?",
+  "¿Reconozco la diferencia entre gastos generales fijos y gastos generales variables?",
+  "¿Conozco las condiciones normativas que debe cumplir la fórmula polinómica?",
+  "¿Conozco el proceso para definir la fórmula polinómica de una obra?"],
+ temas:[
+  {id:"t41", cod:"4.1", titulo:"Presupuesto", semana:"Sem 5-7",
+   pdfs:["4.1 Presupuesto.pdf"],
+   objetivos:[
+     "Descomponer el presupuesto de una obra por contrata.",
+     "Relacionar alcance, recursos y análisis de costo unitario."],
+   check:[
+     "Escribo la estructura completa: Costo Directo (materiales + mano de obra + equipo) + Gastos Generales + Utilidad + IGV = Costo total de obra.",
+     "Distingo gastos generales relacionados con el tiempo de ejecución de los no relacionados.",
+     "Explico la cadena alcance → recursos (MO, materiales, equipo) → análisis de costo unitario → presupuesto.",
+     "Sé que no existe formato oficial único y que todas las partidas deben cubrir el 100% de la obra.",
+     "Identifico las partes del presupuesto: encabezado y cuerpo."]},
+  {id:"t42", cod:"4.2", titulo:"Costo de materiales (PMPO)", semana:"Sem 5-7",
+   pdfs:["4.2 Material.pdf","4.2 Material - Ejemplos.pdf","4.2 Material_Ejercicios.pdf"],
+   objetivos:[
+     "Calcular el precio del material puesto en obra.",
+     "Aplicar los criterios de cotización, IGV, descuentos y mes base."],
+   check:[
+     "Escribo de memoria PMPO = PMO + F + A/M + m + V + O y sé qué es cada término.",
+     "Sé los porcentajes: A/M = 2% del PMO, m (mermas) = 5% del PMO, V (viáticos) = 5 a 30% del PMO.",
+     "Sé que en obra por contrata se trabaja sin IGV y en administración directa con IGV.",
+     "Sé que el PMO no incluye descuentos y que se toma el precio a fin de mes del mes base.",
+     "Determino el mes base a partir de la fecha de entrega del expediente técnico y descarto las cotizaciones posteriores.",
+     "Convierto el flete a la unidad de medida del ACU (por kg, por unidad, por m²) cuando viene por tonelada, por millar o por lote.",
+     "Calculo el flete de un tramo con vehículo propio: costo diario ÷ (viajes por día × capacidad por viaje).",
+     "Defino aporte unitario como la cantidad requerida por unidad de medida de la actividad."]},
+  {id:"t43", cod:"4.3", titulo:"Costo de mano de obra", semana:"Sem 5-7",
+   pdfs:["4.3 Mano de obra.pdf"],
+   objetivos:[
+     "Reconocer el régimen laboral de construcción civil y sus categorías.",
+     "Clasificar los conceptos remunerativos que forman el costo hora-hombre."],
+   check:[
+     "Sé que CAPECO y la FTCC firman anualmente el Acta Final de Negociación Colectiva y que desde 2026 la vigencia inicia el 1 de enero.",
+     "Distingo las 3 categorías: operario, oficial o ayudante, y peón, y sé qué oficios entran en cada una.",
+     "Explico las dos características especiales del trabajo en construcción: eventualidad y ubicación relativa.",
+     "Distingo el cálculo en condiciones regulares (para ET, oferta, proyección) del cálculo en condiciones reales (pago de trabajadores).",
+     "Clasifico los conceptos en: remuneración básica, bonificaciones permanentes por día laborado, bonificaciones por condiciones de trabajo, leyes y beneficios sociales, y otros beneficios.",
+     "Nombro las bonificaciones por condiciones de trabajo: altura, altitud, nocturno, contacto con agua, aguas servidas, agentes químicos, bajo la cota cero.",
+     "Sé qué son BUC y BAE y cuándo se paga su asignación especial."]},
+  {id:"t44", cod:"4.3b", titulo:"Costo de equipos (hora máquina)", semana:"Sem 5-7",
+   pdfs:["4.3 Equipo.pdf"],
+   objetivos:[
+     "Calcular el costo de posesión y el costo de operación de una máquina.",
+     "Componer la tarifa de hora máquina según el tipo de ejecución."],
+   check:[
+     "Sé que HM = Costo de posesión + Costo de operación en obra por contrata, y solo Costo de operación en administración directa.",
+     "Calculo la vida económica en horas: años × 10 meses × 25 días × 8 horas.",
+     "Escribo D = (VA − VR) / VE(horas).",
+     "Escribo K = ((n+1)·n / 2n) / VE(horas), con n en años, y lo uso en I = VA × tasa × K.",
+     "Sé que Seguros, impuestos y almacenaje = 5% × VA × K (3,5% seguros e impuestos + 1,5% almacenaje).",
+     "Sé el rango del valor de rescate: 8 a 20% del VA en equipo liviano y 20 a 25% en equipo pesado, y sé clasificar la máquina.",
+     "Escribo CO = MyR + C + L + F + N + O y sé que %MyR ronda 70 a 75%.",
+     "Sé que el operador se estima en 1,2 × costo HH del operario para equipo liviano y 1,5 × para equipo pesado.",
+     "Calculo el costo hora de neumáticos como VA neumático / VE neumático.",
+     "Sé que para alquiler se añade 15 a 20% por gastos generales y utilidad."]},
+  {id:"t45", cod:"4.4", titulo:"Fórmula polinómica", semana:"Sem 8", pendiente:true,
+   pdfs:[],
+   objetivos:["Aplicar la fórmula polinómica de reajuste automático de precios."],
+   check:[
+     "Sé para qué sirve el reajuste automático de precios.",
+     "Identifico monomios, coeficientes de incidencia y los índices unificados.",
+     "Sé la restricción de número de monomios y de incidencia mínima."]}
+]},
+{id:"u5", cod:"5", titulo:"Planificación del tiempo y adquisiciones", temas:[
+  {id:"t51", cod:"5.1", titulo:"Conceptos básicos de programación", semana:"Sem 9", pendiente:true, pdfs:[],
+   objetivos:["Definir actividad, duración, secuencia y dependencia."],
+   check:["Distingo los tipos de dependencia (FC, CC, FF, CF).","Calculo duraciones a partir de metrados y rendimientos.","Defino holgura total y holgura libre."]},
+  {id:"t52", cod:"5.2", titulo:"Representaciones gráficas", semana:"Sem 9-10", pendiente:true, pdfs:[],
+   objetivos:["Representar el programa con diagrama de barras y redes."],
+   check:["Construyo un diagrama Gantt a partir de la lista de actividades.","Dibujo la red de precedencias.","Identifico la ruta crítica y calculo fechas tempranas y tardías."]},
+  {id:"t53", cod:"5.3", titulo:"Análisis de la programación y aceleración", semana:"Sem 11", pendiente:true, pdfs:[],
+   objetivos:["Analizar y acelerar el cronograma del proyecto."],
+   check:["Distingo crashing de fast tracking.","Calculo el costo de acelerar una actividad.","Reconozco el efecto de la aceleración sobre la ruta crítica."]},
+  {id:"t54", cod:"5.4", titulo:"Proyectos repetitivos y obras lineales", semana:"Sem 11", pendiente:true, pdfs:[],
+   objetivos:["Programar obras lineales y repetitivas."],
+   check:["Uso diagramas de tiempo-espacio (líneas de balance).","Sectorizo una obra por frentes de trabajo.","Calculo el tren de actividades."]},
+  {id:"t55", cod:"5.5", titulo:"MS Project", semana:"Sem 10",
+   pdfs:["Guía para la descarga e instalación de Ms Project.pdf"],
+   objetivos:["Programar actividades y recursos en MS Project."],
+   check:[
+     "Tengo MS Project instalado y activado con el correo institucional.",
+     "Creo tareas, duraciones y vínculos de precedencia.",
+     "Asigno recursos y costos a las tareas.",
+     "Muestro la ruta crítica y genero informes.",
+     "Establezco la línea base y hago seguimiento del avance."]}
+]},
+{id:"u6", cod:"6", titulo:"Seguimiento y control", temas:[
+  {id:"t61", cod:"6.1", titulo:"Control de cambios", semana:"Sem 12", pendiente:true, pdfs:[],
+   objetivos:["Gestionar los cambios sobre la línea base."],
+   check:["Describo el flujo de una solicitud de cambio.","Relaciono el cambio con adicionales y deductivos en obra pública."]},
+  {id:"t62", cod:"6.2", titulo:"Valor ganado", semana:"Sem 12", pendiente:true, pdfs:[],
+   objetivos:["Medir el desempeño con la técnica del valor ganado."],
+   check:["Defino PV, EV y AC.","Calculo CV, SV, CPI y SPI e interpreto su signo.","Proyecto el EAC a partir del CPI."]},
+  {id:"t63", cod:"6.3", titulo:"Reportes de avance", semana:"Sem 13", pendiente:true, pdfs:[],
+   objetivos:["Reportar el estado del proyecto a los interesados."],
+   check:["Elaboro una valorización de obra.","Adapto el reporte al interesado que lo recibe."]}
+]},
+{id:"u7", cod:"7", titulo:"Manejo del cambio e identificación de riesgos", temas:[
+  {id:"t71", cod:"7.1", titulo:"Flujo de caja", semana:"Sem 13", pendiente:true, pdfs:[],
+   objetivos:["Construir el flujo de caja de la obra."],
+   check:["Relaciono valorizaciones, adelantos y amortizaciones con el flujo.","Identifico el punto de máxima exposición financiera."]},
+  {id:"t72", cod:"7.2", titulo:"Gestión de riesgos y de la calidad", semana:"Sem 14", pendiente:true, pdfs:[],
+   objetivos:["Identificar, analizar y asignar riesgos del proyecto."],
+   check:["Construyo la matriz de probabilidad e impacto.","Asigno cada riesgo a la parte que mejor lo controla.","Relaciono la distribución de riesgos con la modalidad de pago del contrato."]}
+]}
+];
+
+const EJERCICIOS = [
+{id:"e-porcelanato", tema:"t42", origen:"Ejemplo de clase · 4.2 Material", tipo:"calculo", verif:"clase", fam:"PMPO",
+ enunciado:"Obra por contrata en Angamos. Material: porcelanato marmolizado gris 60x60 cm (caja = 1.44 m², 4 unidades, 28.1 kg). Cotizaciones con IGV: Promart S/ 36.90, Sodimac S/ 31.90, Cassinelli S/ 39.90. Transportistas sin IGV: S/ 120, S/ 100 y S/ 105 por tonelada. Calcular el precio unitario del porcelanato puesto en obra (S/ por m²).",
+ pasos:[
+  "Contrata ⇒ trabajar sin IGV. Precios sin IGV: 31.27, 27.03 y 33.81 S/ porm² de referencia en tienda.",
+  "PMO = promedio de las tres cotizaciones sin IGV = 30.71 S/ porm².",
+  "Flete: promedio de transportistas = 108.33 S/ porton = 0.10833 S/ porkg.",
+  "Peso por m²: 28.1 kg por caja ÷ 1.44 m² por caja = 19.51 kg/m².",
+  "F = 0.10833 S/ porkg × 19.51 kg/m² = 2.11 S/ porm².",
+  "A/M = 2% × PMO = 0.61 S/ porm². m (mermas) = 5% × PMO = 1.54 S/ porm². V = 0, O = 0.",
+  "PMPO = 30.71 + 2.11 + 0.61 + 1.54 = 34.97 S/ porm²."],
+ resp:"PMPO = 34.97 S/ por m²"},
+
+{id:"e-ladrillo-clase", tema:"t42", origen:"Ejemplo de clase · 4.2 Material", tipo:"calculo", verif:"clase", fam:"PMPO",
+ enunciado:"Determinar el precio unitario del ladrillo por unidad para el ET. Obra por contrata; el ET se entrega el 11 de setiembre de 2026. Se requieren 30 000 unidades. Sodimac-Piura cotizó al 13 de agosto a S/ 0.90 con IGV, con 10% de descuento por compras mayores a 10 000 und. Otros proveedores cotizaron el 28 de agosto a S/ 1.05 y S/ 0.95 con IGV. El 7 de setiembre el precio bajó a S/ 0.80 en todos los proveedores.",
+ pasos:[
+  "Mes base = agosto, por la fecha de entrega del ET (11 de setiembre).",
+  "El precio del 7 de setiembre es posterior al mes base ⇒ no se considera.",
+  "Los descuentos no se incluyen en el PMO.",
+  "Contrata ⇒ sin IGV: 0.76, 0.89 y 0.81 S/ porund.",
+  "PMO = promedio = 0.82 S/ porund.",
+  "En la versión desarrollada en clase el flete y los demás términos quedaron en 0.",
+  "PMPO = 0.82 S/ porund."],
+ resp:"PMPO = 0.82 S/ por unidad",
+ nota:"En la hoja de clase (10/09/26) el flete quedó pendiente: la ingeniera dijo que lo terminaría en la siguiente clase con el flete en dos tramos (tienda → caserío por millar, y caserío → obra con el camión de S/ 250 por día y 5 viajes de un millar). La dinámica, en sus palabras, es exactamente igual a la del porcelanato. Así lo resolvió en video: clase 8, 1:32:23 y 1:34:09."},
+
+{id:"e-cemento", tema:"t42", origen:"4.2 Material_Ejercicios · Ejercicio 1", tipo:"calculo", verif:"propuesta", fam:"PMPO",
+ enunciado:"Se requiere presupuestar 450 bolsas de Cemento Portland Tipo MS para una obra de saneamiento en Canchaque. El ET se entrega el 25 de julio de 2026. Obra por contrata. Cotizaciones de junio con IGV: proveedor A S/ 29.50, B S/ 30.20, C S/ 31.00. Descuentos por compras mayores a 400 bolsas: A 5%, B 8%, C 10%. El 5 de julio el precio regional subió 6% sobre el precio base. Flete Piura–Canchaque: S/ 4.50 por bolsa con IGV. De Canchaque a la obra se usa camioneta 4x4 a S/ 550 por día sin IGV, 8 viajes diarios de 25 bolsas.",
+ pasos:[
+  "Mes base = junio, por la fecha de entrega del ET (25 de julio). El alza del 5 de julio es posterior ⇒ no se considera.",
+  "Los descuentos no entran en el PMO.",
+  "Contrata ⇒ sin IGV: 29.50/1.18 = 25.0000; 30.20/1.18 = 25.5932; 31.00/1.18 = 26.2712.",
+  "PMO = promedio = 25.62 S/ porbolsa.",
+  "Flete tramo 1 (Piura–Canchaque): 4.50/1.18 = 3.81 S/ porbolsa.",
+  "Flete tramo 2 (Canchaque–obra): 8 viajes × 25 bolsas = 200 bolsas/día ⇒ 550/200 = 2.75 S/ porbolsa.",
+  "F = 3.81 + 2.75 = 6.56 S/ porbolsa.",
+  "A/M = 2% × 25.62 = 0.51. m = 5% × 25.62 = 1.28.",
+  "PMPO = 25.62 + 6.56 + 0.51 + 1.28 = 33.98 S/ porbolsa."],
+ resp:"PMPO ≈ 33.98 S/ por bolsa",
+ nota:"Solución propuesta, no corregida por la ingeniera. El criterio del mes base sí está confirmado: en la clase 8 (1:28:52) preguntó cuál era el mes para un ET del 11 de setiembre y validó 'agosto, porque el presupuesto se elabora antes'. Por eso aquí el mes base es junio y el alza del 5 de julio no entra."},
+
+{id:"e-ladrillo-bernal", tema:"t42", origen:"4.2 Material_Ejercicios · Ejercicio 5", tipo:"calculo", verif:"propuesta", fam:"PMPO",
+ enunciado:"Vivienda social en Bernal: 12 500 unidades de ladrillo King Kong 18 huecos. ET se entrega el 14 de mayo de 2026. Obra por contrata. Cotizaciones de abril sin IGV: ladrillera 1 S/ 0.85, ladrillera 2 S/ 0.90, ladrillera 3 S/ 0.82. Descuentos por más de 10 millares: L1 12%, L3 5%. El 10 de mayo subió el precio y llegaron cotizaciones de A S/ 0.90, B S/ 1.05 y C S/ 0.87. Flete Castilla–Bernal: un tráiler a S/ 480 por millar con IGV; otras dos cotizaciones a S/ 400 y S/ 390 por millar sin IGV. De Bernal a la obra se usa motofurgón a S/ 35 por viaje con IGV, capacidad 400 ladrillos.",
+ pasos:[
+  "Mes base = abril, por la fecha de entrega del ET (14 de mayo). Las cotizaciones del 10 de mayo son posteriores ⇒ no se consideran.",
+  "Los descuentos no entran en el PMO. Las cotizaciones de abril ya están sin IGV.",
+  "PMO = (0.85 + 0.90 + 0.82)/3 = 0.8567 S/ porund.",
+  "Flete tramo 1: 480/1.18 = 406.78; promedio con 400 y 390 = 398.93 S/ pormillar ⇒ 0.3989 S/ porund.",
+  "Flete tramo 2: 35/1.18 = 29.66 por viaje ÷ 400 ladrillos = 0.0742 S/ porund.",
+  "F = 0.3989 + 0.0742 = 0.4731 S/ porund.",
+  "A/M = 2% × 0.8567 = 0.0171. m = 5% × 0.8567 = 0.0428.",
+  "PMPO = 0.8567 + 0.4731 + 0.0171 + 0.0428 = 1.3897 S/ porund."],
+ resp:"PMPO ≈ 1.39 S/ por unidad",
+ nota:"Solución propuesta, no corregida. Ojo: aquí las cotizaciones de abril vienen sin IGV, a diferencia de los otros ejercicios."},
+
+{id:"e-varilla", tema:"t42", origen:"4.2 Material_Ejercicios · Ejercicio 6", tipo:"calculo", verif:"propuesta", fam:"PMPO",
+ enunciado:"Puente en Malingas (Tambogrande): trasladar 350 varillas de acero de 5/8\". Obra por contrata. Distribuidores con IGV: 1) S/ 68, 2) S/ 71, 3) S/ 69.50. De Sullana a Tambogrande, camiones cobran por el lote total S/ 1 200, S/ 1 500 y S/ 1 350, todos con IGV. De Tambogrande a la obra se usa carreta a S/ 180 por día sin IGV, 4 viajes diarios con capacidad de 1 500 kg. Cada varilla de 5/8\" pesa 14.8 kg.",
+ pasos:[
+  "Contrata ⇒ sin IGV: 68/1.18 = 57.63; 71/1.18 = 60.17; 69.50/1.18 = 58.90.",
+  "PMO = promedio = 58.90 S/ porvarilla.",
+  "Flete tramo 1: sin IGV los lotes son 1 016.95, 1 271.19 y 1 144.07 ⇒ promedio 1 144.07 S/ por el lote de 350 varillas = 3.27 S/ porvarilla.",
+  "Flete tramo 2: 4 viajes × 1 500 kg = 6 000 kg/día ÷ 14.8 kg = 405.4 varillas/día ⇒ 180/405.4 = 0.44 S/ porvarilla.",
+  "F = 3.27 + 0.44 = 3.71 S/ porvarilla.",
+  "A/M = 2% × 58.90 = 1.18. m = 5% × 58.90 = 2.94.",
+  "PMPO = 58.90 + 3.71 + 1.18 + 2.94 = 66.73 S/ porvarilla."],
+ resp:"PMPO ≈ 66.73 S/ por varilla",
+ nota:"Solución propuesta, no corregida. Aquí el flete del tramo 1 viene por lote completo: hay que repartirlo entre las 350 varillas."},
+
+{id:"e-ladrillo-techo", tema:"t42", origen:"Práctica pasada · 2017 · Pregunta 5", tipo:"examen", verif:"propuesta", fam:"PMPO",
+ enunciado:"Determine el costo por unidad del ladrillo de techo de 0.30 × 0.30 × 0.15 puesto en obra, así como el aporte unitario por metro cuadrado de una losa aligerada (5.50 ptos). Vigueta de 10 cm. El presupuesto se elabora el 19 de mayo de 2017, obra por contrata. Desperdicio del ladrillo: 5%. Promart Piura cotizó al 30.04.17 en S/ 1.90 la unidad (sin IGV), con 20% de descuento por más de 3 000 unidades; el metrado total de la obra es 1 000 m². El 10.05.17 hubo un aumento y el ladrillo está a S/ 2.00 (sin IGV). La obra está en Querecotillo, cerca de Sullana. Flete Promart–Querecotillo: transportista 1 S/ 90 por millar, transportista 2 S/ 80 por millar. El único acceso a la obra es un puente por el que solo pasa un burro: alquiler S/ 50 por día (sin IGV), 5 viajes diarios, 100 unidades por viaje.",
+ pasos:[
+  "Mes base = abril, por la fecha del presupuesto (19 de mayo). La cotización válida es la del 30.04.17: S/ 1.90. El alza del 10.05 es posterior ⇒ no se considera.",
+  "El descuento del 20% no entra en el PMO, aunque la obra necesite 8 750 ladrillos y supere los 3 000. Ese dato es un distractor.",
+  "La cotización ya está sin IGV, como corresponde a obra por contrata. PMO = 1.90 S/ por unidad.",
+  "Flete tramo 1 (Promart–Querecotillo): promedio (90 + 80)/2 = 85 S/ por millar = 0.085 S/ por unidad.",
+  "Flete tramo 2 (el burro): 50 S/ por día ÷ (5 viajes × 100 unidades) = 0.10 S/ por unidad.",
+  "F = 0.085 + 0.10 = 0.185 S/ por unidad.",
+  "A/M = 2% × 1.90 = 0.038. m = 5% × 1.90 = 0.095.",
+  "PMPO = 1.90 + 0.185 + 0.038 + 0.095 = 2.218 ≈ 2.22 S/ por unidad.",
+  "Aporte unitario: cada ladrillo de 30 cm más la vigueta de 10 cm forman un módulo de 0.40 × 0.30 = 0.12 m² ⇒ 1/0.12 = 8.33 ladrillos por m².",
+  "Con 5% de desperdicio: 8.33 × 1.05 = 8.75 unidades por m² de losa.",
+  "Costo del ladrillo por m² de losa = 8.75 × 2.218 ≈ 19.41 S/ por m²."],
+ resp:"PMPO ≈ 2.22 S/ por unidad · Aporte unitario ≈ 8.75 und/m² · ≈ 19.41 S/ por m² de losa",
+ nota:"Solución propuesta con el criterio de mes base que la ingeniera confirmó en clase. Dos trampas: el descuento y el alza posterior. Y un matiz: el desperdicio del 5% va en el aporte unitario (colocación); la merma del 5% del PMPO es por transporte y son conceptos distintos, por eso ambos se aplican."},
+
+{id:"e-tractor", tema:"t44", origen:"Ejemplo de clase · 4.3 Equipo", tipo:"calculo", verif:"clase", fam:"Hora máquina",
+ enunciado:"Tractor con valor de adquisición de $ 100 000. Trabaja 5 años y luego se vende en $ 25 000. ¿Cuál es su depreciación por hora?",
+ pasos:[
+  "Vida económica en horas = 5 años × 10 meses × 25 días × 8 horas = 10 000 h.",
+  "D = (VA − VR) / VE(horas) = (100 000 − 25 000) / 10 000.",
+  "D = 7.50 $/hora."],
+ resp:"D = 7.50 $ por hora"},
+
+{id:"e-cargador-cp", tema:"t44", origen:"Ejemplo de clase · 4.3 Equipo", tipo:"calculo", verif:"clase", fam:"Hora máquina",
+ enunciado:"Cargador sobre llantas con valor de adquisición de S/ 600 000. Trabaja 5 años y se vende al 20% del VA. Tasa de interés 10%. ¿Cuál es el costo de posesión por hora?",
+ pasos:[
+  "VE(horas) = 5 × 10 × 25 × 8 = 10 000 h. VR = 20% × 600 000 = 120 000.",
+  "D = (600 000 − 120 000) / 10 000 = 48.00 S/ porh.",
+  "K = ((n+1)·n / 2n) / VE(horas) = ((6 × 5) / 10) / 10 000 = 3 / 10 000 = 0.0003.",
+  "I = VA × tasa × K = 600 000 × 0.10 × 0.0003 = 18.00 S/ porh.",
+  "S, I y A = 5% × VA × K = 0.05 × 600 000 × 0.0003 = 9.00 S/ porh.",
+  "CP = D + I + (S, I y A) = 48 + 18 + 9 = 75.00 S/ porh."],
+ resp:"CP = 75.00 S/ por hora"},
+
+{id:"e-cargador-co", tema:"t44", origen:"Ejemplo de clase · 4.3 Equipo", tipo:"calculo", verif:"parcial", fam:"Hora máquina",
+ enunciado:"Mismo cargador sobre llantas de 140 HP, obra por contrata. VA S/ 600 000 con IGV, 5 años, se vende al 20% del VA, tasa 10%, %MyR = 70%. Galón de combustible S/ 24 con IGV, galón de aceite S/ 80 con IGV, libra de grasa S/ 20 con IGV. Cuatro neumáticos con VA de S/ 16 000 con IGV y VE de 2 000 h. Costo HH del operario S/ 28.95. ¿Cuál es el costo de operación?",
+ pasos:[
+  "Contrata ⇒ pasar todo a valores sin IGV antes de operar.",
+  "MyR = %MyR × VA / VE(horas), con VE = 10 000 h.",
+  "C (combustible) = consumo en gal/h × precio del galón. El consumo sale de la tabla por tipo y potencia de máquina que la ingeniera entrega en clase.",
+  "L (lubricantes) y F (filtros): se estiman como 20% del costo de combustibles más lubricantes.",
+  "N = VA del neumático / VE del neumático = (16 000 sin IGV) / 2 000 h.",
+  "O (operador): el cargador frontal es equipo pesado ⇒ 1.5 × 28.95 = 43.43 S/ porh.",
+  "CO = MyR + C + L + F + N + O."],
+ nota:"No se puede cerrar el número sin la tabla de consumo de combustible por potencia. Pídele esa tabla a la ingeniera o búscala en el material de Ramos Salazar."},
+
+{id:"e-taller1", tema:"t25", origen:"Taller 1-1 · Radiografía de obra pública", tipo:"taller", verif:"clase", fam:"Contratación",
+ enunciado:"Objetivo de la ingeniera: extraer información situacional y legal de obras públicas peruanas a través del SEACE, el Sistema de Seguimiento de Inversiones (SSI de Invierte.pe) y PLADICOP. Completar la ficha técnica contractual y situacional de una obra pública real: entidad contratante, tipo de procedimiento de selección, valor referencial, sistema de entrega, contratista, plazo contractual, monto contractual, modalidad de pago, mecanismo de garantía y estado actual.",
+ pasos:[
+  "Fuentes indicadas: SEACE (Sistema Electrónico de Contrataciones del Estado), SSI (Sistema de Seguimiento de Inversiones) y el buscador público de contratos.",
+  "Partir del CUI del proyecto para enlazar inversión y contrato.",
+  "Los estados posibles: en licitación, en ejecución, paralizado o en arbitraje, en recepción, en liquidación, finalizado, en operación.",
+  "Cuidar la coherencia: el sistema de entrega condiciona la modalidad de pago y esta condiciona quién asume cada riesgo."],
+ nota:"Ejemplo resuelto en clase: mejoramiento de vía urbana, Municipalidad Provincial de Piura, adjudicación simplificada, valor referencial S/ 8 737 859.46, DBB solo construcción, Consorcio GDC, 150 días, S/ 8 718 636.16, suma alzada, carta fianza de fiel cumplimiento, en liquidación."},
+
+{id:"e-taller2", tema:"t25", origen:"Taller 1-2 · Distribución de riesgos contractuales", tipo:"taller", verif:"clase", fam:"Contratación",
+ enunciado:"Objetivo de la ingeniera: analizar cómo varía la asignación de riesgos entre la Entidad y el Contratista según el sistema de entrega (DBB vs. DB) y la modalidad de pago (suma alzada vs. precios unitarios) frente a incidencias reales. Dado el proyecto de mejoramiento y ampliación de una vía urbana (DBB, solo construcción, suma alzada, 150 días), determinar para cada situación quién soporta principalmente el riesgo y por qué.",
+ pasos:[
+  "Identificar la situación y a qué categoría de riesgo pertenece.",
+  "Preguntar quién controla mejor ese riesgo y qué dice el contrato.",
+  "Justificar siempre desde las características de contratación: sistema de entrega y modalidad de pago.",
+  "En suma alzada el contratista asume la variación de metrados; en precios unitarios la asume la entidad."],
+ nota:"Corrección de la ingeniera en este taller: a casi todos los grupos les faltó destacar las características de contratación que influyen en esa distribución de riesgos. Ese es el punto que califica."},
+
+{id:"e-taller3", tema:"t23", origen:"Taller 1-3 · Stakeholder incómodo", tipo:"taller", verif:"clase", fam:"Stakeholders",
+ enunciado:"Objetivo de la ingeniera: mapear la postura, poder, influencia, impacto e interés de la sociedad civil y estructurar un plan de mitigación frente a un conflicto social en ejecución física. Analizar a la junta vecinal y comerciantes como interesados: posición actual y deseada (en contra, neutro, de apoyo), interés, poder, influencia e impacto, expectativa de valor y estrategia de involucramiento.",
+ pasos:[
+  "Caracterizar al interesado antes de puntuarlo.",
+  "Redactar la expectativa de valor desde la óptica del interesado, con precisión, no en términos genéricos.",
+  "Puntuar los cuatro atributos sin confundirlos entre sí.",
+  "Aterrizar las estrategias de involucramiento a la situación descrita, no en general."],
+ nota:"Corrección de la ingeniera: la caracterización suele estar bien, pero falta precisión en la expectativa de valor y las estrategias se responden de forma global en lugar de aterrizarlas a la situación del enunciado."},
+
+{id:"e-entrega", tema:"t25", origen:"Conceptual · Elegir el sistema de entrega", tipo:"conceptual", verif:"clase", fam:"Contratación",
+ enunciado:"¿Qué sistema de entrega corresponde a cada situación y por qué? a) Un proyecto de baja complejidad con diseño terminado. b) Un proyecto donde el constructor puede aportar valor al diseño. c) Un proyecto de muy alta complejidad con múltiples especialidades.",
+ pasos:[
+  "a) DBB (Diseño – Licitación – Construcción), o solo construcción: proyectos de baja complejidad, el diseño ya está cerrado.",
+  "b) DB (Diseño – Construcción): el constructor aporta valor al diseño.",
+  "c) IPD (Entrega integrada de proyectos) o CM: proyectos de muy alta complejidad. CM-agente y CM-at-Risk corresponden a alta complejidad.",
+  "El criterio general: madurez de la información del proyecto, complejidad o envergadura, nivel de participación del contratista en el diseño y asignación de riesgos."],
+ resp:"a) DBB · b) DB · c) IPD (o CM según el grado)"},
+
+{id:"e-pago", tema:"t25", origen:"Conceptual · Suma alzada vs. precio unitario", tipo:"conceptual", verif:"clase", fam:"Contratación",
+ enunciado:"Explicar la diferencia entre suma alzada y precio unitario, y decir cuándo conviene cada modalidad de pago.",
+ pasos:[
+  "Suma alzada: precio único para todo el proyecto. Exige que el contratista tenga planos y especificaciones completos. Las modificaciones requieren órdenes de cambio.",
+  "Precio unitario: se paga por unidad de trabajo según cantidades reales. Conviene cuando se conoce la naturaleza del trabajo y las cantidades solo de forma aproximada.",
+  "Consecuencia en riesgo: en suma alzada el riesgo de metrados lo asume el contratista; en precio unitario lo asume la entidad.",
+  "Existen además el esquema mixto y el costo reembolsable."],
+ resp:"Suma alzada: precio cerrado, diseño completo, riesgo de metrados al contratista. Precio unitario: pago por cantidades reales, riesgo de metrados a la entidad."},
+
+{id:"e-alcance", tema:"t33", origen:"Conceptual · Del PMI al expediente técnico", tipo:"conceptual", verif:"clase", fam:"Alcance",
+ enunciado:"Traducir cada concepto del PMI a su documento equivalente en un proyecto constructivo peruano: recopilar requisitos, declaración del alcance, EDT y diccionario de la EDT. Luego, clasificar las variaciones del alcance en obra pública.",
+ pasos:[
+  "Recopilar requisitos → revisión de consultas y observaciones al expediente técnico.",
+  "Declaración del alcance → memoria descriptiva y especificaciones técnicas.",
+  "EDT → itemizado de partidas.",
+  "Diccionario de la EDT → especificaciones técnicas y Análisis de Precios Unitarios (APU).",
+  "Variaciones: mayores o menores metrados (más o menos metrado en una partida existente); obra adicional (trabajo que no existe en el contrato, requiere expediente técnico adicional y resolución de aprobación previa); deductivo vinculante (el trabajo que se deja de hacer por el adicional)."],
+ resp:"El Expediente Técnico es la línea base del alcance."},
+
+{id:"e-edt", tema:"t32", origen:"Conceptual · Principios de la EDT", tipo:"conceptual", verif:"clase", fam:"Alcance",
+ enunciado:"Enunciar los cuatro principios básicos de la EDT y explicar la regla del 100%.",
+ pasos:[
+  "Regla del 100%: la suma de los niveles inferiores debe cubrir exactamente todo el alcance del nivel superior, ni más ni menos.",
+  "Elementos mutuamente exclusivos: ningún trabajo aparece en dos ramas, para no duplicarlo entre contratistas o subcontratistas.",
+  "Orientada a entregables, no a acciones.",
+  "Base para el costo y el tiempo: sobre los paquetes de trabajo se estiman recursos, duraciones y costos."],
+ resp:"Regla del 100%, mutuamente exclusivos, orientada a entregables, base para costo y tiempo."},
+
+{id:"x-casitos", tema:"t32", origen:"Anunciado para la PC1 · casos cortos de alcance", tipo:"conceptual", verif:"clase", fam:"Alcance",
+ enunciado:"Para el proyecto de mejoramiento de pistas y veredas de una zona urbana, clasifica cada enunciado como alcance del PRODUCTO (característica de lo que se entrega) o alcance del PROYECTO (trabajo necesario para entregarlo): a) Pavimento flexible con vida útil mínima de 20 años. b) Realizar el estudio de tráfico (IMD) y el diseño de mezcla asfáltica bajo AASHTO. c) Rampas peatonales en todas las esquinas con señalización podotáctil. d) Reubicar los postes de alumbrado que interfieren con el nuevo trazo. e) Ensayos de densidad de campo con cono de arena por cada capa compactada. f) Base granular compactada al 100% de la máxima densidad seca. g) Gestionar el plan de desvío de tránsito con vigías, conos y barreras New Jersey. h) Obtener el acto de conformidad de la empresa de electricidad.",
+ pasos:[
+  "Pregunta guía: ¿esto describe cómo ES la obra terminada, o algo que hay que HACER para llegar a ella?",
+  "a) Producto: es una característica del pavimento.",
+  "b) Proyecto: es trabajo de diseño para llegar al producto.",
+  "c) Producto: describe el entregable físico.",
+  "d) Proyecto: es una tarea de ejecución, aunque termine dejando un poste en otro sitio.",
+  "e) Proyecto: es control de calidad, trabajo del equipo.",
+  "f) Producto: es la especificación que debe cumplir la base.",
+  "g) Proyecto: gestión de tránsito durante la obra; no queda en el producto final.",
+  "h) Proyecto: gestión con un interesado; en clase la ingeniera puso justo este ejemplo como trabajo que puede quedar fuera de la jurisdicción de la empresa pero sigue siendo parte del proyecto.",
+  "Regla que suele salvar los casos dudosos: si desaparece cuando la obra se entrega, es del proyecto; si el usuario lo toca, lo pisa o lo ve, es del producto."],
+ resp:"Producto: a, c, f. Proyecto: b, d, e, g, h.",
+ nota:"La ingeniera anunció el 10-set que en la PC1 habría 'pequeños casitos' para identificar producto y proyecto. Los enunciados salen de la tabla de requisitos de la diapositiva 3.2 y del ejemplo que puso en la clase 6 (1:17:51)."},
+
+{id:"x-pc1-24-red", tema:"t52", origen:"Práctica 1 · 2024-II · 6-set-2024", tipo:"examen", verif:"examen", fam:"Programación",
+ enunciado:"Programación de un edificio de concreto prefabricado. Se dan 13 actividades (A a M) con metrado y rendimiento; los vínculos se describen en prosa. Se pide: tabla de precedencias con sucesoras y duraciones (4.5 ptos), diagrama de red (6 ptos), fechas del proyecto (5 ptos), holguras (3 ptos) y ruta crítica (0.5 ptos). Antes hay un verdadero/falso sobre predecesoras y sucesoras (1 pto).",
+ pasos:[
+  "Duración = metrado ÷ rendimiento, redondeando hacia arriba a días enteros. Las actividades sin metrado traen la duración dada.",
+  "Traducir cada frase de vínculos a una relación: 'no puede iniciar hasta que esté terminado' es fin-comienzo; 'se realizan en paralelo' significa que comparten predecesoras, no que se vinculen entre sí.",
+  "Con la red hecha, recorrido hacia adelante para FPI y FPF; hacia atrás para FUI y FUF.",
+  "Holgura total = FUF − FPF (o FUI − FPI). Holgura libre = menor FPI de las sucesoras − FPF.",
+  "La ruta crítica es la cadena de actividades con holgura total cero."],
+ nota:"En el examen resuelto la ruta crítica pasa por B-E/F-H-I-J y la duración total sale 36 días. Las duraciones que hay que calcular son D=8, E=10, F=10, K=2, L=1, M=2."},
+
+{id:"x-pc2-24-mo", tema:"t43", origen:"Práctica 2 · 2024-II · 18-oct-2024", tipo:"examen", verif:"examen", fam:"Mano de obra",
+ enunciado:"Calcular el costo de la hora-hombre del operario bajo el régimen laboral de construcción civil y usarlo en el ACU de 'Tarrajeo exterior fachada piso 5' acelerado, donde el peón y el operario trabajan 4 horas extras diarias (4 ptos).",
+ pasos:[
+  "Armar la Tabla 2 con todos los conceptos remunerativos: jornal básico, dominical, BUC, escolaridad, movilidad, horas extras, gratificaciones, bonificaciones, compensación vacacional, indemnización, prestaciones de salud, SCTR, CONAFOVICER y SNP.",
+  "Horas extras: sobretasa de 60% para las 2 primeras horas y 100% para las siguientes. Con 4 horas extras, dos van al 60% y dos al 100%.",
+  "Costo hh = total del periodo ÷ (horas por día × días del periodo).",
+  "Llevar ese costo hh al ACU: Cantidad = cuadrilla ÷ rendimiento diario × 8 horas; Parcial = cantidad × precio.",
+  "El costo unitario de la partida es la suma de los parciales de mano de obra, materiales y equipos.",
+  "ACU corregido del tarrajeo acelerado (rendimiento 7 m²/día): operario 1.1429 hh × 39.40 = 45.03; peón 0.5714 hh × 22.70 = 12.97; clavos 0.091; arena 2.973; agua 0.051; cemento 5.756; herramientas 3% de MO = 1.74; regla de aluminio 7.70; andamio 0.3333 hm × 16 = 5.33."],
+ resp:"Costo unitario acelerado = 81.65 S/ por m² (hh operario con 4 horas extras: 39.40; peón: 22.70)",
+ nota:"En el examen resuelto el costo hh del operario en jornada normal sale S/ 28.82/h (691.73 entre 8 horas por 3 días) y con 4 horas extras sube a 39.40. Fíjate que la cantidad de mano de obra se calcula igual (8 h ÷ rendimiento), lo que cambia es el precio de la hora."},
+
+{id:"x-pc2-24-pmpo", tema:"t42", origen:"Práctica 2 · 2024-II · 18-oct-2024", tipo:"examen", verif:"examen", fam:"PMPO",
+ enunciado:"Para el ACU del tarrajeo hay que costear cemento y arena. Cemento: Sodimac S/ 27.50 por bolsa con flete S/ 0.11/kg; Promart S/ 30.00 con flete S/ 0.12/kg; Dino S/ 30.50 con flete S/ 0.10/kg (precios con IGV). Arena: Cantera 1 S/ 70/m³ con flete S/ 50/m³; Cantera 2 S/ 68 con flete S/ 55; Cantera 3 S/ 75 con flete S/ 45. Determinar el precio puesto en obra de cada material.",
+ pasos:[
+  "Obra por contrata ⇒ quitar el IGV a todos los precios cotizados.",
+  "PMO = promedio de las tres cotizaciones sin IGV.",
+  "El flete del cemento viene por kg: la bolsa es de 42.5 kg, así que hay que llevarlo a soles por bolsa antes de promediar.",
+  "El flete de la arena ya viene en la misma unidad del ACU (m³), se promedia directo. Sus cotizaciones no llevan asterisco de IGV: se toman tal cual.",
+  "Cemento: PMO = (23.31 + 25.42 + 25.85)/3 = 24.86; F = 0.11 S/ por kg × 42.5 kg = 4.68; A/M = 0.50; m = 1.24 ⇒ 31.28 S/ por bolsa.",
+  "Arena: PMO = 71.00; F = 50.00; A/M = 1.42; m = 3.55 ⇒ 125.97 S/ por m³.",
+  "Esos dos precios van a la columna 'Precio' del ACU del tarrajeo y se multiplican por la cantidad (0.1840 bol y 0.0236 m³)."],
+ resp:"Cemento 31.28 S/ por bolsa · Arena 125.97 S/ por m³ (ambos dados por correctos en el examen)",
+ nota:"El detalle que suele costar puntos: el flete cotizado por kg hay que convertirlo a la unidad de medida del ACU, la bolsa de 42.5 kg. En el ACU corregido: cemento 0.1840 × 31.28 = 5.756 y arena 0.0236 × 125.97 = 2.973."},
+
+{id:"x-pc2-24-crash", tema:"t53", origen:"Práctica 2 · 2024-II · 18-oct-2024", tipo:"examen", verif:"examen", fam:"Aceleración",
+ enunciado:"Reducir la duración del proyecto en 2 días (4 ptos) y calcular la variación del costo total, incluyendo costos directos e indirectos, sabiendo que los indirectos son S/ 40 por cada día de ejecución (0.5 ptos). La tabla trae por actividad: metrado, rendimiento diario por cuadrilla, número de cuadrillas, duración, costo unitario, costo parcial, máxima reducción posible y costo por día de reducción.",
+ pasos:[
+  "Identificar la ruta crítica antes de acelerar nada: solo sirve acortar actividades críticas.",
+  "Ordenar las actividades críticas por costo por día de reducción, de menor a mayor.",
+  "Acortar primero la más barata, hasta su máxima reducción posible, y luego seguir con la siguiente.",
+  "Después de cada día recortado, revisar si apareció una ruta crítica nueva: si hay dos rutas críticas hay que acortar una actividad en cada una, o una compartida.",
+  "Variación del costo = (suma de los costos por día de reducción aplicados) − (días ahorrados × costo indirecto diario).",
+  "Si el ahorro de indirectos supera el sobrecosto directo, acelerar conviene."],
+ nota:"Fíjate en el signo: acelerar sube el costo directo y baja el indirecto. La pregunta pide la variación neta."},
+
+{id:"x-pc1-25-pert", tema:"t52", origen:"Práctica 1 · 2025-I · 2-may-2025", tipo:"examen", verif:"examen", fam:"PERT",
+ enunciado:"Planificación de la construcción de un grifo. Se pide completar sucesoras (1 pto), trazar la red y estimar la duración esperada (4.5 ptos), calcular fechas y holguras (5 ptos), indicar la ruta crítica (0.5 ptos), la probabilidad de terminar entre 95 y 105 días (1.25 ptos), el plazo para una probabilidad del 95% (0.5 ptos) y comparar una actividad con holgura libre contra otra con holgura independiente (1 pto).",
+ pasos:[
+  "Duración esperada: Te = (To + 4·Tm + Tp) / 6 para cada actividad.",
+  "Varianza: σ² = ((Tp − To) / 6)². Solo se suman las varianzas de las actividades de la ruta crítica.",
+  "σ del proyecto = raíz de la suma de varianzas críticas.",
+  "Z = (TL − TE) / σ, con TE la duración esperada del proyecto y TL el plazo por evaluar.",
+  "Para un intervalo, P(95 < T < 105) = P(Z₁₀₅) − P(Z₉₅).",
+  "Para el camino inverso (95% de probabilidad), se busca Z en la tabla y se despeja TL = TE + Z·σ.",
+  "Holgura libre = FPF sucesora más temprana − FPF de la actividad. Holgura independiente descuenta además la holgura de las predecesoras."],
+ nota:"En el examen resuelto: duración esperada 100 días, σ² acumulada 30.08, σ = 5.48, Z(95) = −0.912. Corrección de la profesora: hay que sustentar las holguras con un ejemplo numérico, no solo escribir la fórmula."},
+
+{id:"x-pc2-25-prog", tema:"t52", origen:"Práctica 2 · 2025-II · 7-nov-2025", tipo:"examen", verif:"examen", fam:"Curvas y recursos",
+ enunciado:"Programación de un proyecto con 10 actividades, dadas predecesoras, cantidad de trabajo, rendimiento diario por unidad de metrado, operarios y peones por día y costo total. Se pide: tabla de duraciones (0.5 ptos), diagrama de Gantt con fecha de fin (2.5 ptos) sabiendo que se inicia el lunes 3 de noviembre de 2025 y se trabaja de lunes a sábado sin feriados, diagrama de red (2.5 ptos), ruta crítica y duración (1 pto), histograma diario del recurso peón (2 ptos) y curva S asumiendo costo por día proporcional (2.5 ptos).",
+ pasos:[
+  "Duración = cantidad de trabajo ÷ rendimiento diario, redondeada hacia arriba.",
+  "Para el Gantt con calendario: contar solo días laborables (lunes a sábado). Un proyecto de N días laborables no termina N días después en el calendario.",
+  "El histograma de peón se arma sumando, día por día, los peones de todas las actividades activas ese día. Los picos indican dónde hay que nivelar recursos.",
+  "Curva S: costo diario de cada actividad = costo total ÷ duración; se reparte por día, se suma por día y se acumula.",
+  "La curva S se traza sobre el calendario, no sobre los días laborables numerados."],
+ nota:"Esta pregunta junta todo lo de programación: es la más rentable para practicar completa."},
+
+{id:"x-pc2-25-pert", tema:"t52", origen:"Práctica 2 · 2025-II · 7-nov-2025", tipo:"examen", verif:"examen", fam:"PERT",
+ enunciado:"Vivienda social con 9 actividades y tiempos optimista, probable y pesimista. Se pide: red (2.5 ptos), fechas FPI, FUI, FPF y FUF (1.5 ptos), ruta crítica y duración (1 pto), probabilidad de terminar antes de 45 días (2 ptos) y qué duración pondrías si el cliente pide una probabilidad de éxito de al menos 93% (2 ptos). Trabajar con 2 decimales.",
+ pasos:[
+  "Te = (To + 4·Tm + Tp)/6 y σ² = ((Tp − To)/6)² para cada actividad.",
+  "Ojo con los vínculos especiales del enunciado: A FC-1, C FC+5, E FC-3, F FC-1, H FC+2 desplazan las fechas.",
+  "Red, recorrido adelante y atrás, ruta crítica con holgura cero.",
+  "P(T < 45): Z = (45 − TE)/σ y se lee la tabla normal.",
+  "Para 93%: se busca el Z que deja 0.93 a la izquierda (≈ 1.48) y se calcula TL = TE + 1.48·σ."],
+ nota:"Las dos preguntas de probabilidad valen 4 de los 20 puntos y son las que más se dejan en blanco por falta de tiempo."},
+
+{id:"x-pc3-25-poli", tema:"t45", origen:"Práctica 3 · 2025-I · 13-jun-2025", tipo:"examen", verif:"examen", fam:"Fórmula polinómica",
+ enunciado:"Elaborar la fórmula polinómica de un proyecto a partir del listado de recursos con su monto en soles y su índice unificado (IU). Costos directos S/ 800 000, gastos generales 12% del costo directo (IU 39), utilidad 8% del costo directo (IU 39). Se debe incluir un monomio compuesto (8 ptos).",
+ pasos:[
+  "Calcular el monto total del presupuesto: CD + GG + U.",
+  "Coeficiente de incidencia de cada recurso = monto del recurso ÷ monto total. La suma de todos debe dar 1.000.",
+  "Agrupar recursos por índice unificado; los que comparten IU se suman en un solo término.",
+  "La fórmula admite como máximo 8 monomios y cada coeficiente de incidencia no puede ser menor a 0.050.",
+  "Los recursos con incidencia menor a 0.050 se agrupan con otros afines formando un monomio compuesto, cuyo índice es un promedio ponderado de los IU agrupados.",
+  "Escribir K = a·(Jr/Jo) + b·(Mr/Mo) + ... con los coeficientes redondeados a 3 decimales y sumando exactamente 1."],
+ nota:"Vale 8 de 20 puntos, la pregunta más cara de todas las prácticas revisadas. Los recursos de la tabla son mano de obra (IU 47), acero (3), cemento (21), agregado fino (4), agregado grueso (5), ladrillo (17), madera (43), PVC (72), cable (7), aparatos sanitarios (10), pintura (54), maquinaria (48), combustible (53), herramientas (37) y fletes (32)."},
+
+{id:"x-pc3-25-riesgo", tema:"t72", origen:"Práctica 3 · 2025-I · 13-jun-2025", tipo:"examen", verif:"examen", fam:"Riesgos",
+ enunciado:"Proyecto de construcción del puente vehicular sobre la Quebrada Seca, zona rural de Piura. Seis riesgos identificados con su probabilidad de ocurrencia e impacto: R1 retraso de materiales (0.8 / 75%), R2 fallas del equipo de topografía (0.6 / 20%), R3 huelga local de transportistas (0.9 / 60%), R4 restos arqueológicos (0.4 / 80%), R5 lluvias torrenciales atípicas (0.7 / 90%), R6 variación del tipo de cambio (0.3 / 30%). Escalas: probabilidad baja <30%, media 30-60%, alta >60%; impacto bajo <35%, medio 35-50%, alto >50%. Ubicar los riesgos en la matriz, hacer el ranking y elegir los dos de mayor prioridad, sustentando (2 ptos).",
+ pasos:[
+  "Clasificar cada riesgo con las escalas dadas, sin inventar cortes propios.",
+  "Probabilidad alta (>60%): R1 (0.8), R3 (0.9), R5 (0.7). Media (30-60%): R2 (0.6), R4 (0.4), R6 (0.3 queda en el límite bajo).",
+  "Impacto alto (>50%): R1 (75%), R3 (60%), R4 (80%), R5 (90%). Medio: ninguno claro. Bajo (<35%): R2 (20%), R6 (30%).",
+  "Ranking por el producto probabilidad × impacto: R5 = 0.63, R1 = 0.60, R3 = 0.54, R4 = 0.32, R2 = 0.12, R6 = 0.09.",
+  "Los dos prioritarios son R5 (lluvias torrenciales) y R1 (retraso de materiales), ambos en la celda alta-alta.",
+  "Sustentar con el contexto: en Piura las lluvias atípicas son el riesgo climático dominante y una zona rural agrava la logística de materiales."],
+ resp:"Prioritarios: R5 (0.63) y R1 (0.60), ambos probabilidad alta e impacto alto."},
+
+{id:"x-pc3-25-ev", tema:"t62", origen:"Práctica 3 · 2025-I · 13-jun-2025", tipo:"examen", verif:"examen", fam:"Valor ganado",
+ enunciado:"Proyecto adjudicado por S/ 2 900 000 con plazo de 8 meses. Al término del mes 4 el avance físico real reportado fue del 45% del trabajo total y se habían gastado S/ 1 400 000. Según la línea base, al término del cuarto mes se debería haber completado el 50%. Se pide: identificar el estado respecto al cronograma y al costo (3 ptos), analizar la eficiencia (1 pto) y proyectar costo, tiempo y lo que resta pagar manteniendo el mismo ritmo (1.5 ptos).",
+ pasos:[
+  "EV (valor ganado) = 45% × 2 900 000 = S/ 1 305 000.",
+  "PV (valor planificado) = 50% × 2 900 000 = S/ 1 450 000.",
+  "AC (costo real) = S/ 1 400 000.",
+  "SV = EV − PV = −145 000 ⇒ atrasado. CV = EV − AC = −95 000 ⇒ sobrecosto.",
+  "SPI = EV/PV = 0.90 y CPI = EV/AC = 0.932: por cada sol gastado se produce 0.93 de valor.",
+  "EAC = BAC / CPI = 2 900 000 / 0.932 ≈ S/ 3 111 600. ETC = EAC − AC ≈ S/ 1 711 600 por pagar.",
+  "Plazo proyectado = 8 / SPI ≈ 8.9 meses."],
+ resp:"Atrasado y sobrecosteado: SV = −145 000, CV = −95 000, SPI = 0.90, CPI = 0.93, EAC ≈ S/ 3.11 millones."},
+
+{id:"x-pc3-25-curva", tema:"t63", origen:"Práctica 3 · 2025-I · 13-jun-2025", tipo:"examen", verif:"examen", fam:"Curvas y recursos",
+ enunciado:"Una gráfica muestra el reporte de un proyecto del mes 4 al 9 con tres series: línea base, valorización acumulada y valor ganado acumulado. Se pide, sin cálculos: la duración y el costo total previsto (0.5 ptos), cómo estuvo el proyecto en términos de costo en el mes 4 (0.75 ptos) y en términos de tiempo en el mes 7 (0.75 ptos).",
+ pasos:[
+  "Duración prevista: el último mes en que la línea base tiene dato. Costo total previsto: su valor final.",
+  "Para leer costo: comparar valor ganado contra valorización acumulada (lo que se gastó o cobró). Si el valor ganado está por debajo, hubo sobrecosto.",
+  "Para leer tiempo: comparar valor ganado contra línea base. Si el valor ganado va por debajo de la línea base, hay atraso.",
+  "No confundir las series: la valorización acumulada es dinero facturado, no avance físico."],
+ nota:"En el examen revisado el alumno respondió lo de costo usando el criterio de tiempo y viceversa, y la profesora se lo marcó. Es el error clásico de esta pregunta."},
+
+{id:"x-pc3-25-calidad", tema:"t72", origen:"Práctica 3 · 2025-I · 13-jun-2025", tipo:"examen", verif:"examen", fam:"Calidad",
+ enunciado:"Ampliación de un hospital con área de quirófanos y laboratorio de patología. Se dan extractos de las especificaciones técnicas de pisos de quirófanos (vinilo homogéneo antibacteriano, espesor mínimo 2 mm, planicidad ±2 mm en 2 metros), paredes (paneles HPL de 6 mm, verticalidad ±3 mm en 3 metros) y pintura (epóxica sanitaria lavable, dos manos, acabado liso sin porosidades). Seleccionar uno de los tres elementos y definir sus métricas de calidad (3 ptos).",
+ pasos:[
+  "Una métrica de calidad tiene que ser medible y verificable en obra: valor objetivo, tolerancia y método de verificación.",
+  "Pisos: espesor ≥ 2 mm medido con micrómetro; planicidad ±2 mm verificada con regla de 2 m; uniones termosoldadas sin filtración.",
+  "Paredes: espesor de panel ≥ 6 mm; verticalidad ±3 mm en 3 m con plomada o nivel láser; juntas selladas herméticas y esquinas redondeadas.",
+  "Pintura: dos manos como mínimo, espesor de película seca, inspección visual de acabado liso sin porosidades.",
+  "No basta con copiar la especificación: hay que convertirla en criterio de aceptación con instrumento y frecuencia de ensayo."],
+ nota:"En el examen revisado se aceptó como correcta la respuesta que copiaba la tolerancia y el criterio; la fila de pintura quedó en blanco y aun así dieron los 3 puntos."},
+
+{id:"x-ef-25-mo", tema:"t43", origen:"Examen final · 2025-I · 3-jul-2025", tipo:"examen", verif:"examen", fam:"Mano de obra",
+ enunciado:"Obra por contrata con la partida 'Excavación manual de zanjas' programada en 10 días hábiles (lunes a sábado, 8 horas diarias) iniciando el lunes 7 de julio. Para terminar 1 día antes se evalúan dos opciones: Opción 1, trabajar 2 horas extras diarias los primeros 4 días; Opción 2, trabajar el domingo 13 de julio. Determinar cuál es más económica, desarrollando el costo de la hora hombre y los ACU (7 ptos). Jornales: operario S/ 86.80 (BUC 32%), oficial S/ 69.10 (30%), peón S/ 61.30 (30%).",
+ pasos:[
+  "Armar la Tabla 1 con los conceptos remunerativos para cada opción, columna por columna.",
+  "Opción 1: aparecen horas extras con sobretasa 60% las 2 primeras horas; no hay feriado ni dominical trabajado.",
+  "Opción 2: no hay horas extras, pero el domingo trabajado se paga aparte del dominical de descanso, que igual se devenga.",
+  "Conceptos que van en ambas: jornal básico, dominical, BUC, escolaridad (30 RB anuales), movilidad S/ 8.60, gratificaciones (40 RB anuales), compensación vacacional 10% RB, indemnización 15% RB, prestaciones de salud 9% RB, SCTR 5% RB, Essalud + Vida S/ 5.00 mensual, Ley 29351 9% de gratificación, CONAFOVICER 2% y SNP 13%.",
+  "Costo hh = total ÷ horas efectivas de cada opción.",
+  "Llevar cada costo hh al ACU de excavación manual (rendimiento 4.0000 m³/día, cuadrilla 1 peón, herramientas manuales 3% de la mano de obra) y comparar el costo unitario por m³."],
+ resp:"La opción 2 (trabajar el domingo) resulta más económica.",
+ nota:"En el examen revisado: opción 1 da S/ 2 129.84 y opción 2 S/ 1 573.01. La profesora observó que no se consideró la productividad del trabajo en domingo ni la profundidad de excavación. Vale 7 de 20 puntos: es la pregunta más cara del final."},
+
+{id:"x-ef-25-hm", tema:"t44", origen:"Examen final · 2025-I · 3-jul-2025", tipo:"examen", verif:"examen", fam:"Hora máquina",
+ enunciado:"Estimar el costo hm del vibrador de concreto de 4 HP y 1.25\" para un proyecto de administración directa (1 pto). Galón de combustible S/ 23, galón de aceite S/ 38, libra de grasa S/ 18. VA del vibrador S/ 2 500, tasa de interés 10%, valor después de la vida útil 10% del VA, %MyR 75%, vida útil 5 años. Consumos del vibrador de 4 HP: combustible 0.16 gal/hr, lubricantes 0.002 gal/hr, grasas 0.01 lb/hr.",
+ pasos:[
+  "Administración directa ⇒ HM = solo costo de operación, y los precios van con IGV.",
+  "VE(horas) = 5 × 10 × 25 × 8 = 10 000 h.",
+  "MyR = 75% × 2 500 / 10 000 = S/ 0.1875 por hora.",
+  "Combustible = 0.16 gal/h × S/ 23 = S/ 3.68 por hora.",
+  "Lubricantes = 0.002 gal/h × S/ 38 = S/ 0.076 por hora. Grasa = 0.01 lb/h × S/ 18 = S/ 0.18 por hora.",
+  "El vibrador no lleva neumáticos ni operador propio en este caso; si se pidiera operador, sería equipo liviano (1.2 × costo HH del operario).",
+  "CO ≈ 0.1875 + 3.68 + 0.076 + 0.18 = S/ 4.12 por hora."],
+ resp:"CO ≈ S/ 4.12 por hora (administración directa: HM = CO)",
+ nota:"Aquí está la tabla de consumos que faltaba para cerrar los ejercicios de hora máquina: vibrador de 4 HP consume 0.16 gal/hr de combustible, 0.002 gal/hr de lubricante y 0.01 lb/hr de grasa."},
+
+{id:"x-ef-25-crash", tema:"t53", origen:"Examen final · 2025-I · 3-jul-2025", tipo:"examen", verif:"examen", fam:"Aceleración",
+ enunciado:"Red de alcantarillado con 12 actividades (trazo, excavación, cama de apoyo, tubería PVC, rellenos, buzones, pruebas hidráulicas, tapas), con tiempos optimista, probable y pesimista, y con duración y costo parcial en condiciones normales y en condición acelerada. Se pide: duraciones y red con ruta crítica (4.5 ptos), probabilidad de terminar antes de 35 días (0.25) y entre 35 y 40 días (0.5), reducir la duración en 3 días (4.25 ptos) y calcular la variación del costo total con indirectos de S/ 400 por día (0.5 ptos).",
+ pasos:[
+  "Te = (To + 4·Tm + Tp)/6 para cada actividad; con esas duraciones se arma la red.",
+  "Costo por día de reducción = (costo acelerado − costo normal) ÷ (duración normal − duración acelerada). Calcularlo solo para las críticas.",
+  "Ordenar de menor a mayor costo por día y acortar en ese orden, revisando la ruta crítica después de cada día.",
+  "Con 3 días recortados: sobrecosto directo = suma de los costos por día aplicados; ahorro indirecto = 3 × S/ 400 = S/ 1 200.",
+  "Variación total = sobrecosto directo − ahorro indirecto."],
+ nota:"En el examen resuelto el costo normal total es S/ 196 000 y el acelerado total S/ 229 050. Los costos por día más baratos salen en las actividades I (S/ 1 125), L (S/ 775) y H (S/ 4 000): conviene ordenarlos antes de decidir."},
+
+{id:"x-ef-25-lineal", tema:"t54", origen:"Examen final · 2025-I · 3-jul-2025", tipo:"examen", verif:"examen", fam:"Obras lineales",
+ enunciado:"Líneas de balance de la construcción de una línea de abastecimiento de agua, con cuatro actividades (limpieza del terreno, apertura de zanjas, colocación de tuberías, relleno de zanjas) y cada 500 m como unidad de trabajo, de 0+000 a 2+000. a) ¿Cuál de las actividades tiene menor rendimiento? Justificar (1 pto). b) ¿Qué pasa si la apertura de zanjas, en los últimos 500 m, demora 1 día más de lo previsto? (1 pto).",
+ pasos:[
+  "En un diagrama tiempo-espacio, la pendiente de la línea es el inverso del rendimiento: mientras más inclinada (más tiempo por tramo), menor rendimiento.",
+  "La actividad de menor rendimiento es la que marca el ritmo de todo el tren de trabajo.",
+  "Un retraso en un tramo desplaza hacia arriba el resto de esa línea y, si se toca otra línea, arrastra a las actividades siguientes.",
+  "Si las líneas se cruzan, hay interferencia: dos cuadrillas ocuparían el mismo tramo al mismo tiempo, lo que no es físicamente posible.",
+  "Por eso en obras lineales se busca que las líneas sean paralelas, con un colchón de tiempo entre ellas."],
+ nota:"El alumno respondió que la de menor rendimiento es el relleno de zanjas y obtuvo el punto. Lee las pendientes con cuidado antes de responder."},
+
+{id:"x-15-lineal", tema:"t54", origen:"Examen final · 2015-I · 10-jul-2015", tipo:"examen", verif:"examen", fam:"Obras lineales",
+ enunciado:"Un diagrama representa la construcción de una unidad de un proyecto repetitivo con 6 actividades (A 1 día, B 2, C 4, D 3, E 1, F 2) y sus horas-hombre por unidad (8, 48, 32, 48, 32, 16). a) Calcular la duración del proyecto si comprende 8 unidades con un ritmo de 1 día y representarlo en la Carta Dentada (2 ptos). b) Representar el perfil de hh por unidad de tiempo y el acumulado del proyecto (2 ptos).",
+ pasos:[
+  "Duración total = duración de una unidad + (número de unidades − 1) × ritmo.",
+  "La Carta Dentada repite el mismo patrón de actividades desplazado una unidad de ritmo cada vez.",
+  "El perfil de hh se arma sumando, día a día, las horas-hombre de todas las actividades activas en ese día de todas las unidades.",
+  "En el régimen permanente (cuando todas las cuadrillas están trabajando) el consumo diario de hh se estabiliza: ese es el valor que dimensiona la obra.",
+  "El acumulado es la integral del perfil y tiene forma de S."],
+ nota:"El examen de 2015 pedía además explicar los métodos de programación en proyectos únicos (3 ptos de parte teórica)."},
+
+{id:"x-15-crash", tema:"t53", origen:"Examen final · 2015-I · 10-jul-2015", tipo:"examen", verif:"examen", fam:"Aceleración",
+ enunciado:"El plazo establecido para un proyecto es de 18 días. Se da la red en condiciones normales (A 6, B 5, C 6, D 8, E 9, F 8 días) y por actividad el costo normal, la pendiente de costo y la duración de rotura: A S/ 6 000 / −600 / 3; B S/ 4 000 / −800 / 4; C S/ 20 000 / −500 / 5; D S/ 18 000 / −400 / 5; E S/ 10 000 / −600 / 6; F S/ 7 000 / −900 / 7. Replantear las duraciones para cumplir el plazo al mínimo costo, calcular el nuevo costo del proyecto y la variación respecto al normal (3 ptos).",
+ pasos:[
+  "Calcular la duración normal del proyecto y ver cuántos días hay que recortar para llegar a 18.",
+  "La pendiente de costo es lo que cuesta cada día ganado; la duración de rotura es el mínimo al que puede llegar la actividad.",
+  "Acortar siempre sobre la ruta crítica, empezando por la actividad con menor pendiente de costo (en valor absoluto).",
+  "Después de cada recorte, recalcular la ruta crítica: puede aparecer una segunda ruta crítica y entonces hay que recortar en ambas a la vez.",
+  "Nuevo costo = costo normal total + suma de (días recortados × pendiente de cada actividad).",
+  "Nunca pasar la duración de rotura de una actividad."],
+ nota:"En este examen los costos indirectos no entran: la pregunta pide mínimo costo directo para cumplir el plazo."}
+];
+
+const CLASES = [
+{n:"Clase 1", fecha:"2026-08-13", vid:"w2YOFfpkIdw", dur:"1 h 18",
+ nota:"La grabación del 18-ago es esta misma clase resubida con otro enlace: el texto coincide al 99.9%.",
+ marcas:[
+  {t:0, tema:"t11", d:"Evaluación, tareas en grupo y reglas de calificación"},
+  {t:420, tema:"t11", d:"Convivencia y participación en clases virtuales"},
+  {t:634, tema:"t11", d:"Uso de herramientas de IA: se exige aporte propio"},
+  {t:1537, tema:"t11", d:"Cómo se responde en el foro de Canvas para ganar puntos"},
+  {t:2444, tema:"t11", d:"Cómo se entrega una tarea en Canvas"},
+  {t:2570, tema:"t21", d:"Presentación de la Unidad 2: objetivos y check-list"},
+  {t:2811, tema:"t21", d:"Qué es un proyecto: primeras definiciones"},
+  {t:3225, tema:"t21", d:"Características: descomposición, restricciones, multidisciplinariedad"},
+  {t:4111, tema:"t21", d:"Paquete de trabajo y actividad como unidad básica"}]},
+
+{n:"Clase 2", fecha:"2026-08-18", vid:"4FZ9JM8PJiE", dur:"1 h 18", duplicada:true,
+ nota:"Duplicado de la clase del 13-ago.", marcas:[]},
+
+{n:"Clase 3", fecha:"2026-08-20", vid:"XELaQ-MLY6o", dur:"1 h 40",
+ marcas:[
+  {t:121, tema:"t23", d:"Anuncio de la Tarea 1 y su relación con la Unidad 2"},
+  {t:248, tema:"t23", d:"Quiénes son los interesados y cómo involucrarlos"},
+  {t:839, tema:"t23", d:"El proyecto nace de la necesidad de un promotor o cliente"},
+  {t:1276, tema:"t23", d:"Área de planificación: plan de involucramiento"},
+  {t:1777, tema:"t23", d:"Preguntas del registro de interesados"},
+  {t:2230, tema:"t23", d:"Postura y nivel de participación del interesado"},
+  {t:2482, tema:"t23", d:"Ejemplo: cuándo interviene la Contraloría"},
+  {t:3154, tema:"t23", d:"Matrices poder/interés y poder/influencia"},
+  {t:4892, tema:"t23", d:"Los 7 procesos del PMI para interesados"},
+  {t:5208, tema:"t24", d:"Ciclo de vida genérico aplicable a ingeniería civil"},
+  {t:5443, tema:"t24", d:"La fase de diseño y el presupuesto de partida"},
+  {t:5896, tema:"t24", d:"El ciclo de vida cambia según el sistema de entrega"}]},
+
+{n:"Clase 4", fecha:"2026-08-27", vid:"QK3c9Qkx84w", dur:"1 h 45",
+ marcas:[
+  {t:143, tema:"t25", d:"Procedimientos de selección: cuál se usa más"},
+  {t:389, tema:"t25", d:"Ejecución contractual: la etapa más larga"},
+  {t:488, tema:"t25", d:"Garantía de fiel cumplimiento: para qué existe"},
+  {t:958, tema:"t25", d:"Suma alzada: por qué se oferta con precio firme"},
+  {t:1483, tema:"t25", d:"Liquidación del contrato y devolución de retenciones"},
+  {t:1921, tema:"t25", d:"Adelanto directo y adelanto para materiales"},
+  {t:3717, tema:"t25", d:"Taller 1-1: descarga de la plantilla y entrada al SEACE"},
+  {t:4058, tema:"t25", d:"Búsqueda de una convocatoria real en el SEACE"},
+  {t:4289, tema:"t25", d:"Identificar el procedimiento: adjudicación simplificada"},
+  {t:4942, tema:"t25", d:"Llenado de la ficha: entidad contratante y demás campos"},
+  {t:5233, tema:"t25", d:"Sistema de entrega no es lo mismo que modalidad de contratación"},
+  {t:5497, tema:"t25", d:"Las bases y los límites a la subcontratación"},
+  {t:6130, tema:"t25", d:"Modificaciones contractuales y ampliaciones de plazo"}]},
+
+{n:"Clase 5", fecha:"2026-09-01", vid:"_JiEafU7aZ0", dur:"1 h 45",
+ marcas:[
+  {t:138, tema:"t25", d:"Taller 1-2: contexto de contratación del proyecto"},
+  {t:545, tema:"t25", d:"Trabajo en salas: reparto de las situaciones"},
+  {t:1617, tema:"t25", d:"Puesta en común de la distribución de riesgos"},
+  {t:2340, tema:"t25", d:"Situación B: red de agua no consignada en el expediente técnico"},
+  {t:2932, tema:"t24", d:"El ciclo de vida condicionado por el sistema de entrega (DBB)"},
+  {t:5652, tema:"t23", d:"Taller 1-3: cómo progresa la afectación a los interesados"},
+  {t:6057, tema:"t23", d:"Cierre de los talleres y dudas sobre la tarea"}]},
+
+{n:"Clase 6", fecha:"2026-09-03", vid:"m05xIizfXzg", dur:"1 h 47",
+ marcas:[
+  {t:118, tema:"t31", d:"Aclaración sobre la entrega de la Tarea 1 (plantilla + PDF)"},
+  {t:276, tema:"t31", d:"Arranque de la Unidad 3: qué es planificar un proyecto"},
+  {t:563, tema:"t31", d:"El resultado de planificar es un documento"},
+  {t:1683, tema:"t31", d:"Alcance, tiempo y costo, y los requisitos operativos"},
+  {t:1802, tema:"t31", d:"Beneficios de planificar"},
+  {t:2357, tema:"t31", d:"Planificación en un proyecto de ingeniería civil"},
+  {t:2772, tema:"t32", d:"Cierre de la primera parte y preguntas"},
+  {t:3315, tema:"t32", d:"Plan de gestión del alcance"},
+  {t:3315, tema:"t33", d:"El expediente técnico como línea base, versión uno"},
+  {t:3426, tema:"t32", d:"Recopilar requisitos: qué es un requisito"},
+  {t:4041, tema:"t32", d:"Ejemplo: requisito de la empresa de energía eléctrica"},
+  {t:4234, tema:"t32", d:"El supervisor y los requisitos de calidad"},
+  {t:4493, tema:"t32", d:"Vecinos y comerciantes: diseño frente a construcción"},
+  {t:4671, tema:"t32", d:"Alcance del producto frente a alcance del proyecto"},
+  {t:5525, tema:"t32", d:"Declaración del alcance, punto por punto"},
+  {t:5992, tema:"t32", d:"Restricciones: suma alzada frente a precios unitarios"}]},
+
+{n:"Clase 7", fecha:"2026-09-08", vid:"YdadfqRgxcY", dur:"2 h 41",
+ marcas:[
+  {t:211, tema:"t32", d:"Cierre del segundo proceso del alcance"},
+  {t:624, tema:"t32", d:"Qué es la EDT y de dónde viene el acrónimo"},
+  {t:685, tema:"t32", d:"Los paquetes de trabajo y la jerarquía de la Unidad 2"},
+  {t:870, tema:"t32", d:"Ejemplos de descomposición para un proyecto de aulas"},
+  {t:1610, tema:"t32", d:"Paquetes en serie o en paralelo"},
+  {t:2586, tema:"t32", d:"Principio: la EDT se enfoca en entregables, no en tareas"},
+  {t:2646, tema:"t32", d:"Cómo elaborar una EDT desde cero"},
+  {t:2808, tema:"t33", d:"Descomposición por especialidades y Norma Técnica de Metrados"},
+  {t:3056, tema:"t33", d:"El 80% de los adicionales viene de un alcance mal definido"},
+  {t:3915, tema:"t33", d:"Matices del alcance en obra privada"},
+  {t:4115, tema:"t33", d:"La declaración del alcance en obra pública"},
+  {t:4582, tema:"t33", d:"Consideraciones al definir el alcance de un proyecto constructivo"},
+  {t:4855, tema:"t33", d:"Cambios de alcance durante la ejecución"},
+  {t:5490, tema:"t41", d:"Arranque de la Unidad 4: planificación del costo"},
+  {t:5690, tema:"t41", d:"Costos unitarios de los recursos"},
+  {t:5758, tema:"t41", d:"Gastos generales: costos transversales al proyecto"},
+  {t:5859, tema:"t41", d:"Composición del presupuesto en obra por contrata"},
+  {t:5952, tema:"t41", d:"Por qué el IGV se separa del costo directo"}]},
+
+{n:"Clase 8", fecha:"2026-09-10", vid:"H0gwI-NbF-w", dur:"1 h 39",
+ marcas:[
+  {t:336, tema:"t41", d:"El campo de tributos en el presupuesto"},
+  {t:431, tema:"t41", d:"Contenido del presupuesto y las partidas"},
+  {t:875, tema:"t41", d:"Cálculo de cada componente, empezando por el costo directo"},
+  {t:1730, tema:"t42", d:"Cotizaciones para el presupuesto del expediente técnico"},
+  {t:1954, tema:"t42", d:"De dónde deben venir las cotizaciones válidas"},
+  {t:3751, tema:"t42", d:"Ejercicio en Excel: el porcelanato, paso a paso"},
+  {t:3898, tema:"t42", d:"Primero fijar la unidad de medida del ACU"},
+  {t:4060, tema:"t42", d:"Cálculo del precio del material en el origen (PMO)"},
+  {t:4410, tema:"t42", d:"El flete y la unidad en que lo cotiza el transportista"},
+  {t:4670, tema:"t42", d:"Convertir el flete por kg a soles por metro cuadrado"},
+  {t:5543, tema:"t42", d:"Ejercicio del ladrillo: no se usan los precios con descuento"},
+  {t:5649, tema:"t42", d:"Flete en dos tramos hasta el caserío Miraflores"},
+  {t:5844, tema:"t42", d:"Cierre: los check-list son la preparación para la práctica"}]}
+];
+
+const PC1 = {
+  fecha:"2026-09-17",
+  fuente:{vid:"H0gwI-NbF-w", t:5790, clase:"Clase 8 · 10-set · 1:36:30"},
+  cita:"Para la práctica entra todo hasta aquí, hasta lo que hemos visto el día de hoy. [...] Sobre los temas anteriores, sí hay contenido teórico en cuanto a la Unidad 2: mucho énfasis en estos check-lists. [...] En la Unidad 3 habrá también algo de contenido conceptual, pero también algunos ejercicios donde ustedes sean capaces de identificar producto, de identificar cuándo estamos hablando de un proyecto, con pequeños casitos.",
+  rumor:"Un compañero escuchó en clase que serían 10 puntos de teoría y 10 puntos en dos ejercicios de las diapositivas. Coincide con lo que dijo la ingeniera; el reparto exacto no está confirmado.",
+  bloques:[
+   {h:"Teoría · Unidad 2", p:"≈ 10 pts con la Unidad 3", que:"Los 8 ítems del check-list oficial. La ingeniera dijo literalmente que si sabes responderlos, estás listo.", ir:"u2"},
+   {h:"Conceptual · Unidad 3", que:"Alcance del producto vs. alcance del proyecto con casos cortos; el expediente técnico como línea base; mayor metrado vs. adicional.", ir:"u3", ej:[["x-casitos","Casitos producto / proyecto"],["e-alcance","Del PMI al expediente"],["e-edt","Principios EDT"]]},
+   {h:"Ejercicio · PMPO", p:"≈ 10 pts en 2 ejercicios", que:"La misma dinámica del porcelanato y del ladrillo, incluido el flete en dos tramos y la elección del mes base. Practica con los ejercicios 1, 5 y 6 del PDF.", ej:[["e-porcelanato","Porcelanato"],["e-ladrillo-clase","Ladrillo"],["e-cemento","Ej. 1 cemento"],["e-ladrillo-bernal","Ej. 5 ladrillo KK"],["e-varilla","Ej. 6 varilla"],["e-ladrillo-techo","Ladrillo de techo + aporte"],["x-pc2-24-pmpo","Cemento y arena (PC2 2024)"]]},
+   {h:"Presupuesto · Unidad 4", que:"Estructura del presupuesto por contrata vs. administración directa, IGV separado, utilidad cero en administración directa.", ir:"u4"}
+  ]
+};
+
+const EJES = {
+  red:{n:"Red, ruta crítica y holguras", tema:"t52"},
+  pert:{n:"PERT y probabilidad", tema:"t52"},
+  gantt:{n:"Gantt y calendario", tema:"t52"},
+  curvas:{n:"Histograma, curva S y recursos", tema:"t52"},
+  crash:{n:"Aceleración (crashing)", tema:"t53"},
+  mo:{n:"Mano de obra y ACU", tema:"t43"},
+  pmpo:{n:"Materiales (PMPO)", tema:"t42"},
+  hm:{n:"Hora máquina", tema:"t44"},
+  poli:{n:"Fórmula polinómica", tema:"t45"},
+  ev:{n:"Valor ganado", tema:"t62"},
+  riesgo:{n:"Riesgos", tema:"t72"},
+  calidad:{n:"Calidad", tema:"t72"},
+  lineal:{n:"Obras lineales y repetitivas", tema:"t54"},
+  teoria:{n:"Teoría y conceptos", tema:"t21"}
+};
+
+const EXAMENES = [
+{id:"pc1-24", nombre:"Práctica 1", periodo:"2024-II", fecha:"2024-09-06", dur:"1 h 40",
+ preguntas:[
+  {e:"teoria", p:1, d:"Verdadero/falso sobre predecesoras y sucesoras"},
+  {e:"red", p:19, d:"Edificio prefabricado: precedencias y duraciones desde metrado y rendimiento, red, fechas, holguras y ruta crítica"}]},
+{id:"pc2-24", nombre:"Práctica 2", periodo:"2024-II", fecha:"2024-10-18", dur:"1 h 40", nota:"18",
+ preguntas:[
+  {e:"red", p:4.5, d:"Diagrama de red, duración del proyecto y ruta crítica"},
+  {e:"mo", p:7, d:"Calendario de inicio y costo de la hora hombre del operario"},
+  {e:"pmpo", p:4, d:"Cotizaciones de cemento y arena y ACU del tarrajeo acelerado"},
+  {e:"crash", p:4.5, d:"Reducir la duración en 2 días y variación del costo con indirectos"}]},
+{id:"pc1-25", nombre:"Práctica 1", periodo:"2025-I", fecha:"2025-05-02", dur:"1 h 40", nota:"16",
+ preguntas:[
+  {e:"red", p:15.25, d:"Construcción de un grifo: sucesoras, red, fechas, holguras y ruta crítica; más una segunda red con recursos"},
+  {e:"pert", p:1.75, d:"Probabilidad de terminar entre 95 y 105 días y plazo con 95% de probabilidad"},
+  {e:"gantt", p:3, d:"Diagrama de Gantt sobre calendario"}]},
+{id:"pc3-25", nombre:"Práctica 3", periodo:"2025-I", fecha:"2025-06-13", dur:"1 h 40",
+ preguntas:[
+  {e:"poli", p:8, d:"Fórmula polinómica con monomio compuesto a partir del listado de recursos e índices unificados"},
+  {e:"riesgo", p:2, d:"Matriz de probabilidad e impacto, ranking y los dos riesgos prioritarios"},
+  {e:"ev", p:5.5, d:"Valor ganado: estado respecto a cronograma y costo, eficiencia y proyección"},
+  {e:"curvas", p:2, d:"Lectura de la gráfica de línea base, valorización acumulada y valor ganado"},
+  {e:"calidad", p:3, d:"Métricas de calidad a partir de las especificaciones técnicas"}]},
+{id:"ef-25", nombre:"Examen final", periodo:"2025-I", fecha:"2025-07-03", dur:"3 h", nota:"07",
+ preguntas:[
+  {e:"mo", p:7, d:"Excavación de zanjas: comparar horas extras contra domingo trabajado, con costo hh y ACU"},
+  {e:"hm", p:1, d:"Costo hm del vibrador de concreto en administración directa"},
+  {e:"red", p:4.5, d:"Red de alcantarillado: duraciones PERT, red y ruta crítica"},
+  {e:"pert", p:0.75, d:"Probabilidad de terminar antes de 35 días y entre 35 y 40 días"},
+  {e:"crash", p:4.75, d:"Reducir 3 días y variación del costo total con indirectos de S/ 400 por día"},
+  {e:"lineal", p:2, d:"Líneas de balance de una línea de abastecimiento de agua"}]},
+{id:"pc2-25", nombre:"Práctica 2", periodo:"2025-II", fecha:"2025-11-07", dur:"1 h 40",
+ preguntas:[
+  {e:"red", p:9, d:"Duraciones, red y ruta crítica en dos proyectos distintos"},
+  {e:"gantt", p:2.5, d:"Gantt sobre calendario real, de lunes a sábado sin feriados"},
+  {e:"curvas", p:4.5, d:"Histograma diario del recurso peón y curva S del proyecto"},
+  {e:"pert", p:4, d:"Probabilidad de terminar antes de 45 días y duración para 93% de éxito"}]},
+{id:"ef-15", nombre:"Examen final", periodo:"2015-I", fecha:"2015-07-10", dur:"3 h",
+ preguntas:[
+  {e:"teoria", p:3, d:"Métodos de programación en proyectos únicos"},
+  {e:"red", p:4, d:"Red flecha-actividad, duración, ruta crítica y holguras"},
+  {e:"gantt", p:3, d:"Dos diagramas de Gantt: con fechas tempranas y con fechas tardías"},
+  {e:"curvas", p:3, d:"Curvas de demanda parcial y acumulada de dinero"},
+  {e:"lineal", p:4, d:"Proyecto repetitivo: Carta Dentada y perfil de horas-hombre"},
+  {e:"crash", p:3, d:"Replantear duraciones con pendiente de costo y duración de rotura"}]}
+];
+
+const TARJETAS = [
+{t:"t21", q:"Definición de proyecto según el PMI 2026", a:"Iniciativa temporal en un contexto único, emprendida para generar valor."},
+{t:"t21", q:"Las 6 características de un proyecto", a:"Temporalidad, unicidad, tiene objetivos (entregable), se descompone en actividades, tiene restricciones y participación multidisciplinaria."},
+{t:"t21", q:"Jerarquía del sistema de generación de valor, de mayor a menor", a:"Portafolio → Programa → Proyecto → Subproyecto → Paquete de trabajo → Actividad."},
+{t:"t21", q:"Diferencia entre portafolio y programa", a:"Portafolio: conjunto de programas, proyectos y operaciones. Programa: grupo de proyectos relacionados y/o programas subsidiarios."},
+{t:"t22", q:"Los 6 factores del entorno externo del proyecto", a:"Político, económico, social, técnico, legal y medioambiental."},
+{t:"t23", q:"Definición de interesado (stakeholder)", a:"Persona, grupo u organización que se ve afectado, afecta o se percibe afectado por una actividad, producto o resultado del proyecto."},
+{t:"t23", q:"Poder, interés, influencia e impacto: ¿qué es cada uno?", a:"Poder: capacidad de influir en las decisiones y resultados. Interés: grado de compromiso con el entregable. Influencia: capacidad de modificar el comportamiento de otros actores. Impacto: capacidad de generar cambios en la planificación y ejecución."},
+{t:"t24", q:"¿Por qué los contratos deben prever una distribución justa de riesgos?", a:"Porque muchas decisiones se toman en etapas tempranas, cuando la incertidumbre es mayor."},
+{t:"t25", q:"Las 3 etapas del proceso de contratación pública", a:"Actuaciones preparatorias, selección y ejecución contractual."},
+{t:"t25", q:"¿Qué es el principio de valor por el dinero?", a:"Contratar considerando calidad, sostenibilidad de la oferta, costos y plazos, sin procurar únicamente el menor precio."},
+{t:"t25", q:"Las 4 modalidades de pago", a:"Suma alzada, precio unitario, esquema mixto y costo reembolsable."},
+{t:"t25", q:"¿Cuándo se puede usar retención de pago en lugar de carta fianza?", a:"Solo en proyectos de más de 60 días y con monto de contratación menor a 5 millones. Se retiene durante la primera mitad de los pagos."},
+{t:"t25", q:"Los 3 mecanismos de solución de controversias", a:"Junta de Prevención y Resolución de Disputas (JPRD), conciliación y arbitraje."},
+{t:"t25", q:"Las 4 condiciones para el inicio del plazo contractual", a:"Comunicación del supervisor, entrega de adelantos, firma de la JPRD y entrega del terreno."},
+{t:"t25", q:"Diferencia entre licitación pública y concurso público", a:"Licitación pública: bienes y obras. Concurso público: servicios en general y consultorías."},
+{t:"t31", q:"Las 3 características de la planificación", a:"Es iterativa, define una línea base y es continua."},
+{t:"t32", q:"Los 6 criterios de un requisito", a:"Claro, conciso, verificable, consistente, completo y trazable."},
+{t:"t32", q:"Los 6 componentes de la declaración del alcance", a:"Descripción del alcance del producto, entregables, criterios de aceptación, exclusiones, restricciones y supuestos."},
+{t:"t32", q:"Alcance del producto vs. alcance del proyecto", a:"Del producto: características y funciones. Del proyecto: el trabajo realizado para entregar ese producto con esas características."},
+{t:"t32", q:"Los 4 principios básicos de la EDT", a:"Regla del 100%, elementos mutuamente exclusivos, orientada a entregables y base para el costo y el tiempo."},
+{t:"t33", q:"¿Cuál es la línea base del alcance en un proyecto constructivo?", a:"El Expediente Técnico."},
+{t:"t33", q:"Mayores metrados, obra adicional y deductivo vinculante", a:"Mayores metrados: más metrado en una partida existente. Obra adicional: trabajo que no existe en el contrato, requiere expediente técnico adicional y resolución previa. Deductivo vinculante: el trabajo que se deja de realizar por ese adicional."},
+{t:"t41", q:"Estructura del presupuesto en obra por contrata", a:"Costo Directo (materiales + mano de obra + equipo) + Gastos Generales + Utilidad + IGV = Costo total de obra."},
+{t:"t42", q:"Fórmula del precio del material puesto en obra", a:"PMPO = PMO + F + A/M + m + V + O (origen, flete, almacenamiento y manipuleo, mermas, viáticos y otros)."},
+{t:"t42", q:"Porcentajes de A/M, mermas y viáticos", a:"A/M = 2% del PMO. Mermas = 5% del PMO. Viáticos = 5 a 30% del PMO."},
+{t:"t42", q:"¿Con o sin IGV, y se incluyen descuentos en el PMO?", a:"Contrata: sin IGV. Administración directa: con IGV. Los descuentos no se incluyen. Se usa el precio a fin de mes del mes base."},
+{t:"t42", q:"¿Cómo se calcula el flete de un tramo con vehículo propio?", a:"Costo diario ÷ (viajes por día × capacidad por viaje), para obtener el costo por unidad de medida del material."},
+{t:"t43", q:"Las 3 categorías del trabajador de construcción civil", a:"Operario, oficial o ayudante, y peón."},
+{t:"t43", q:"Las 2 características especiales del trabajo en construcción", a:"Eventualidad (la relación es temporal, dura lo que dura la obra) y ubicación relativa (no hay lugar fijo)."},
+{t:"t43", q:"¿Quiénes firman el acta de negociación colectiva y desde cuándo rige?", a:"CAPECO y la Federación de Trabajadores en Construcción Civil (FTCC). Desde 2026 la vigencia inicia el 1 de enero de cada año."},
+{t:"t44", q:"Composición de la hora máquina", a:"Contrata: HM = Costo de posesión + Costo de operación. Administración directa: HM = solo Costo de operación."},
+{t:"t44", q:"¿Cómo se calcula la vida económica en horas?", a:"Años × 10 meses × 25 días × 8 horas. Por ejemplo, 5 años = 10 000 horas."},
+{t:"t44", q:"Fórmula de la depreciación por hora", a:"D = (VA − VR) / VE(horas)."},
+{t:"t44", q:"Los 3 componentes del costo de posesión", a:"Depreciación, interés del capital invertido y seguros, impuestos y almacenaje (5% × VA × K)."},
+{t:"t44", q:"Los 6 componentes del costo de operación", a:"Mantenimiento y reparación, combustible, lubricantes, filtros, neumáticos y operador."},
+{t:"t44", q:"Valor de rescate según tipo de equipo", a:"Equipo liviano: 8 a 20% del VA. Equipo pesado (movimiento de tierras): 20 a 25% del VA."},
+{t:"t44", q:"¿Cómo se estima el costo del operador?", a:"Equipo liviano: 1.2 × costo HH del operario. Equipo pesado: 1.5 × costo HH del operario."}
+];
+</script>
+
+<script>
+const TEMAS = CURSO.flatMap(u => u.temas.map(t => ({...t, unidad:u.titulo, uid:u.id})));
+const porId = Object.fromEntries(TEMAS.map(t => [t.id, t]));
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+let estado = {check:{}, ej:{}, videos:{}, extra:[], cards:{}};
+let abierto = null;
+let abiertoU = null;
+let vista = "temario";
+
+/* ---------- persistencia ---------- */
+const CLAVE = "gdc-cuaderno-v1";
+let docDb = null, guardando = null;
+
+function cargarLocal(){
+  try{
+    const raw = localStorage.getItem(CLAVE);
+    if(raw) estado = Object.assign(estado, JSON.parse(raw));
+  }catch(e){}
+}
+function guardar(){
+  try{ localStorage.setItem(CLAVE, JSON.stringify(estado)); }catch(e){}
+  if(!docDb) return;
+  clearTimeout(guardando);
+  guardando = setTimeout(() => { docDb.set({datos:estado}).catch(() => {}); }, 700);
+}
+async function conectarDb(){
+  const db = await (window.claude && window.claude.use ? window.claude.use("db") : null);
+  if(!db) return;
+  docDb = db.doc("estado/principal");
+  docDb.onSnapshot(snap => {
+    if(!snap.exists || snap.metadata.hasPendingWrites) return;
+    const d = snap.data().datos;
+    if(d){ estado = Object.assign({check:{},ej:{},videos:{},extra:[],cards:{}}, d); pintar(); }
+  }, () => {});
+}
+
+/* ---------- cálculo de avance ---------- */
+function itemsDe(t){ return t.check.map((_, i) => t.id + "-c" + i); }
+function avanceTema(t){
+  const ids = itemsDe(t);
+  if(!ids.length) return 0;
+  const suma = ids.reduce((a, id) => a + (estado.check[id] || 0), 0);
+  return suma / (ids.length * 2);
+}
+function avanceUnidad(u){
+  const ids = u.temas.flatMap(itemsDe);
+  if(!ids.length) return 0;
+  return ids.reduce((a, id) => a + (estado.check[id] || 0), 0) / (ids.length * 2);
+}
+function avanceOficial(u){
+  if(!u.check || !u.check.length) return 0;
+  const s = u.check.reduce((a, _, i) => a + (estado.check[u.id + "-o" + i] || 0), 0);
+  return s / (u.check.length * 2);
+}
+function avanceCurso(){
+  const con = CURSO.filter(u => u.check && u.check.length);
+  if(!con.length) return 0;
+  const tot = con.reduce((a, u) => a + u.check.length, 0);
+  const s = con.reduce((a, u) => a + u.check.reduce((b, _, i) => b + (estado.check[u.id + "-o" + i] || 0), 0), 0);
+  return s / (tot * 2);
+}
+function avanceGlobal(){
+  const ids = TEMAS.flatMap(itemsDe);
+  return ids.reduce((a, id) => a + (estado.check[id] || 0), 0) / (ids.length * 2);
+}
+const pct = x => Math.round(x * 100) + "%";
+
+const ytUrl = (vid, t) => "https://www.youtube.com/watch?v=" + vid + "&t=" + Math.max(0, t) + "s";
+const mmss = s => (s >= 3600 ? Math.floor(s / 3600) + ":" + String(Math.floor(s % 3600 / 60)).padStart(2, "0") : String(Math.floor(s / 60))) + ":" + String(s % 60).padStart(2, "0");
+function marcasDeTema(id){
+  const out = [];
+  CLASES.forEach(c => c.marcas.forEach(m => {
+    if(m.tema === id) out.push({...m, clase:c.n, vid:c.vid, fecha:c.fecha});
+  }));
+  return out.sort((a, b) => a.fecha.localeCompare(b.fecha) || a.t - b.t);
+}
+function todosEjercicios(){
+  return EJERCICIOS.concat((estado.extra || []).map(e => ({...e, propio:true})));
+}
+function familias(){
+  const c = {};
+  todosEjercicios().forEach(e => { if(e.fam) c[e.fam] = (c[e.fam] || 0) + 1; });
+  return c;
+}
+
+/* ---------- hitos ---------- */
+function diasHasta(iso){
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  return Math.round((new Date(iso + "T00:00:00") - hoy) / 86400000);
+}
+function renderHitos(){
+  const prox = PRACTICAS.map(f => ({f, d:diasHasta(f)})).filter(x => x.d >= 0)[0];
+  const lab = {f:"2026-11-12", d:diasHasta("2026-11-12")};
+  const fmt = iso => new Date(iso + "T00:00:00").toLocaleDateString("es-PE", {day:"numeric", month:"short"});
+  const cel = (k, v, n, urg) =>
+    `<div class="hito${urg ? " urg" : ""}"><div class="k">${k}</div><div class="v">${v}</div><div class="n">${n}</div></div>`;
+  $("#hitos").innerHTML =
+    cel("Próxima práctica", prox ? fmt(prox.f) : "—",
+        prox ? (prox.d === 0 ? "es hoy" : "en " + prox.d + " día" + (prox.d === 1 ? "" : "s")) : "ya pasaron las 3", prox && prox.d <= 3) +
+    cel("Evaluación MS Project", fmt(lab.f), lab.d >= 0 ? "en " + lab.d + " días" : "ya pasó", false) +
+    cel("Check-list del curso", pct(avanceCurso()), CURSO.filter(u => u.check).length + " unidades publicadas") +
+    cel("Ejercicios resueltos",
+        todosEjercicios().filter(e => estado.ej[e.id] === "resuelto").length + " / " + todosEjercicios().length,
+        "banco de práctica");
+}
+
+/* ---------- temario ---------- */
+function planPractica(){
+  const d = diasHasta(PC1.fecha);
+  if(d < 0) return "";
+  const cuando = d === 0 ? "es hoy" : d === 1 ? "es mañana" : "en " + d + " días";
+  const ej = pares => pares.map(([id, l]) => {
+    const st = estado.ej[id] || "pendiente";
+    return `<button class="est${st === "fallado" ? " f" : ""}" data-ir-ej-id="${id}" aria-pressed="${st !== "pendiente"}">${esc(l)}${st === "resuelto" ? " ✓" : st === "fallado" ? " ✗" : ""}</button>`;
+  }).join("");
+  return `<div class="plan">
+    <div class="plan-h">
+      <span class="eyebrow">Práctica calificada 1 · jueves 17 de setiembre · ${cuando}</span>
+      <h2>Qué entra, según la ingeniera</h2>
+    </div>
+    <blockquote class="cita">${esc(PC1.cita)}
+      <a href="${ytUrl(PC1.fuente.vid, PC1.fuente.t)}" target="_blank" rel="noopener">Escucharlo · ${esc(PC1.fuente.clase)} ↗</a></blockquote>
+    <p class="nota">${esc(PC1.rumor)}</p>
+    <div class="bloques">${PC1.bloques.map(b => `<div class="bloque">
+      <div class="bloque-h"><b>${esc(b.h)}</b>${b.p ? `<span class="chip">${esc(b.p)}</span>` : ""}</div>
+      <p>${esc(b.que)}</p>
+      <div class="linkrow">
+        ${b.ir ? `<button class="btn ghost mini" data-abrir-u="${b.ir}">Abrir unidad</button>` : ""}
+        ${b.ej ? ej(b.ej) : ""}
+      </div>
+    </div>`).join("")}</div>
+  </div>`;
+}
+function renderTemario(){
+  $("#v-temario").innerHTML = planPractica() + CURSO.map(u => {
+    const of = u.check && u.check.length;
+    const a = of ? avanceOficial(u) : avanceUnidad(u);
+    return `<div class="unidad">
+      <button class="unidad-h" data-unidad="${u.id}" aria-expanded="${abiertoU === u.id}">
+        <span class="cod">${u.cod}</span>
+        <h2>${esc(u.titulo)}</h2>
+        ${of ? `<span class="tag ver">check-list oficial</span>` : ""}
+        <span class="pct num">${pct(a)}</span>
+        <span class="caret">${abiertoU === u.id ? "−" : "+"}</span>
+      </button>
+      ${abiertoU === u.id ? panelUnidad(u) : ""}
+      ${u.temas.map(t => filaTema(t)).join("")}
+    </div>`;
+  }).join("") + indiceClases();
+}
+function indiceClases(){
+  const vivas = CLASES.filter(c => !c.duplicada);
+  const total = vivas.reduce((a, c) => a + c.marcas.length, 0);
+  return `<div class="sec">
+    <h2>Índice de clases grabadas</h2>
+    <p class="subtle" style="margin-top:0">${vivas.length} clases y ${total} momentos indexados. Cada enlace abre YouTube en el minuto exacto.</p>
+    ${CLASES.map(c => `<details class="examen">
+      <summary><h3>${esc(c.n)}</h3>
+        <span class="f">${new Date(c.fecha + "T00:00:00").toLocaleDateString("es-PE", {day:"numeric", month:"long"})} · ${esc(c.dur)}</span>
+        ${c.duplicada ? '<span class="tag prop">duplicada</span>' : `<span class="chip">${c.marcas.length} momentos</span>`}</summary>
+      <div class="qs">
+        ${c.nota ? `<p class="nota" style="margin-top:10px">${esc(c.nota)}</p>` : ""}
+        ${c.marcas.map(m => `<div class="q">
+          <a class="p" href="${ytUrl(c.vid, m.t)}" target="_blank" rel="noopener">${mmss(m.t)}</a>
+          <span><span class="e">${porId[m.tema] ? porId[m.tema].cod + " · " + esc(porId[m.tema].titulo) : ""}</span>${esc(m.d)}</span>
+        </div>`).join("")}
+        <div class="linkrow" style="margin-top:10px">
+          <a class="btn ghost mini" href="${ytUrl(c.vid, 0)}" target="_blank" rel="noopener">Ver la clase completa ↗</a>
+        </div>
+      </div>
+    </details>`).join("")}
+  </div>`;
+}
+function panelUnidad(u){
+  if(!u.check && !u.objetivos) return '<div class="panel"><p class="vacio">Esta unidad todavía no tiene publicados sus objetivos ni su check-list en el aula virtual.</p></div>';
+  return `<div class="panel panel-u">
+    ${u.cita ? `<blockquote class="cita">${esc(u.cita)}</blockquote>` : ""}
+    ${u.intro ? `<p class="intro">${esc(u.intro)}</p>` : ""}
+
+    ${u.objetivos ? `<h3>Objetivos de aprendizaje</h3>
+      <p class="subtle" style="margin:0 0 6px">Al finalizar la unidad debes ser capaz de:</p>
+      <ul>${u.objetivos.map(o => `<li>${esc(o)}</li>`).join("")}</ul>` : ""}
+
+    ${u.ruta ? `<h3>Ruta de aprendizaje</h3>
+      <ol class="ruta">${u.ruta.map(r => `<li><b>${esc(r.h)}</b>
+        <ul>${r.i.map(x => `<li>${esc(x)}</li>`).join("")}</ul></li>`).join("")}</ol>` : ""}
+
+    ${u.normativa ? `<h3>Normativa</h3><ul>${u.normativa.map(n => `<li>${esc(n)}</li>`).join("")}</ul>` : ""}
+
+    ${u.check ? `<h3>Check-list de autoevaluación · de la ingeniera</h3>
+      <p class="subtle" style="margin:0 0 8px">Antes de dar por completada esta unidad, verifica tus aprendizajes:</p>
+      <ul class="chk">${u.check.map((c, i) => {
+        const id = u.id + "-o" + i, s = estado.check[id] || 0;
+        return `<li data-s="${s}"><button data-chk="${id}">
+          <span class="mark">${s === 2 ? "✓" : s === 1 ? "~" : ""}</span>
+          <span class="txt">${esc(c)}</span></button></li>`;
+      }).join("")}</ul>
+      <div class="leyenda">
+        <span><i class="dot"></i> no visto</span>
+        <span><i class="dot e"></i> lo entiendo</span>
+        <span><i class="dot d"></i> lo domino</span>
+      </div>` : ""}
+  </div>`;
+}
+function filaTema(t){
+  const a = avanceTema(t);
+  const abierta = abierto === t.id;
+  return `<div class="fila" data-open="${abierta}">
+    <button class="fila-b" data-tema="${t.id}" aria-expanded="${abierta}">
+      <span class="cod">${t.cod}</span>
+      <span><span class="tit">${esc(t.titulo)}</span>
+        <span class="sem">${t.semana}${t.pendiente ? " · material aún no publicado" : ""}</span></span>
+      <span class="medidor"><span class="barra"><i style="width:${a * 100}%"></i></span>
+        <span class="p num">${pct(a)}</span></span>
+    </button>
+    ${abierta ? panelTema(t) : ""}
+  </div>`;
+}
+function panelTema(t){
+  const ejs = todosEjercicios().filter(e => e.tema === t.id);
+  const vid = estado.videos[t.id] || "";
+  const marcas = marcasDeTema(t.id);
+  return `<div class="panel">
+    <h3>Objetivos de aprendizaje</h3>
+    <ul>${t.objetivos.map(o => `<li>${esc(o)}</li>`).join("")}</ul>
+
+    <h3>Autochequeo detallado · derivado de las diapositivas</h3>
+    <ul class="chk">${t.check.map((c, i) => {
+      const id = t.id + "-c" + i, s = estado.check[id] || 0;
+      return `<li data-s="${s}"><button data-chk="${id}">
+        <span class="mark">${s === 2 ? "✓" : s === 1 ? "~" : ""}</span>
+        <span class="txt">${esc(c)}</span></button></li>`;
+    }).join("")}</ul>
+    <div class="leyenda">
+      <span><i class="dot"></i> no visto</span>
+      <span><i class="dot e"></i> lo entiendo</span>
+      <span><i class="dot d"></i> lo domino</span>
+      <span>· toca cada ítem para avanzar de estado</span>
+    </div>
+
+    ${marcas.length ? `<h3>En las clases grabadas (${marcas.length} momentos)</h3>
+      <div class="lista marcas">${marcas.map(m => `<a class="r" href="${ytUrl(m.vid, m.t)}" target="_blank" rel="noopener">
+        <span class="chip">${esc(m.clase)}</span>
+        <span class="mm num">${mmss(m.t)}</span>
+        <span class="t">${esc(m.d)}</span>
+        <span class="go">↗</span></a>`).join("")}</div>` : ""}
+
+    <h3>${marcas.length ? "Otro enlace" : "Clase grabada"}</h3>
+    ${vid
+      ? `<div class="linkrow"><a class="btn" href="${esc(vid)}" target="_blank" rel="noopener">Abrir enlace guardado ↗</a>
+         <button class="btn ghost mini" data-vid-del="${t.id}">Quitar</button></div>`
+      : `<div class="linkrow"><input type="url" id="vid-${t.id}" placeholder="Pega aquí otro enlace de YouTube" style="max-width:420px">
+         <button class="btn mini" data-vid-add="${t.id}">Guardar</button></div>`}
+
+    ${t.pdfs.length ? `<h3>Material del profesor</h3><div class="chips">${
+      t.pdfs.map(p => `<span class="chip${/\.pdf$/i.test(p) ? " pdf" : ""}">${esc(p.replace(/\.pdf$/i, ""))}</span>`).join("")
+    }</div>` : ""}
+
+    ${ejs.length ? `<h3>Ejercicios de este tema (${ejs.length})</h3>
+      <div class="lista">${ejs.map(e => {
+        const st = estado.ej[e.id] || "pendiente";
+        return `<div class="r"><span class="t">${esc(e.origen)}</span>
+          <span class="chip">${st}</span></div>`;
+      }).join("")}</div>
+      <div class="linkrow" style="margin-top:10px"><button class="btn ghost mini" data-ir-ej="${t.id}">Ver en el banco →</button></div>` : ""}
+  </div>`;
+}
+
+/* ---------- ejercicios ---------- */
+function renderFiltros(){
+  const op = ['<option value="">Todos los temas</option>']
+    .concat(TEMAS.filter(t => todosEjercicios().some(e => e.tema === t.id))
+      .map(t => `<option value="${t.id}">${t.cod} · ${esc(t.titulo)}</option>`));
+  const sel = $("#f-tema"); const prev = sel.value;
+  sel.innerHTML = op.join(""); sel.value = prev;
+  $("#ne-tema").innerHTML = TEMAS.map(t => `<option value="${t.id}">${t.cod} · ${esc(t.titulo)}</option>`).join("");
+}
+function renderEjercicios(){
+  const ft = $("#f-tema").value, fe = $("#f-estado").value;
+  const fams = familias();
+  const lista = todosEjercicios().filter(e =>
+    (!ft || e.tema === ft) && (!fe || (estado.ej[e.id] || "pendiente") === fe));
+  $("#lista-ej").innerHTML = lista.length ? lista.map(e => {
+    const st = estado.ej[e.id] || "pendiente";
+    const rec = e.fam && fams[e.fam] >= 3;
+    const t = porId[e.tema];
+    return `<article class="ej">
+      <div class="ej-h">
+        <span class="org">${esc(e.origen)}${t ? " · " + t.cod + " " + esc(t.titulo) : ""}</span>
+        ${rec ? `<span class="tag rec">recurrente · ${fams[e.fam]}×</span>` : ""}
+        ${e.verif === "clase" ? '<span class="tag ver">resuelto en clase</span>' : ""}
+        ${e.verif === "propuesta" ? '<span class="tag prop">solución propuesta</span>' : ""}
+        ${e.verif === "parcial" ? '<span class="tag prop">falta un dato</span>' : ""}
+        ${e.verif === "examen" ? '<span class="tag ex">pregunta de examen real</span>' : ""}
+      </div>
+      <div class="ej-body">
+        <p>${esc(e.enunciado)}</p>
+        <button class="btn ghost mini" data-sol="${e.id}">${estado["_ver" + e.id] ? "Ocultar" : "Revelar"} solución</button>
+        ${estado["_ver" + e.id] ? `<div class="sol">
+          ${e.pasos && e.pasos.length ? `<ol>${e.pasos.map(p => `<li>${esc(p)}</li>`).join("")}</ol>` : "<p>Sin procedimiento guardado todavía.</p>"}
+          ${e.resp ? `<div class="resp">${esc(e.resp)}</div>` : ""}
+          ${e.nota ? `<div class="nota">${esc(e.nota)}</div>` : ""}
+        </div>` : ""}
+      </div>
+      <div class="estados">
+        <button class="est" data-est="${e.id}|pendiente" aria-pressed="${st === "pendiente"}">Pendiente</button>
+        <button class="est f" data-est="${e.id}|fallado" aria-pressed="${st === "fallado"}">La fallé</button>
+        <button class="est" data-est="${e.id}|resuelto" aria-pressed="${st === "resuelto"}">Resuelta</button>
+        ${e.propio ? `<button class="est" data-borrar="${e.id}">Borrar</button>` : ""}
+      </div>
+    </article>`;
+  }).join("") : '<p class="vacio">No hay ejercicios con esos filtros.</p>';
+}
+
+/* ---------- repaso ---------- */
+let mazo = [], indice = 0;
+function armarMazo(){
+  const peso = c => {
+    const s = estado.cards[c.q];
+    if(!s) return 1;
+    return s.box === 0 ? 3 : s.box === 1 ? 1.5 : 0.5;
+  };
+  mazo = TARJETAS.slice().map(c => ({c, r:Math.random() / peso(c)}))
+    .sort((a, b) => a.r - b.r).slice(0, 15).map(x => x.c);
+  indice = 0;
+}
+function renderRepaso(){
+  if(!mazo.length) armarMazo();
+  const c = mazo[indice];
+  if(!c){
+    $("#c-tema").textContent = "";
+    $("#c-q").textContent = "Terminaste la ronda.";
+    $("#c-a").hidden = true;
+    $("#c-ver").hidden = true; $("#c-mal").hidden = true; $("#c-bien").hidden = true;
+    $("#c-cont").textContent = "";
+    if(!$("#c-otra")){
+      const b = document.createElement("button");
+      b.className = "btn"; b.id = "c-otra"; b.textContent = "Otra ronda";
+      b.onclick = () => { armarMazo(); renderRepaso(); };
+      $("#c-ver").parentElement.appendChild(b);
+    }
+    $("#c-otra").hidden = false;
+    return;
+  }
+  if($("#c-otra")) $("#c-otra").hidden = true;
+  const t = porId[c.t];
+  $("#c-tema").textContent = t ? t.cod + " · " + t.titulo : "";
+  $("#c-q").textContent = c.q;
+  $("#c-a").textContent = c.a;
+  $("#c-a").hidden = true;
+  $("#c-ver").hidden = false; $("#c-mal").hidden = true; $("#c-bien").hidden = true;
+  $("#c-cont").textContent = (indice + 1) + " / " + mazo.length;
+}
+function responder(bien){
+  const c = mazo[indice];
+  const s = estado.cards[c.q] || {box:0};
+  s.box = bien ? Math.min(3, s.box + 1) : 0;
+  estado.cards[c.q] = s;
+  if(!bien) mazo.push(c);
+  indice++;
+  guardar(); renderRepaso(); renderHitos();
+}
+
+/* ---------- lo esencial PC1 ---------- */
+function renderEsencial(){
+  const d = diasHasta(PC1.fecha);
+  const cuando = d < 0 ? "ya pasó" : d === 0 ? "es hoy" : d === 1 ? "es mañana" : "faltan " + d + " días";
+  $("#v-esencial").innerHTML = `
+  <div class="esen">
+    <div class="esen-top">
+      <span class="eyebrow">Práctica calificada 1 · jueves 17 de setiembre · ${cuando}</span>
+      <h2>Lo que sí o sí entra</h2>
+      <p>Mi apuesta, en orden de certeza. Lo primero lo dijo la ingeniera con nombre y apellido; lo último es lo que los exámenes pasados dicen que siempre pregunta. Si solo tienes una hora, estudia esta página de arriba abajo.</p>
+    </div>
+
+    <!-- ===== BLOQUE 1: PMPO ===== -->
+    <section class="esen-card cert-3">
+      <div class="esen-h"><span class="cert">Certeza máxima</span><h3>1 · El ejercicio de PMPO (≈ 10 pts, casi seguro los dos ejercicios)</h3></div>
+      <p class="why">Ella dijo: "exactamente la misma dinámica del porcelanato y del ladrillo". Los dos ejemplos de las diapositivas son esos. Lo que cambia son los números y las trampas.</p>
+
+      <div class="formula">PMPO = PMO + F + A/M + m + V + O</div>
+      <div class="kv">
+        <div><b>PMO</b> precio del material en el origen: promedio de las cotizaciones, <u>sin descuentos</u>, del <u>mes base</u></div>
+        <div><b>F</b> flete hasta la obra, convertido a la unidad del ACU</div>
+        <div><b>A/M</b> almacenamiento y manipuleo = <span class="num">2 %</span> del PMO</div>
+        <div><b>m</b> mermas por transporte = <span class="num">5 %</span> del PMO</div>
+        <div><b>V</b> viáticos = <span class="num">5 a 30 %</span> del PMO, solo si el enunciado lo pide (custodia, zona lejana)</div>
+        <div><b>O</b> otros, normalmente 0</div>
+      </div>
+
+      <h4>El procedimiento en el orden en que ella lo hace en el Excel</h4>
+      <ol class="pasos">
+        <li><b>Fija la unidad de medida del ACU</b> antes de tocar un número: m², unidad, bolsa, varilla. Todo se convierte a esa unidad. Ella dice "no se suman papas con camotes".</li>
+        <li><b>Decide IGV.</b> Obra por contrata ⇒ todo <u>sin IGV</u> (divide entre <span class="num">1.18</span>). Administración directa ⇒ <u>con IGV</u>. Si una cotización ya viene sin IGV, no la toques.</li>
+        <li><b>Decide el mes base</b> = el mes anterior a la fecha de entrega del ET o del presupuesto. Ella lo validó en clase: ET del 11 de setiembre ⇒ mes base agosto, "porque el presupuesto se elabora antes". Todo cambio de precio posterior a ese mes <u>no existe</u>.</li>
+        <li><b>PMO</b> = promedio de las cotizaciones válidas. Los descuentos por volumen <u>no se consideran</u>, aunque la obra los alcance. Es un distractor que ha caído en todos los ejercicios.</li>
+        <li><b>Flete, tramo por tramo.</b> Si viene por tonelada, por millar o por lote, conviértelo: por ton → por kg → multiplica por los kg de una unidad del ACU (bolsa 42.5 kg; caja de porcelanato 28.1 kg ÷ 1.44 m² = 19.51 kg/m²; varilla 5/8" 14.8 kg). Si es vehículo alquilado por día: <span class="num">costo diario ÷ (viajes por día × capacidad por viaje)</span>. Suma los tramos.</li>
+        <li><b>A/M y m se calculan sobre el PMO</b>, no sobre el PMO + flete. Es el error más fácil de cometer con prisa.</li>
+        <li>Suma y <b>escribe la unidad</b> en la respuesta: S/ por m², S/ por unidad, S/ por bolsa.</li>
+        <li>Si piden <b>aporte unitario</b>: cantidad de material por unidad de la actividad, con su desperdicio. Ladrillo de techo 30×30 con vigueta de 10 cm ⇒ 1 ÷ (0.40 × 0.30) = 8.33 und/m², × 1.05 = 8.75 und/m².</li>
+      </ol>
+
+      <h4>Las trampas que ya cayeron (todas)</h4>
+      <ul class="trampas">
+        <li>Descuento por comprar más de X unidades → <b>no se aplica</b>.</li>
+        <li>Precio subió o bajó después del mes base → <b>se ignora</b>.</li>
+        <li>Cotizaciones de otros proveedores que llegaron tarde (fuera del mes base) → <b>no entran al promedio</b>.</li>
+        <li>Flete en dos tramos, el segundo con burro, motofurgón, carreta o camioneta por día → <b>costo diario ÷ (viajes × capacidad)</b>.</li>
+        <li>Flete cotizado por kg cuando el ACU va por bolsa → <b>× 42.5 kg</b>.</li>
+        <li>Mezcla de precios con y sin IGV en el mismo enunciado → <b>normaliza cada uno por separado</b>.</li>
+        <li>Flete "por el lote total" → <b>divide entre las unidades del lote</b>.</li>
+      </ul>
+      <div class="linkrow">
+        <button class="btn mini" data-ir-ej-id="e-porcelanato">Porcelanato resuelto en clase</button>
+        <button class="btn ghost mini" data-ir-ej-id="e-ladrillo-clase">Ladrillo</button>
+        <button class="btn ghost mini" data-ir-ej-id="e-ladrillo-techo">Ladrillo de techo + aporte</button>
+        <button class="btn ghost mini" data-ir-ej-id="x-pc2-24-pmpo">Cemento y arena (corregido por ella)</button>
+      </div>
+    </section>
+
+    <!-- ===== BLOQUE 2: TEORÍA U2 ===== -->
+    <section class="esen-card cert-3">
+      <div class="esen-h"><span class="cert">Certeza máxima</span><h3>2 · La teoría de la Unidad 2 (≈ 10 pts): los 8 puntos del check-list, respondidos</h3></div>
+      <p class="why">"Si ustedes saben responder que todo va bien con cada uno de esos puntos, estarán listos para la práctica." Estas son las respuestas que yo daría, en el tamaño que cabe en un cuadernillo.</p>
+
+      <details class="resp-modelo" open><summary>1 · Portafolio, programa y proyecto, y cómo generan valor</summary><div>
+        <p><b>Proyecto:</b> iniciativa temporal en un contexto único, emprendida para generar valor (PMI 2026); entrega un producto, servicio o resultado único. <b>Programa:</b> grupo de proyectos relacionados gestionados de forma coordinada para obtener beneficios que no se lograrían por separado. <b>Portafolio:</b> conjunto de programas, proyectos y operaciones alineado con los objetivos estratégicos de la organización.</p>
+        <p>Generan valor por niveles: el portafolio alinea con la estrategia (nivel estratégico), el programa gestiona beneficios compartidos, el proyecto entrega el resultado (operativo). Debajo: subproyecto y paquete de trabajo (táctico) y actividad (ejecución: la unidad básica que consume tiempo y recursos). Las operaciones son continuas; los proyectos, temporales.</p>
+      </div></details>
+
+      <details class="resp-modelo"><summary>2 · Qué es la gestión de proyectos y por qué importa</summary><div>
+        <p>Aplicación de conocimientos, habilidades, herramientas y técnicas a las actividades del proyecto para cumplir sus requisitos y alcanzar o superar el valor previsto (PMI). Planificar, organizar, dirigir y controlar (Pierce). Importa porque el éxito no depende del cálculo estructural sino de cumplir alcance, plazo, costo y calidad con los interesados satisfechos; la construcción compite casi por completo en costo, plazo y desempeño.</p>
+      </div></details>
+
+      <details class="resp-modelo"><summary>3 · Áreas de enfoque de la gestión de proyectos (PMBOK 2026)</summary><div>
+        <p>Grupos de proceso: inicio, planificación, ejecución, seguimiento y control, cierre. Áreas: integración, alcance, tiempo, costo, calidad, equipo de trabajo, comunicaciones, riesgos, adquisiciones e interesados. En inicio y planificación el flujo es: formalizar el proyecto e identificar interesados → recopilar requisitos, definir el alcance, crear la EDT → definir y secuenciar actividades, estimar recursos y duraciones, cronograma → estimar costos y presupuesto → línea base.</p>
+      </div></details>
+
+      <details class="resp-modelo"><summary>4 · Identificar y clasificar interesados y armar la matriz de involucramiento</summary><div>
+        <p><b>Interesado:</b> persona, grupo u organización que se ve afectado, afecta o se percibe afectado por el proyecto. Se clasifican en internos y externos. Se analizan con cuatro atributos que no hay que confundir: <b>poder</b> (influir en decisiones), <b>interés</b> (compromiso con el entregable), <b>influencia</b> (modificar el comportamiento de otros), <b>impacto</b> (generar cambios en planificación y ejecución).</p>
+        <p>Pasos: identificación básica (quién, qué rol) → comprender y analizar (matrices poder/interés, poder/influencia, impacto/influencia) → <b>registro de interesados</b> (clasificación, expectativa de valor redactada desde el interesado, requisitos de información, posición a favor o en contra) → <b>matriz de involucramiento</b>: nivel de participación actual vs. deseado y estrategias concretas para moverlo (reuniones, informes, acceso a información, valorizaciones a tiempo, cuaderno de obra al día).</p>
+      </div></details>
+
+      <details class="resp-modelo"><summary>5 · DBB vs. DB: diferencias operativas y de riesgo</summary><div>
+        <p><b>DBB (Diseño – Licitación – Construcción):</b> el promotor contrata primero al proyectista, cierra el expediente técnico y luego licita la construcción. Fases en serie, diseño completo antes de construir. Conviene en proyectos de baja complejidad. El promotor asume el riesgo de los errores del diseño: las deficiencias del ET se vuelven adicionales a su cargo.</p>
+        <p><b>DB (Diseño – Construcción):</b> un solo contratista diseña y construye. Permite solapar fases y aprovechar que el constructor aporta al diseño. El contratista asume el riesgo del diseño; el promotor pierde control sobre él. El ciclo de vida del proyecto cambia según cuál se elija; la elección depende de la madurez de la información, la complejidad y la asignación de riesgos deseada.</p>
+      </div></details>
+
+      <details class="resp-modelo"><summary>6 · Proceso de contratación de obra pública (Ley N° 32069)</summary><div>
+        <p>Tres etapas. <b>Actuaciones preparatorias:</b> elaboración del requerimiento → estrategia de contratación → expediente de contratación (anuncio de contratación futura es opcional). <b>Selección:</b> bases administrativas → convocatoria → adjudicación. <b>Ejecución contractual:</b> perfeccionamiento del contrato → ejecución y supervisión (valorizaciones, modificaciones, recepción) → liquidación. Principio rector: <b>valor por el dinero</b>, no solo el menor precio. Plataforma: PLADICOP. Licitación pública para bienes y obras; concurso público para servicios y consultorías.</p>
+        <p>Condiciones para que empiece el plazo: comunicación del supervisor, entrega de adelantos, firma de la JPRD y entrega del terreno.</p>
+      </div></details>
+
+      <details class="resp-modelo"><summary>7 · Sistemas de entrega y modalidades de pago</summary><div>
+        <p><b>Sistemas de entrega:</b> DBB o solo construcción (baja complejidad), DB (el constructor aporta al diseño), IPD (muy alta complejidad), CM como agente y CM con riesgo (alta complejidad), EPC (ingeniería, procura y construcción), APP (concesiones, BOT, DBOM), ejecución directa (la entidad ejecuta). Llave en mano se aplica sobre cualquiera e incluye equipamiento hasta la puesta en servicio.</p>
+        <p><b>Modalidades de pago:</b> suma alzada (precio único, exige planos y especificaciones completos, cambios por orden de cambio; el contratista asume el riesgo de metrados), precio unitario (se paga por cantidades reales; la entidad asume el riesgo de metrados), esquema mixto, costo reembolsable.</p>
+      </div></details>
+
+      <details class="resp-modelo"><summary>8 · Garantías, adelantos y solución de controversias</summary><div>
+        <p><b>Garantía de fiel cumplimiento:</b> asegura a la entidad que el contratista termina la obra según especificaciones; se entrega siempre, pida adelantos o no. Dos formas: <b>carta fianza</b> (banco regulado por la SBS) o <b>retención</b> de pago, solo en obras de más de 60 días y monto menor a 5 millones, retenida en la primera mitad de los pagos y devuelta en la liquidación.</p>
+        <p><b>Adelantos:</b> directo (movilización, inicio de operaciones) y para materiales e insumos (compra de materiales clave, protege de la inflación); ambos con carta fianza. <b>Controversias:</b> JPRD (decisiones obligatorias y de cumplimiento inmediato sobre aspectos técnicos y contractuales), conciliación (resolución de contrato, ampliación de plazo, recepción, valorizaciones, liquidación) y arbitraje (validez, nulidad, interpretación, ejecución del contrato).</p>
+      </div></details>
+    </section>
+
+    <!-- ===== BLOQUE 3: U3 ===== -->
+    <section class="esen-card cert-2">
+      <div class="esen-h"><span class="cert">Certeza alta</span><h3>3 · Unidad 3: lo conceptual y los "casitos"</h3></div>
+      <p class="why">Ella anunció "algo de contenido conceptual" y "pequeños casitos" para identificar producto y proyecto. Esto es lo que hay que tener listo.</p>
+
+      <div class="dos">
+        <div class="caja">
+          <h4>Alcance del producto vs. del proyecto</h4>
+          <p><b>Producto:</b> características y funciones de lo que se entrega (cómo ES la obra terminada). <b>Proyecto:</b> el trabajo que hay que hacer para entregarlo. Regla rápida: si desaparece cuando se entrega la obra, es del proyecto; si el usuario lo pisa, lo toca o lo ve, es del producto. Ambos viven en el expediente técnico: memoria y especificaciones describen el producto; partidas, plazos y procedimientos describen el proyecto.</p>
+          <button class="btn ghost mini" data-ir-ej-id="x-casitos">Practicar los 8 casitos</button>
+        </div>
+        <div class="caja">
+          <h4>Del PMI al expediente técnico</h4>
+          <table class="tabla"><tbody>
+            <tr><td>Recopilar requisitos</td><td>Consultas y observaciones al ET</td></tr>
+            <tr><td>Declaración del alcance</td><td>Memoria descriptiva y especificaciones técnicas</td></tr>
+            <tr><td>EDT</td><td>Itemizado de partidas</td></tr>
+            <tr><td>Diccionario de la EDT</td><td>Especificaciones técnicas y APU</td></tr>
+          </tbody></table>
+          <p><b>El Expediente Técnico es la línea base del alcance.</b> Los RDI aparecen en licitación (consultas y observaciones), en adjudicación (informe de revisión del ET) y en ejecución (cuaderno de obra).</p>
+        </div>
+      </div>
+
+      <div class="dos">
+        <div class="caja">
+          <h4>Cambios de alcance en obra pública</h4>
+          <p><b>Mayores / menores metrados:</b> más o menos cantidad en una partida que ya existe. <b>Obra adicional:</b> trabajo que no existe en el contrato; requiere expediente técnico adicional y resolución de aprobación antes de ejecutarse. <b>Deductivo vinculante:</b> el trabajo que se deja de hacer por causa del adicional. Dato de clase: el 80 % de los adicionales viene de un alcance mal definido.</p>
+        </div>
+        <div class="caja">
+          <h4>EDT y declaración del alcance</h4>
+          <p><b>EDT:</b> descomposición jerárquica del alcance total del trabajo. Cuatro principios: regla del 100 %, elementos mutuamente exclusivos, orientada a entregables (no a tareas), base para costo y tiempo. En obra pública se organiza por especialidades siguiendo la Norma Técnica de Metrados. <b>Declaración del alcance:</b> descripción del producto, entregables, criterios de aceptación, exclusiones, restricciones y supuestos. <b>Requisito:</b> claro, conciso, verificable, consistente, completo y trazable.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== BLOQUE 4: U4 presupuesto ===== -->
+    <section class="esen-card cert-2">
+      <div class="esen-h"><span class="cert">Certeza alta</span><h3>4 · Presupuesto: contrata vs. administración directa</h3></div>
+      <p class="why">Es el primer ítem del check-list de la Unidad 4 y lo repitió dos clases seguidas. Cabe como pregunta corta de teoría.</p>
+      <div class="dos">
+        <div class="caja">
+          <h4>Obra por contrata</h4>
+          <p><b>Costo directo</b> (materiales + mano de obra + equipos) + <b>gastos generales</b> (relacionados y no relacionados con el tiempo de ejecución) + <b>utilidad</b> + <b>IGV</b> = costo total de obra. El IGV va separado; CD y GG se trabajan sin IGV. Cadena: alcance → recursos → análisis de costo unitario → presupuesto. Todas las partidas deben cubrir el 100 % de la obra; no hay formato oficial único.</p>
+        </div>
+        <div class="caja">
+          <h4>Administración directa</h4>
+          <p>La entidad ejecuta con sus propios recursos: <b>utilidad = 0</b> y el IGV no aparece separado, está dentro de los precios de los insumos (por eso en PMPO se cotiza con IGV). Los gastos generales existen igual. En equipos: HM = solo costo de operación, sin costo de posesión.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== BLOQUE 5: números ===== -->
+    <section class="esen-card cert-1">
+      <div class="esen-h"><span class="cert">Para no dudar</span><h3>5 · Los números que hay que llevar en la cabeza</h3></div>
+      <div class="nums">
+        <div><span class="num">1.18</span><span>divisor para quitar el IGV</span></div>
+        <div><span class="num">2 %</span><span>A/M sobre el PMO</span></div>
+        <div><span class="num">5 %</span><span>mermas sobre el PMO</span></div>
+        <div><span class="num">5–30 %</span><span>viáticos sobre el PMO</span></div>
+        <div><span class="num">42.5 kg</span><span>una bolsa de cemento</span></div>
+        <div><span class="num">mes − 1</span><span>mes base = anterior a la entrega del ET</span></div>
+        <div><span class="num">60 d / 5 M</span><span>retención en vez de carta fianza: obra &gt; 60 días y monto &lt; 5 millones</span></div>
+        <div><span class="num">3 × 3</span><span>etapas de contratación × pasos: preparatorias, selección, ejecución</span></div>
+        <div><span class="num">4</span><span>atributos de un interesado: poder, interés, influencia, impacto</span></div>
+        <div><span class="num">4</span><span>modalidades de pago: suma alzada, precio unitario, mixto, reembolsable</span></div>
+        <div><span class="num">6</span><span>partes de la declaración del alcance</span></div>
+        <div><span class="num">6</span><span>criterios de un requisito</span></div>
+      </div>
+    </section>
+
+    <div class="esen-pie">
+      <p><b>Cómo lo estudiaría yo:</b> primero resuelve el porcelanato y el ladrillo de techo con lápiz, sin mirar, y compara. Luego responde en voz alta los 8 puntos del check-list de la Unidad 2 con este texto tapado. Termina con los casitos de producto y proyecto. Lo demás del Temario es respaldo.</p>
+      <p class="subtle">Fuente de la apuesta: lo que la ingeniera dijo al cierre de la clase 8 (10-set, 1:36:30), sus propias correcciones en la Práctica 2 de 2024-II y el patrón de las 7 evaluaciones que tienes en "Qué cae".</p>
+    </div>
+  </div>`;
+}
+
+/* ---------- qué cae ---------- */
+function totalesPorEje(){
+  const t = {};
+  EXAMENES.forEach(x => x.preguntas.forEach(q => { t[q.e] = (t[q.e] || 0) + q.p; }));
+  return t;
+}
+function renderQueCae(){
+  const tot = totalesPorEje();
+  const ejes = Object.keys(EJES).filter(k => tot[k]).sort((a, b) => tot[b] - tot[a]);
+  const maxTot = Math.max(...ejes.map(k => tot[k]));
+  const granTotal = ejes.reduce((a, k) => a + tot[k], 0);
+  const ex = EXAMENES.slice().sort((a, b) => a.fecha.localeCompare(b.fecha));
+  const maxCel = Math.max(...ex.flatMap(x => x.preguntas.map(q => q.p)));
+  const fmt = n => Number.isInteger(n) ? String(n) : n.toFixed(2).replace(/0$/, "");
+  const lider = ejes[0];
+
+  const celda = (x, k) => {
+    const qs = x.preguntas.filter(p => p.e === k);
+    if(!qs.length) return '<td><span class="celda">·</span></td>';
+    const p = qs.reduce((a, b) => a + b.p, 0);
+    const i = p / maxCel;
+    const bg = "color-mix(in oklab, var(--brand) " + Math.round(12 + i * 78) + "%, var(--surface))";
+    return `<td><span class="celda on${i > 0.55 ? " alto" : ""}" style="background:${bg}"
+      title="${esc(x.nombre + " " + x.periodo)}: ${fmt(p)} puntos en ${esc(EJES[k].n)}">${fmt(p)}</span></td>`;
+  };
+
+  $("#v-quecae").innerHTML = `
+  <div class="sec">
+    <h2>Qué cae en las evaluaciones</h2>
+    <div class="headline">
+      <div class="big">${Math.round(tot[lider] / granTotal * 100)}%</div>
+      <p>De los ${fmt(granTotal)} puntos repartidos en las ${EXAMENES.length} evaluaciones pasadas que tengo,
+      esa proporción se la lleva <strong>${esc(EJES[lider].n)}</strong>, y aparece en
+      ${EXAMENES.filter(x => x.preguntas.some(q => q.e === lider)).length} de las ${EXAMENES.length}.
+      Es el tema con mejor retorno por hora de estudio.</p>
+    </div>
+
+    <div class="scroll-x">
+      <table class="matriz">
+        <thead><tr><th class="eje">Tema</th>
+          ${ex.map(x => `<th>${esc(x.nombre.replace("Práctica", "PC").replace("Examen final", "Final"))}
+            <span class="per">${esc(x.periodo)}</span></th>`).join("")}
+          <th style="text-align:left">Total</th></tr></thead>
+        <tbody>${ejes.map(k => `<tr>
+          <th class="eje">${esc(EJES[k].n)}</th>
+          ${ex.map(x => celda(x, k)).join("")}
+          <td><span class="tot"><i class="b" style="width:${tot[k] / maxTot * 78}px"></i>
+            <span class="v">${fmt(tot[k])}</span></span></td>
+        </tr>`).join("")}</tbody>
+      </table>
+    </div>
+    <p class="subtle">Puntos sobre 20 por evaluación. Pasa el cursor por una celda para ver el detalle.
+    Las celdas con un punto son temas que esa evaluación no tocó.</p>
+  </div>
+
+  <div class="sec">
+    <h2>Evaluación por evaluación</h2>
+    ${ex.slice().reverse().map(x => `<details class="examen">
+      <summary><h3>${esc(x.nombre)} · ${esc(x.periodo)}</h3>
+        <span class="f">${new Date(x.fecha + "T00:00:00").toLocaleDateString("es-PE", {day:"numeric", month:"long", year:"numeric"})} · ${esc(x.dur)}</span>
+        ${x.nota ? `<span class="chip">nota ${esc(x.nota)}</span>` : ""}</summary>
+      <div class="qs">${x.preguntas.map(q => `<div class="q">
+        <span class="p">${fmt(q.p)} pt</span>
+        <span><span class="e">${esc(EJES[q.e].n)}</span>${esc(q.d)}</span>
+      </div>`).join("")}</div>
+    </details>`).join("")}
+    <p class="subtle">Las notas que aparecen son las del alumno que rindió el examen escaneado, no un puntaje de referencia.</p>
+  </div>`;
+}
+
+/* ---------- avance ---------- */
+function renderAvance(){
+  const puntos = {};
+  EXAMENES.forEach(x => x.preguntas.forEach(q => {
+    const id = EJES[q.e].tema; puntos[id] = (puntos[id] || 0) + q.p;
+  }));
+  const flojos = TEMAS.map(t => ({t, a:avanceTema(t), p:puntos[t.id] || 0}))
+    .filter(x => x.p > 0 || !x.t.pendiente)
+    .map(x => ({...x, prio:(1 - x.a) * (x.p + 2)}))
+    .sort((x, y) => y.prio - x.prio).slice(0, 6);
+  const fams = familias();
+  const pend = todosEjercicios().filter(e => (estado.ej[e.id] || "pendiente") !== "resuelto" && e.fam && fams[e.fam] >= 3);
+  const dominadas = Object.values(estado.cards).filter(s => s.box >= 2).length;
+
+  $("#v-avance").innerHTML = `
+  <div class="sec">
+    <h2>Dónde estoy</h2>
+    <div class="tiles">
+      <div class="tile"><div class="k">Check-list de la ingeniera</div><div class="v">${pct(avanceCurso())}</div></div>
+      <div class="tile"><div class="k">Repaso detallado</div><div class="v">${pct(avanceGlobal())}</div></div>
+      <div class="tile"><div class="k">Ejercicios resueltos</div><div class="v">${todosEjercicios().filter(e => estado.ej[e.id] === "resuelto").length}</div></div>
+      <div class="tile"><div class="k">Ejercicios fallados</div><div class="v">${todosEjercicios().filter(e => estado.ej[e.id] === "fallado").length}</div></div>
+      <div class="tile"><div class="k">Tarjetas dominadas</div><div class="v">${dominadas}</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>Avance por unidad</h2>
+    <div class="lista">${CURSO.map(u => {
+      const of = u.check && u.check.length;
+      const a = of ? avanceOficial(u) : avanceUnidad(u);
+      return `<div class="r"><span class="cod num" style="color:var(--brand);min-width:22px">${u.cod}</span>
+        <span class="t">${esc(u.titulo)}${of ? "" : ' <span class="subtle">· sin check-list oficial</span>'}</span>
+        <span class="barra"><i style="width:${a * 100}%"></i></span>
+        <span class="num" style="min-width:42px;text-align:right;color:var(--muted)">${pct(a)}</span></div>`;
+    }).join("")}</div>
+  </div>
+
+  <div class="sec">
+    <h2>Qué estudiar primero</h2>
+    <p class="subtle" style="margin-top:0">Cruza lo que te falta del check-list con los puntos que ese tema ha valido en las evaluaciones pasadas.</p>
+    <div class="lista">${flojos.map(({t, a, p}) =>
+      `<div class="r"><span class="cod num" style="color:var(--brand);min-width:34px">${t.cod}</span>
+        <span class="t">${esc(t.titulo)}</span>
+        ${p ? `<span class="chip">${p} pts en exámenes</span>` : ""}
+        <span class="num" style="color:var(--muted)">${pct(a)}</span></div>`).join("")}</div>
+  </div>
+
+  <div class="sec">
+    <h2>Ejercicios recurrentes sin resolver</h2>
+    <p class="subtle" style="margin-top:0">Tipos de ejercicio que aparecen tres veces o más entre clases, talleres y prácticas.</p>
+    ${pend.length ? `<div class="lista">${pend.map(e =>
+      `<div class="r"><span class="chip">${esc(e.fam)}</span><span class="t">${esc(e.origen)}</span>
+       <span class="num" style="color:var(--crit)">${estado.ej[e.id] === "fallado" ? "fallado" : "pendiente"}</span></div>`).join("")}</div>`
+      : '<p class="vacio">Nada pendiente en las familias recurrentes.</p>'}
+  </div>
+
+  <div class="sec">
+    <h2>Cómo se calcula la nota</h2>
+    <div class="scroll-x"><table class="tabla">
+      <thead><tr><th>Evaluación</th><th>Peso</th><th>Nota</th></tr></thead>
+      <tbody>${EVALS.map(e => `<tr><td>${esc(e.k)}</td><td class="n">${e.peso}%</td><td>${esc(e.nota)}</td></tr>`).join("")}</tbody>
+    </table></div>
+    <p class="subtle">Prácticas calificadas: 17-Set, 15-Oct y 29-Oct, una anulable. Las notas de cada evaluación se redondean, pero los promedios de tareas y prácticas no se redondean para el promedio final.</p>
+  </div>`;
+}
+
+/* ---------- pintar y eventos ---------- */
+function pintar(){
+  renderHitos();
+  if(vista === "esencial") renderEsencial();
+  if(vista === "temario") renderTemario();
+  if(vista === "ejercicios"){ renderFiltros(); renderEjercicios(); }
+  if(vista === "quecae") renderQueCae();
+  if(vista === "repaso") renderRepaso();
+  if(vista === "avance") renderAvance();
+}
+function cambiarVista(v){
+  vista = v;
+  ["esencial","temario","ejercicios","quecae","repaso","avance"].forEach(x => {
+    $("#v-" + x).hidden = x !== v;
+    $("#tab-" + x).setAttribute("aria-selected", String(x === v));
+  });
+  pintar();
+}
+["esencial","temario","ejercicios","quecae","repaso","avance"].forEach(x => {
+  $("#tab-" + x).addEventListener("click", () => cambiarVista(x));
+});
+
+document.addEventListener("click", ev => {
+  const b = ev.target.closest("button");
+  if(!b) return;
+
+  if(b.dataset.unidad){ abiertoU = abiertoU === b.dataset.unidad ? null : b.dataset.unidad; renderTemario(); return; }
+  if(b.dataset.abrirU){
+    abiertoU = b.dataset.abrirU; renderTemario();
+    const el = document.querySelector(`[data-unidad="${abiertoU}"]`); if(el) el.scrollIntoView({block:"start"});
+    return;
+  }
+  if(b.dataset.irEjId){
+    cambiarVista("ejercicios"); $("#f-tema").value = ""; $("#f-estado").value = "";
+    estado["_ver" + b.dataset.irEjId] = true; renderEjercicios();
+    const el = document.querySelector(`[data-sol="${b.dataset.irEjId}"]`); if(el) el.closest(".ej").scrollIntoView({block:"start"});
+    return;
+  }
+  if(b.dataset.tema){ abierto = abierto === b.dataset.tema ? null : b.dataset.tema; renderTemario(); return; }
+
+  if(b.dataset.chk){
+    const id = b.dataset.chk;
+    estado.check[id] = ((estado.check[id] || 0) + 1) % 3;
+    guardar(); renderTemario(); renderHitos(); return;
+  }
+  if(b.dataset.vidAdd){
+    const inp = $("#vid-" + b.dataset.vidAdd);
+    if(inp && inp.value.trim()){ estado.videos[b.dataset.vidAdd] = inp.value.trim(); guardar(); renderTemario(); }
+    return;
+  }
+  if(b.dataset.vidDel){ delete estado.videos[b.dataset.vidDel]; guardar(); renderTemario(); return; }
+  if(b.dataset.irEj){ cambiarVista("ejercicios"); $("#f-tema").value = b.dataset.irEj; renderEjercicios(); return; }
+
+  if(b.dataset.sol){ estado["_ver" + b.dataset.sol] = !estado["_ver" + b.dataset.sol]; renderEjercicios(); return; }
+  if(b.dataset.est){
+    const [id, st] = b.dataset.est.split("|");
+    estado.ej[id] = estado.ej[id] === st ? "pendiente" : st;
+    guardar(); renderEjercicios(); renderHitos(); return;
+  }
+  if(b.dataset.borrar){
+    estado.extra = (estado.extra || []).filter(e => e.id !== b.dataset.borrar);
+    guardar(); renderFiltros(); renderEjercicios(); renderHitos(); return;
+  }
+});
+
+$("#f-tema").addEventListener("change", renderEjercicios);
+$("#f-estado").addEventListener("change", renderEjercicios);
+$("#btn-nuevo").addEventListener("click", () => { $("#form-ej").hidden = !$("#form-ej").hidden; });
+$("#ne-cancel").addEventListener("click", () => { $("#form-ej").hidden = true; });
+$("#form-ej").addEventListener("submit", ev => {
+  ev.preventDefault();
+  const sol = $("#ne-sol").value.trim();
+  estado.extra = estado.extra || [];
+  estado.extra.push({
+    id:"p" + Date.now(),
+    tema:$("#ne-tema").value,
+    origen:$("#ne-org").value.trim() || "Agregado por mí",
+    enunciado:$("#ne-enun").value.trim(),
+    pasos:sol ? sol.split("\n").filter(x => x.trim()) : [],
+    verif:"propuesta"
+  });
+  guardar();
+  ev.target.reset(); $("#form-ej").hidden = true;
+  renderFiltros(); renderEjercicios(); renderHitos();
+});
+
+$("#c-ver").addEventListener("click", () => {
+  $("#c-a").hidden = false;
+  $("#c-ver").hidden = true;
+  $("#c-mal").hidden = false; $("#c-bien").hidden = false;
+});
+$("#c-mal").addEventListener("click", () => responder(false));
+$("#c-bien").addEventListener("click", () => responder(true));
+
+cargarLocal();
+if(diasHasta(PC1.fecha) >= 0) cambiarVista("esencial"); else pintar();
+conectarDb();
+</script>
+
+
+</body>
+</html>
