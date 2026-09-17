@@ -279,6 +279,22 @@ textarea{min-height:76px;resize:vertical}
 .resp-modelo[open] summary::before{content:"−"}
 .resp-modelo>div{padding:4px 14px 12px;font-size:.88rem;color:var(--ink2)}
 .resp-modelo p{margin:8px 0 0}
+.resumen-clave{background:var(--surface2);border-left:4px solid var(--brand);padding:10px 14px;border-radius:0 var(--r-sm) var(--r-sm) 0;margin:8px 0 10px;font-size:.88rem;color:var(--ink2);line-height:1.55}
+.resumen-clave p{margin:0 0 6px}
+.resumen-clave p:last-child{margin-bottom:0}
+.resumen-clave b{color:var(--ink)}
+.resumen-clave-badge{display:inline-flex;align-items:center;gap:5px;font-size:.74rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--brand);background:var(--brandSoft);padding:2px 8px;border-radius:var(--r-sm);margin-bottom:8px}
+.exp-extendida{margin:8px 0 6px;border:1px dashed rgba(0,75,135,.3);border-radius:var(--r-md);background:rgba(240,249,255,.45);overflow:hidden;transition:all .2s}
+.exp-extendida[open]{background:#f8fafc;border-style:solid;border-color:rgba(0,75,135,.25);box-shadow:var(--sh-xs)}
+.exp-extendida>summary{padding:9px 14px;font-size:.83rem;font-weight:600;color:var(--brand);cursor:pointer;list-style:none;display:flex;align-items:center;gap:7px;background:none;user-select:none;transition:background .15s}
+.exp-extendida>summary::-webkit-details-marker{display:none}
+.exp-extendida>summary::before{content:"▶";font-size:.68rem;transition:transform .15s;display:inline-block;color:var(--brand)}
+.exp-extendida[open]>summary::before{transform:rotate(90deg)}
+.exp-extendida>summary:hover{background:var(--brandSoft)}
+.exp-extendida-body{padding:10px 14px 14px;border-top:1px solid var(--lineSoft);font-size:.87rem;line-height:1.55;color:var(--ink2)}
+.exp-extendida-body p{margin:8px 0 0}
+.exp-extendida-body ul{margin:6px 0 0;padding-left:20px}
+.exp-extendida-body li{margin-bottom:5px}
 .dos{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:12px}
 .caja{background:var(--surface2);border:1px solid var(--line);border-left:4px solid var(--brand);border-radius:var(--r-md);padding:12px 14px}
 .caja h4{margin-top:0}
@@ -1978,77 +1994,185 @@ function renderEsencial(){
       <div id="quiz-u2-wrap" class="quiz-u2" ${quizU2.abierto ? '' : 'hidden'}></div>
 
       <details class="resp-modelo" open><summary>1 · Portafolio, programa y proyecto, y cómo generan valor</summary><div>
-        <p><b>Proyecto:</b> iniciativa temporal en un contexto único, emprendida para generar valor (PMI 2026); entrega un producto, servicio o resultado único. <b>Programa:</b> grupo de proyectos relacionados gestionados de forma coordinada para obtener beneficios que no se lograrían por separado. <b>Portafolio:</b> conjunto de programas, proyectos y operaciones alineado con los objetivos estratégicos de la organización.</p>
-        <p>Generan valor por niveles: el portafolio alinea con la estrategia (nivel estratégico), el programa gestiona beneficios compartidos, el proyecto entrega el resultado (operativo). Debajo: subproyecto y paquete de trabajo (táctico) y actividad (ejecución: la unidad básica que consume tiempo y recursos). Las operaciones son continuas; los proyectos, temporales.</p>
+        <div class="resumen-clave">
+          <div class="resumen-clave-badge">💡 Resumen clave (para responder al grano)</div>
+          <p>• <b>Proyecto:</b> Esfuerzo temporal y único emprendido para entregar un producto o resultado que genera valor.<br>
+          • <b>Programa:</b> Conjunto de proyectos relacionados gestionados de forma coordinada para obtener beneficios y sinergias que no se lograrían por separado.<br>
+          • <b>Portafolio:</b> Conjunto de programas, proyectos y operaciones agrupados para cumplir con los objetivos estratégicos del negocio o del Estado.<br>
+          • <b>Generación de valor por niveles:</b> El <b>portafolio</b> decide qué hacer según la estrategia (nivel estratégico: <i>"¿hacemos los proyectos correctos?"</i>), el <b>programa</b> armoniza beneficios y recursos entre obras, y el <b>proyecto</b> entrega el resultado físico tangible en campo (nivel operativo: <i>"¿hacemos el proyecto correctamente?"</i>).</p>
+        </div>
+
+        <details class="exp-extendida"><summary>📖 Ver explicación extendida y a fondo</summary><div class="exp-extendida-body">
+          <p><b>1. Jerarquía estructural de la gestión de proyectos:</b><br>
+          En una organización constructora o entidad pública, el trabajo se descompone en varios niveles de toma de decisiones:</p>
+          <p>• <b>Portafolio (Nivel Estratégico):</b> Asigna el presupuesto global, prioriza inversiones y selecciona qué iniciativas se financian para maximizar el valor de la empresa o del Estado.<br>
+          • <b>Programa (Nivel Táctico / Sinergia):</b> Por ejemplo, un <i>Programa de Mejoramiento de la Red Vial del Norte</i> agrupa 5 contratos de carreteras y 3 puentes; gestiona recursos compartidos (canteras, plantas de asfalto) para abaratar costos globales.<br>
+          • <b>Proyecto (Nivel Operativo):</b> La construcción de un puente específico (ej. Puente Santa Rosa) con fecha de inicio, fin, presupuesto fijo y entregables claros.<br>
+          • <b>Subproyecto y Paquete de Trabajo (WBS / EDT):</b> Divisiones manejables del proyecto (ej. Cimentación profunda, Superestructura, Accesos).<br>
+          • <b>Actividad:</b> La unidad mínima de trabajo que consume tiempo y recursos (ej. Vaciado de concreto en estribo derecho, habilitación de acero f'c=280 kg/cm²).</p>
+          <p><b>2. Diferencia clave: Proyecto vs. Operaciones:</b><br>
+          Los <b>proyectos</b> son finitos, temporales y crean algo único (diseño y construcción de una planta de tratamiento). Las <b>operaciones</b> son continuas, rutinarias y repetitivas; mantienen el negocio funcionando (el mantenimiento diario y operación de la planta una vez inaugurada).</p>
+        </div></details>
       </div></details>
 
       <details class="resp-modelo"><summary>2 · Qué es la gestión de proyectos y por qué importa</summary><div>
-        <p><b>Definición PMI (PMBOK 2026):</b> Aplicación de conocimientos, habilidades, herramientas y técnicas a las actividades del proyecto para cumplir sus requisitos y alcanzar o superar el valor previsto.</p>
-        <p><b>Ciclo administrativo en ingeniería civil (Pierce):</b> Se sintetiza en cuatro verbos fundamentales:</p>
-        <p><b>1. Planificar:</b> Definir <b>qué</b> se va a hacer (alcance), <b>cómo y cuándo</b> (cronograma) y <b>a qué costo</b> (presupuesto y ACU).<br>
-        <b>2. Organizar:</b> Asignar cuadrillas, frentes de trabajo, maquinaria pesada, subcontratos y campamentos.<br>
-        <b>3. Dirigir:</b> Liderar al equipo en campo, coordinar con la supervisión, resolver consultas técnicas mediante RDI (o cuaderno de obra) y negociar con gremios.<br>
-        <b>4. Controlar:</b> Medir diariamente el avance real frente a la <b>línea base</b> (cronograma valorizado y curvas S), detectar desvíos y aplicar medidas correctivas (ej. crashing / horas extras, turnos dobles).</p>
-        <p><b>Por qué importa en la construcción:</b> El éxito no depende únicamente del cálculo estructural (no basta que el puente no se caiga), sino de cumplir alcance, plazo, costo, calidad y seguridad con los interesados satisfechos. La construcción compite en costo y plazo, produciendo prototipos únicos a la intemperie donde se vende a precio fijado antes de construir (licitación → contrato → producción → entrega). Con márgenes estrechos (5–10 %) y penalidades por mora de hasta 10 % (Ley N° 32069), sin una gestión rigurosa cualquier imprevisto destruye la viabilidad de la obra.</p>
+        <div class="resumen-clave">
+          <div class="resumen-clave-badge">💡 Resumen clave (para responder al grano)</div>
+          <p>• <b>Definición PMI (PMBOK):</b> Aplicación de conocimientos, habilidades, herramientas y técnicas a las actividades del proyecto para cumplir sus requisitos y generar o superar el valor previsto.<br>
+          • <b>Los 4 verbos del ciclo administrativo (Pierce):</b> <b>Planificar</b> (definir alcance, cronograma y presupuesto), <b>Organizar</b> (asignar cuadrillas, frentes y maquinaria), <b>Dirigir</b> (liderar en campo y resolver RDI) y <b>Controlar</b> (medir avance real vs. línea base).<br>
+          • <b>¿Por qué importa en construcción?:</b> Porque el éxito no es solo que la estructura no se caiga, sino cumplir alcance, costo y plazo. En construcción se vende a precio cerrado antes de producir, al aire libre y con márgenes reducidos (5–10 %); sin gestión, los desvíos y penalidades destruyen la obra.</p>
+        </div>
+
+        <details class="exp-extendida"><summary>📖 Ver explicación extendida y a fondo</summary><div class="exp-extendida-body">
+          <p><b>1. Desglose detallado del ciclo administrativo de Pierce en ingeniería civil:</b></p>
+          <p>• <b>Planificar:</b> Implica modelar la obra en papel antes de mover una sola piedra. Se establece la <b>Línea Base</b>: qué se hará (EDT y especificaciones), en cuánto tiempo (diagrama de Gantt / ruta crítica CPM) y con qué recursos (análisis de costos unitarios y presupuesto).<br>
+          • <b>Organizar:</b> Estructurar el organigrama de obra: designar al residente, jefes de frente, cuadrillas de operarios/peones, subcontratistas especializados, plantas de dosificación y logística de campamentos.<br>
+          • <b>Dirigir:</b> El liderazgo operativo del día a día. Comunicar metas semanales (Lookahead), coordinar con la supervisión técnica, resolver consultas de campo mediante RDI o Cuaderno de Obra digital y gestionar el clima laboral con sindicatos.<br>
+          • <b>Controlar:</b> Seguimiento continuo mediante herramientas de control (Curvas S, Valor Ganado / EVM, cronogramas valorizados). Si una partida de la ruta crítica se atrasa, se aplican de inmediato medidas correctivas como turnos dobles o aceleración (<i>crashing</i>).</p>
+          <p><b>2. El contexto económico hostil de la construcción:</b><br>
+          A diferencia de la manufactura industrial en fábrica, la construcción produce prototipos únicos bajo condiciones climáticas y de suelo inciertas. Se opera con el ciclo invertido: <i>Licitación (precio fijo pactado) → Contrato → Producción → Entrega</i>. Con penalidades por mora de hasta el 10 % del contrato (Ley N° 32069), un atraso de dos semanas puede borrar por completo la utilidad de la empresa constructora.</p>
+        </div></details>
       </div></details>
 
       <details class="resp-modelo"><summary>3 · ¿Cómo se estructura el marco de trabajo del PMBOK (procesos y áreas) y cuál es el flujo lógico para planificar un proyecto?</summary><div>
-        <p><b>1. Estructura del marco de trabajo (La Matriz del PMBOK):</b> Se organiza cruzando las etapas en el tiempo con las especialidades de gestión:</p>
-        <p>• <b>5 Grupos de Proceso (¿Cuándo?):</b> Inicio (formalizar encargo y contrato), Planificación (diseñar y presupuestar en papel), Ejecución (construir en campo), Seguimiento y Control (medir avance vs. línea base y corregir desvíos) y Cierre (recepción, liquidación y entrega).<br>
-        • <b>10 Áreas de Conocimiento / Enfoque (¿Qué?):</b> Integración (coordina todo el proyecto), Alcance, Tiempo, Costo, Calidad, Recursos/Equipo, Comunicaciones, Riesgos, Adquisiciones e Interesados.</p>
-        <p><b>2. Flujo lógico para planificar un proyecto:</b> Responde a la regla: <i>"No puedes saber cuánto cuesta ni cuánto demora una obra si primero no sabes exactamente QUÉ vas a construir"</i>. La secuencia obligatoria es:</p>
-        <p><b>Paso 1:</b> Formalizar el proyecto e identificar interesados.<br>
-        <b>Paso 2:</b> Recopilar requisitos del cliente y definir el <b>Alcance</b> detallado.<br>
-        <b>Paso 3:</b> Descomponer el alcance creando la <b>EDT / WBS</b> (paquetes de trabajo e itemizado).<br>
-        <b>Paso 4:</b> Definir y secuenciar actividades, estimar recursos y duraciones para armar el <b>Cronograma</b> (Gestión del Tiempo).<br>
-        <b>Paso 5:</b> Estimar costos de los recursos y Análisis de Costos Unitarios para formular el <b>Presupuesto</b> (Gestión del Costo).<br>
-        <b>Paso 6:</b> Integrar y aprobar la <b>Línea Base</b> (alcance + cronograma + costo) contra la cual se medirá el avance real en obra.</p>
+        <div class="resumen-clave">
+          <div class="resumen-clave-badge">💡 Resumen clave (para responder al grano)</div>
+          <p>• <b>Estructura de la Matriz PMBOK:</b> Cruza <b>5 Grupos de Proceso</b> temporales (Inicio, Planificación, Ejecución, Monitoreo/Control y Cierre) con <b>10 Áreas de Conocimiento</b> temáticas (Integración, Alcance, Tiempo, Costo, Calidad, Recursos, Comunicaciones, Riesgos, Adquisiciones e Interesados).<br>
+          • <b>Flujo lógico de planificación (Regla de oro):</b> <i>"No puedes saber cuánto cuesta ni cuánto demora una obra si primero no sabes exactamente qué vas a construir"</i>.<br>
+          • <b>Secuencia obligatoria:</b> Interesados → Alcance → EDT/WBS → Cronograma → Presupuesto (ACU) → Aprobación de la Línea Base.</p>
+        </div>
+
+        <details class="exp-extendida"><summary>📖 Ver explicación extendida y a fondo</summary><div class="exp-extendida-body">
+          <p><b>1. Los componentes de la Matriz del PMBOK:</b></p>
+          <p>• <b>Los 5 Grupos de Procesos (Eje cronológico):</b><br>
+          1. <i>Inicio:</i> Acta de constitución, formalización de contrato e identificación de interesados.<br>
+          2. <i>Planificación:</i> Elaboración de todos los planes de gestión y líneas base de alcance, tiempo y costo.<br>
+          3. <i>Ejecución:</i> Llevar a cabo el trabajo físico programado en obra.<br>
+          4. <i>Seguimiento y Control:</i> Medir el desempeño real contra lo planificado y gestionar cambios contractuales.<br>
+          5. <i>Cierre:</i> Recepción de obra, actas de entrega, liquidación financiera y lecciones aprendidas.</p>
+          <p>• <b>Las 10 Áreas de Conocimiento (Eje temático):</b><br>
+          <i>Gestión de la Integración</i> coordina todas las áreas. Las áreas duras son <i>Alcance, Cronograma y Costo</i> (la triple restricción), articuladas con <i>Calidad, Recursos, Comunicaciones, Riesgos, Adquisiciones e Interesados</i>.</p>
+          <p><b>2. Paso a paso detallado del flujo de planificación:</b></p>
+          <p><b>Paso 1 (Interesados):</b> Saber quiénes son el cliente, usuarios y comunidad vecinal, y qué expectativas tienen.<br>
+          <b>Paso 2 (Alcance):</b> Recopilar requisitos del cliente y redactar la Declaración del Alcance (lo incluido y formalmente excluido).<br>
+          <b>Paso 3 (EDT / WBS):</b> Descomponer jerárquicamente el proyecto en paquetes de trabajo (itemizado de partidas de obra).<br>
+          <b>Paso 4 (Cronograma):</b> Desglosar paquetes en actividades, definir dependencias/precedencias, asignar rendimientos y armar el diagrama de Gantt (ruta crítica CPM).<br>
+          <b>Paso 5 (Presupuesto / ACU):</b> Calcular costos unitarios directos (mano de obra, materiales, equipos), sumar gastos generales y utilidad.<br>
+          <b>Paso 6 (Línea Base Integral):</b> Aprobar el trípode Alcance + Cronograma + Costo contra el cual se medirá el avance real en obra.</p>
+        </div></details>
       </div></details>
 
       <details class="resp-modelo"><summary>4 · Identificar y clasificar interesados y armar la matriz de involucramiento</summary><div>
-        <p><b>Interesado:</b> persona, grupo u organización que se ve afectado, afecta o se percibe afectado por el proyecto. Se clasifican en internos y externos. Se analizan con cuatro atributos que no hay que confundir: <b>poder</b> (influir en decisiones), <b>interés</b> (compromiso con el entregable), <b>influencia</b> (modificar el comportamiento de otros), <b>impacto</b> (generar cambios en planificación y ejecución).</p>
-        <p>Pasos: identificación básica (quién, qué rol) → comprender y analizar (matrices poder/interés, poder/influencia, impacto/influencia) → <b>registro de interesados</b> (clasificación, expectativa de valor redactada desde el interesado, requisitos de información, posición a favor o en contra) → <b>matriz de involucramiento</b>: nivel de participación actual vs. deseado y estrategias concretas para moverlo (reuniones, informes, acceso a información, valorizaciones a tiempo, cuaderno de obra al día).</p>
+        <div class="resumen-clave">
+          <div class="resumen-clave-badge">💡 Resumen clave (para responder al grano)</div>
+          <p>• <b>Interesado (Stakeholder):</b> Persona, grupo u organización que afecta, se ve afectada o se percibe afectada por el proyecto (internos y externos).<br>
+          • <b>4 atributos de análisis:</b> <b>Poder</b> (autoridad para tomar decisiones), <b>Interés</b> (nivel de preocupación/atención), <b>Influencia</b> (capacidad de inducir a otros) e <b>Impacto</b> (capacidad de causar cambios en la ejecución).<br>
+          • <b>Herramientas clave:</b> El <b>Registro de Interesados</b> (quién es, rol, expectativas y postura) y la <b>Matriz de Involucramiento</b> (clasifica el nivel actual vs. deseado y define estrategias para moverlo).</p>
+        </div>
+
+        <details class="exp-extendida"><summary>📖 Ver explicación extendida y a fondo</summary><div class="exp-extendida-body">
+          <p><b>1. Proceso de gestión de interesados paso a paso:</b></p>
+          <p><b>Paso 1 (Identificación):</b> Listar a todos los actores: cliente, supervisión, proyectista, contratistas, residentes, sindicatos de construcción civil, municipalidad vecinal, organismos ambientales y comunidad aledaña.<br>
+          <b>Paso 2 (Análisis y matrices 2×2):</b> Mapear en la matriz <i>Poder vs. Interés</i> para asignar estrategias de gestión:</p>
+          <p>• <i>Alto poder y alto interés:</i> <b>Gestionar atentamente / de cerca</b> (ej. el supervisor y el cliente).<br>
+          • <i>Alto poder y bajo interés:</i> <b>Mantener satisfecho</b> (ej. entidades regulatorias y financieras).<br>
+          • <i>Bajo poder y alto interés:</i> <b>Mantener bien informado</b> (ej. vecinos afectados por desvíos de tránsito o ruido).<br>
+          • <i>Bajo poder y bajo interés:</i> <b>Monitorear con mínimo esfuerzo</b>.<br>
+          <b>Paso 3 (Registro de interesados):</b> Documento vivo que registra información de contacto, requisitos de información, expectativa de valor redactada desde la perspectiva del interesado y su postura (favorable, neutral o resistente).<br>
+          <b>Paso 4 (Matriz de involucramiento):</b> Se evalúa el nivel de compromiso en 5 estados: <i>Desconocedor (U), Renuente (R), Neutral (N), De apoyo (S) y Líder (L)</i>. Se compara la posición actual <b>(C)</b> con la deseada <b>(D)</b> y se formulan acciones específicas (ej. reuniones semanales de coordinación, valorizaciones oportunas, informes de impacto vecinal).</p>
+        </div></details>
       </div></details>
 
       <details class="resp-modelo"><summary>5 · DBB vs. DB: diferencias operativas y de riesgo</summary><div>
-        <p><b>DBB (Diseño – Licitación – Construcción):</b> el promotor contrata primero al proyectista, cierra el expediente técnico y luego licita la construcción. Fases en serie, diseño completo antes de construir. Conviene en proyectos de baja complejidad. El promotor asume el riesgo de los errores del diseño: las deficiencias del ET se vuelven adicionales a su cargo.</p>
-        <p><b>DB (Diseño – Construcción):</b> un solo contratista diseña y construye. Permite solapar fases y aprovechar que el constructor aporta al diseño. El contratista asume el riesgo del diseño; el promotor pierde control sobre él. El ciclo de vida del proyecto cambia según cuál se elija; la elección depende de la madurez de la información, la complejidad y la asignación de riesgos deseada.</p>
+        <div class="resumen-clave">
+          <div class="resumen-clave-badge">💡 Resumen clave (para responder al grano)</div>
+          <p>• <b>DBB (Design-Bid-Build / Tradicional):</b> Fases estrictamente en serie: primero se diseña y aprueba el Expediente Técnico completo, luego se licita y finalmente se construye. El <b>promotor asume el riesgo</b> de errores o vacíos en el diseño (generan adicionales de obra a cargo del cliente). Ideal para proyectos estándar de baja complejidad.<br>
+          • <b>DB (Design-Build / Diseño y Construcción):</b> Un solo contratista se encarga de diseñar y construir. Permite solapar fases (<i>fast-track</i>) y reduce plazos globales. El <b>contratista asume el riesgo</b> del diseño; a cambio, el promotor pierde control directo sobre los detalles finales del proyecto.</p>
+        </div>
+
+        <details class="exp-extendida"><summary>📖 Ver explicación extendida y a fondo</summary><div class="exp-extendida-body">
+          <p><b>1. Comparación operativa y contractual:</b></p>
+          <table class="tabla" style="font-size:.84rem;margin:8px 0 12px;background:#fff">
+            <thead>
+              <tr style="background:var(--surface2)"><th>Criterio</th><th>DBB (Tradicional)</th><th>DB (Diseño y Construcción)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><b>Contratos</b></td><td>Dos contratos separados (Diseñador y Constructor).</td><td>Un solo contrato integral.</td></tr>
+              <tr><td><b>Secuencia</b></td><td>Secuencial estricta (no se construye sin ET 100 % cerrado).</td><td>Solapada / Fast-track (se excava mientras se diseña la superestructura).</td></tr>
+              <tr><td><b>Riesgo de diseño</b></td><td><b>Del promotor / entidad:</b> si hay fallas en planos, el constructor cobra adicionales.</td><td><b>Del contratista:</b> absorbe las inconsistencias entre diseño y obra.</td></tr>
+              <tr><td><b>Control del cliente</b></td><td>Alto: revisa y aprueba cada detalle antes de construir.</td><td>Medio/Bajo: el contratista optimiza costos y materiales según su conveniencia.</td></tr>
+              <tr><td><b>Relación de partes</b></td><td>Proclive a controversias (constructor culpa al diseñador por atrasos).</td><td>Colaboración interna del equipo diseñador-constructor.</td></tr>
+            </tbody>
+          </table>
+          <p><b>2. Criterio de elección:</b><br>
+          Se elige <b>DBB</b> cuando el cliente requiere control estricto de la arquitectura y la obra es estándar (edificios convencionales, colegios). Se elige <b>DB</b> cuando el factor crítico es la velocidad de entrega, proyectos de tecnología avanzada o donde la constructora posee métodos patentados de montaje.</p>
+        </div></details>
       </div></details>
 
       <details class="resp-modelo"><summary>6 · Proceso de contratación de obra pública (Ley N° 32069)</summary><div>
-        <p>Tres etapas. <b>Actuaciones preparatorias:</b> elaboración del requerimiento → estrategia de contratación → expediente de contratación (anuncio de contratación futura es opcional). <b>Selección:</b> bases administrativas → convocatoria → adjudicación. <b>Ejecución contractual:</b> perfeccionamiento del contrato → ejecución y supervisión (valorizaciones, modificaciones, recepción) → liquidación. Principio rector: <b>valor por el dinero</b>, no solo el menor precio. Plataforma: PLADICOP. Licitación pública para bienes y obras; concurso público para servicios y consultorías.</p>
-        <p>Condiciones para que empiece el plazo: comunicación del supervisor, entrega de adelantos, firma de la JPRD y entrega del terreno.</p>
+        <div class="resumen-clave">
+          <div class="resumen-clave-badge">💡 Resumen clave (para responder al grano)</div>
+          <p>• <b>3 Etapas de la contratación:</b><br>
+          1. <i>Actuaciones preparatorias:</i> Requerimiento → Estrategia de contratación → Expediente de contratación aprobado.<br>
+          2. <i>Selección:</i> Bases → Convocatoria pública → Evaluación → Otorgamiento de la Buena Pro.<br>
+          3. <i>Ejecución contractual:</i> Perfeccionamiento del contrato → Ejecución de obra (valorizaciones, supervisión) → Liquidación final.<br>
+          • <b>Principio rector:</b> <b>Valor por el dinero</b> (calidad y sostenibilidad en el ciclo de vida, no únicamente el precio más bajo). Plataforma: <b>PLADICOP</b>.<br>
+          • <b>4 condiciones copulativas para iniciar el plazo de obra:</b> 1) Notificación del supervisor/inspector, 2) Entrega total o parcial del terreno, 3) Pago del adelanto directo (si se solicitó), y 4) Instalación de la JPRD.</p>
+        </div>
+
+        <details class="exp-extendida"><summary>📖 Ver explicación extendida y a fondo</summary><div class="exp-extendida-body">
+          <p><b>1. Novedades y reglas de la Ley N° 32069 (Nueva Ley de Contrataciones Públicas):</b></p>
+          <p>• <b>Estrategia de contratación:</b> La entidad ya no aplica fórmulas automáticas; debe evaluar previamente el mercado, la complejidad técnica y los riesgos del proyecto para seleccionar el método de contratación más eficiente.<br>
+          • <b>Procedimientos de selección:</b> Se utiliza <b>Licitación Pública</b> para obras y bienes, y <b>Concurso Público</b> para servicios en general y consultorías de obra.<br>
+          • <b>Inicio del plazo contractual:</b> El plazo de ejecución no corre con la sola firma del contrato. Es indispensable que se cumplan en simultáneo (copulativamente) las cuatro condiciones. Si la Entidad no entrega el terreno o no transfiere el adelanto directo a tiempo, el contratista tiene derecho a exigir la reprogramación o suspender el inicio sin incurrir en mora.</p>
+        </div></details>
       </div></details>
 
       <details class="resp-modelo"><summary>7 · Sistemas de entrega y modalidades de pago</summary><div>
-        <p><b>Sistemas de entrega:</b> DBB o solo construcción (baja complejidad), DB (el constructor aporta al diseño), IPD (muy alta complejidad), CM como agente y CM con riesgo (alta complejidad), EPC (ingeniería, procura y construcción), APP (concesiones, BOT, DBOM), ejecución directa (la entidad ejecuta). Llave en mano se aplica sobre cualquiera e incluye equipamiento hasta la puesta en servicio.</p>
-        <p><b>Modalidades de pago:</b> suma alzada (precio único, exige planos y especificaciones completos, cambios por orden de cambio; el contratista asume el riesgo de metrados), precio unitario (se paga por cantidades reales; la entidad asume el riesgo de metrados), esquema mixto, costo reembolsable.</p>
+        <div class="resumen-clave">
+          <div class="resumen-clave-badge">💡 Resumen clave (para responder al grano)</div>
+          <p>• <b>Sistemas de entrega:</b> DBB (obra tradicional), DB (diseño y construcción), CM agente / con riesgo (gerencia de construcción profesional), EPC (llave en mano para megaproyectos industriales), IPD (colaborativo multiparte) y Ejecución Presupuestaria Directa.<br>
+          • <b>Modalidades de pago (Regla de oro de los metrados):</b><br>
+          — <b>Suma Alzada:</b> Precio cerrado único. Exige planos y especificaciones completos. <b>El contratista asume el riesgo de metrados</b> (si ejecuta más metrado del presupuestado, no se le paga adicional).<br>
+          — <b>Precios Unitarios:</b> Se paga por las cantidades realmente medidas en campo. <b>La Entidad asume el riesgo de metrados</b>. Obligatorio en obras de alta incertidumbre en suelos (carreteras, presas, saneamiento).</p>
+        </div>
+
+        <details class="exp-extendida"><summary>📖 Ver explicación extendida y a fondo</summary><div class="exp-extendida-body">
+          <p><b>1. Sistemas de Entrega (Project Delivery Systems):</b></p>
+          <p>• <b>CM como Agente (Construction Management as Agent):</b> El gerente actúa como asesor técnico del propietario; los contratos de obra se firman directamente entre el propietario y los contratistas.<br>
+          • <b>CM con Riesgo (CM at Risk):</b> El gerente se compromete con un Precio Máximo Garantizado (GMP) y asume el rol de contratista general de la obra.<br>
+          • <b>EPC (Engineering, Procurement and Construction):</b> Enfoque llave en mano integral para proyectos energéticos, mineros o industriales; se entrega la planta probada y funcionando.<br>
+          • <b>IPD (Integrated Project Delivery):</b> Contrato multipartito de ganancia y dolor compartido (<i>shared pain, shared gain</i>) donde cliente, diseñador y constructor alinean incentivos.</p>
+          <p><b>2. Modalidades de Pago y tratamientos contractuales:</b></p>
+          <p>• <i>Esquema mixto:</i> Típico en edificaciones donde las estructuras bajo tierra (cimentación) se pagan a Precios Unitarios por el riesgo del suelo, y la superestructura a Suma Alzada.<br>
+          • <i>Costos Reembolsables (Cost Plus):</i> Se reembolsa el costo directo real comprobado más una tarifa de honorarios; se usa ante emergencias o desastres donde no hay tiempo para presupuestar.</p>
+        </div></details>
       </div></details>
 
       <details class="resp-modelo"><summary>8 · Garantías, adelantos y solución de controversias</summary><div>
-        <p><b>1. Garantía de Fiel Cumplimiento (10 % del contrato):</b> asegura a la Entidad que el contratista culminará la obra conforme a los planos, especificaciones y contrato. Se entrega obligatoriamente siempre (se soliciten o no adelantos). Dos modalidades:</p>
-        <p>• <b>Carta Fianza:</b> emitida por banco regulado por la SBS, incondicional, solidaria y ejecutable de inmediato ante cualquier incumplimiento grave.<br>
-        • <b>Retención del 10 %:</b> permitida únicamente en contratos de obra con plazo mayor a 60 días calendario y monto contractual menor a S/ 5 millones. La Entidad retiene el 10 % prorrateado en la primera mitad de las valorizaciones mensuales y lo devuelve en la liquidación final.</p>
+        <div class="resumen-clave">
+          <div class="resumen-clave-badge">💡 Resumen clave (para responder al grano)</div>
+          <p>• <b>Garantía de Fiel Cumplimiento (10 % del contrato):</b> Obligatoria siempre. Se presenta mediante <b>Carta Fianza</b> bancaria (SBS) o por <b>Retención del 10 %</b> (solo en obras con plazo > 60 días y monto < S/ 5 millones, retenida en la primera mitad de los pagos).<br>
+          • <b>Adelantos (préstamos de liquidez, máx. 30 % en total con Carta Fianza al 100 %):</b><br>
+          — <i>Directo (hasta 10 %):</i> Para movilización, campamentos y gastos de arranque; se amortiza proporcionalmente en cada valorización.<br>
+          — <i>Materiales (hasta 20 %):</i> Compra por adelantado de insumos críticos según calendario; <b>congela precios (protege de la inflación)</b> y por ello <b>no recibe reajuste por fórmula polinómica (K)</b>.<br>
+          • <b>Controversias (Ley N° 32069):</b> <b>JPRD</b> (órgano en obra con decisiones obligatorias e inmediatas para no parar los trabajos), <b>Conciliación</b> (acuerdo mutuo) y <b>Arbitraje</b> (laudo definitivo e inapelable).</p>
+        </div>
 
-        <p><b>2. Adelantos en Obra Pública (¿Cómo funcionan y para qué sirven?):</b><br>
-        <i>Concepto clave:</i> No son un regalo ni un pago adicional; son <b>préstamos de liquidez / financiamiento a cuenta</b> que el Estado otorga al contratista para que pueda movilizarse y comprar insumos sin quebrar o retrasar la obra mientras espera el pago de sus primeras valorizaciones (que se pagan recién a mes vencido).<br>
-        <i>Regla de oro:</i> La Entidad nunca entrega dinero sin respaldo; cada adelanto exige obligatoriamente una <b>Carta Fianza por el 100 % del monto entregado</b> (riesgo financiero cero para el Estado). En conjunto suman como máximo el <b>30 % del contrato original</b>.</p>
+        <details class="exp-extendida"><summary>📖 Ver explicación extendida y a fondo</summary><div class="exp-extendida-body">
+          <p><b>1. Garantía de Fiel Cumplimiento:</b></p>
+          <p>Asegura a la Entidad que el contratista culminará la obra conforme a los planos, especificaciones y contrato. Es incondicional, solidaria y ejecutable de inmediato ante cualquier incumplimiento grave o resolución de contrato. Si se opta por retención (obras menores a S/ 5 millones y > 60 días), la entidad retiene el monto en las valorizaciones de la primera mitad del plazo y lo devuelve en la liquidación final.</p>
 
-        <p>• <b>Adelanto Directo (hasta el 10 % del contrato original):</b><br>
-        — <i>Finalidad:</i> Capital de trabajo inmediato para movilización de maquinaria pesada, instalación de campamentos, seguros y gastos operativos iniciales.<br>
-        — <i>Plazo de trámite:</i> Se solicita dentro de los 8 días posteriores a la firma de contrato; su entrega es una de las 4 condiciones para el inicio del plazo de obra.<br>
-        — <i>Amortización (devolución):</i> Se descuenta mensualmente en cada valorización en proporción directa al avance de la obra (fórmula: <i>A/C × V</i>) hasta devolverlo íntegramente.</p>
+          <p><b>2. Adelantos en Obra Pública:</b></p>
+          <p><i>Concepto clave:</i> No son pagos extras ni a fondo perdido; son <b>préstamos de liquidez / financiamiento a cuenta</b> otorgados por el Estado para que el contratista pueda operar sin asfixiarse financieramente mientras espera cobrar sus valorizaciones (que se tramitan a mes vencido). La Entidad exige <b>Carta Fianza por el 100 %</b> del monto entregado.</p>
+          <p>• <b>Adelanto Directo (hasta el 10 %):</b> Financia la instalación de campamentos, movilización de maquinaria y trámites. Se solicita dentro de los 8 días de firmado el contrato. Se amortiza descontando en cada valorización mensual según: <i>Amortización = (A / C) × V</i>.<br>
+          • <b>Adelanto para Materiales e Insumos (hasta el 20 %):</b> Fondos etiquetados para insumos de alto volumen (acero, cemento, tuberías) según el Calendario de Adquisición de Materiales. <i>Protección contra la inflación:</i> El constructor compra en bloque al por mayor y asegura el precio de fábrica. Por norma legal, el monto adelantado ya no se reajusta con el coeficiente $K$ de la fórmula polinómica. Se amortiza mensualmente según el uso físico de cada material en las partidas valorizadas.</p>
 
-        <p>• <b>Adelanto para Materiales e Insumos (hasta el 20 % del contrato original):</b><br>
-        — <i>Finalidad:</i> Fondos etiquetados exclusivamente para comprar por adelantado insumos críticos de gran volumen (cemento, acero corrugado, agregados, tuberías) según el <b>Calendario de Adquisición de Materiales</b> aprobado en la oferta.<br>
-        — <i>¿Por qué protege de la inflación?:</i> Al comprar en bloque desde el inicio, el contratista <b>congela el precio</b> con el fabricante/cantera y evita sobrecostos si luego hay escasez o inflación en el mercado.<br>
-        — <i>Impacto en la fórmula polinómica (K):</i> Como los materiales se compraron por anticipado con dinero del Estado (y no del bolsillo del constructor con precios inflados posteriores), la Ley establece que <b>sobre ese monto adelantado ya no se paga reajuste por inflación (coeficiente K)</b> en las valorizaciones, protegiendo también las finanzas del Estado.<br>
-        — <i>Amortización (devolución):</i> Se descuenta en las valorizaciones mensuales según la cantidad real de ese material específico que se va colocando físicamente en las partidas ejecutadas.</p>
-
-        <p><b>3. Mecanismos de Solución de Controversias (Ley N° 32069):</b></p>
-        <p>• <b>JPRD (Junta de Prevención y Resolución de Disputas):</b> Acompaña la obra de forma permanente y en tiempo real; emite decisiones técnicas y contractuales de <b>cumplimiento obligatorio e inmediato</b> para que la obra continúe sin paralizarse (si alguna parte no está de acuerdo, acata la decisión en campo y puede someterla a arbitraje recién al liquidar la obra).<br>
-        • <b>Conciliación:</b> Vía de acuerdo mutuo y negociación para temas específicos como ampliación de plazo, resolución de contrato, valorizaciones y liquidación.<br>
-        • <b>Arbitraje:</b> Proceso jurisdiccional privado que emite un <b>laudo definitivo e inapelable</b> para resolver disputas de fondo sobre validez, nulidad, eficacia, interpretación o ejecución contractual.</p>
+          <p><b>3. Mecanismos de Solución de Controversias:</b></p>
+          <p>• <b>JPRD (Junta de Prevención y Resolución de Disputas):</b> Expertos que visitan periódicamente la obra y resuelven controversias técnicas en tiempo real. Sus decisiones son de <b>cumplimiento obligatorio e inmediato</b> en campo (la obra nunca se paraliza). Si una parte está en desacuerdo, debe acatar la decisión en obra y recién puede recurrir al arbitraje tras la recepción o liquidación.<br>
+          • <b>Conciliación:</b> Vía voluntaria para buscar acuerdos extrajudiciales sobre ampliaciones de plazo, penalidades, recepción o liquidación.<br>
+          • <b>Arbitraje:</b> Tribunal arbitral colegiado o árbitro único que resuelve disputas de validez, nulidad o rescisión del contrato mediante un <b>laudo vinculante e inapelable</b> con valor de cosa juzgada.</p>
+        </div></details>
       </div></details>
     </section>
 
