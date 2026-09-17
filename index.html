@@ -306,6 +306,21 @@ form#form-ej label{font-size:.8rem;font-weight:600;color:var(--ink2);display:gri
   .brandrow .subtle{padding-left:0}
   .unidad-h,.panel{padding-inline:14px}
 }
+
+/* Quiz Didáctico U2 */
+.quiz-u2{background:var(--surface);border:2px solid var(--brand);border-radius:var(--r-lg);box-shadow:var(--sh-md);padding:20px;margin-bottom:20px}
+.quiz-u2-h{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.quiz-u2-badge{background:var(--brandSoft);color:var(--brand);font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:999px;border:1px solid rgba(0,75,135,.15)}
+.quiz-u2-bar{width:100%;height:7px;background:var(--lineSoft);border-radius:4px;overflow:hidden;margin-bottom:16px}
+.quiz-u2-bar-fill{height:100%;background:var(--brand);transition:width .3s ease}
+.quiz-u2-q{font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:14px;line-height:1.45}
+.quiz-u2-opts{display:grid;gap:9px;margin-bottom:16px}
+.quiz-u2-opt{display:flex;align-items:flex-start;gap:12px;text-align:left;background:var(--surface2);border:1px solid var(--line);border-radius:var(--r-md);padding:11px 15px;font-size:.88rem;color:var(--ink2);cursor:pointer;transition:all .15s;width:100%;line-height:1.4}
+.quiz-u2-opt:hover:not(:disabled){background:var(--brandSoft);border-color:var(--brand);color:var(--brandDeep)}
+.quiz-u2-opt.correct{background:var(--goodSoft)!important;border-color:var(--good)!important;color:var(--goodText)!important;font-weight:600}
+.quiz-u2-opt.wrong{background:var(--critSoft)!important;border-color:var(--crit)!important;color:var(--critText)!important;font-weight:600}
+.quiz-u2-feedback{background:var(--surface2);border-left:4px solid var(--brand);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:12px 15px;font-size:.86rem;margin-bottom:16px;color:var(--ink2);line-height:1.5}
+.quiz-u2-scorebox{text-align:center;padding:16px 8px}
 </style>
 
 <header class="topbar">
@@ -1693,6 +1708,206 @@ function responder(bien){
   guardar(); renderRepaso(); renderHitos();
 }
 
+/* ---------- Quiz didáctico Unidad 2 ---------- */
+const QUIZ_U2 = [
+  {
+    item: "Punto 1 · Portafolio, programa y proyecto",
+    q: "En el sistema de generación de valor del PMI, ¿cuál es la diferencia conceptual y operativa entre un Portafolio y un Programa en la gestión de obras?",
+    opts: [
+      "Un programa agrupa proyectos relacionados para obtener beneficios y sinergias que no se lograrían por separado; un portafolio reúne programas, proyectos y operaciones alineados con la estrategia institucional, compitiendo por recursos sin requerir relación técnica directa entre sí.",
+      "Un portafolio agrupa proyectos con relación técnica directa; un programa agrupa proyectos de distintas áreas que no tienen ninguna relación.",
+      "El portafolio dura como máximo 1 año y lo ejecuta una sola cuadrilla; el programa es indefinido y no tiene presupuesto asignado.",
+      "En un programa la utilidad es siempre cero, mientras que en un portafolio la utilidad comercial es obligatoriamente del 10%."
+    ],
+    ans: 0,
+    exp: "En un programa los proyectos son interdependientes y buscan sinergias (ej. túnel + trenes + patio taller en una línea de metro). En un portafolio los proyectos responden a la estrategia institucional (ej. colegios + carreteras + hospitales del MTC) y compiten por el presupuesto global sin necesitar relación técnica entre sí."
+  },
+  {
+    item: "Punto 2 · Qué es la gestión de proyectos y por qué importa",
+    q: "Según Pierce y la realidad de la ingeniería civil, ¿por qué el éxito de un proyecto de construcción NO depende únicamente del cálculo estructural o del rendimiento en campo?",
+    opts: [
+      "Porque las normas sismorresistentes exoneran al contratista de controlar el costo si la estructura soporta el sismo de diseño sin colapso.",
+      "Porque en construcción se producen prototipos únicos a la intemperie donde se vende a precio fijado antes de construir (licitación → contrato → producción), con márgenes estrechos (5–10 %) y penalidades severas, exigiendo el ciclo de planificar, organizar, dirigir y controlar para cumplir alcance, costo, plazo, calidad y satisfacción de interesados.",
+      "Porque el ciclo de Pierce establece que solo se debe controlar al final de la obra, durante la liquidación final.",
+      "Porque la gestión de proyectos solo aplica a obras privadas de edificación, mientras que la obra pública se rige exclusivamente por el expediente técnico."
+    ],
+    ans: 1,
+    exp: "De nada sirve que el puente no se caiga si costó el triple, demoró 2 años más y la empresa quebró por penalidades. La gestión de proyectos articula alcance, costo, tiempo, calidad, seguridad y riesgos bajo condiciones de alta incertidumbre."
+  },
+  {
+    item: "Punto 3 · Áreas de enfoque (PMBOK 2026) y flujo de planificación",
+    q: "¿Cuál es la secuencia lógica obligatoria que debe seguirse durante el proceso de planificación según el marco del PMI?",
+    opts: [
+      "Presupuesto → Cronograma → Línea Base → Definición de Actividades → Recopilación de Requisitos.",
+      "Firma del contrato de obra → Inicio de vaciados en campo → Elaborar cronograma valorizado → Presupuestar adicionales.",
+      "Requisitos de interesados → Definición del Alcance y creación de la EDT → Definir y secuenciar actividades con duraciones (Cronograma) → Estimar recursos y costos (Presupuesto) → Línea Base integrada.",
+      "Cronograma de compras → EDT → Asignación de cuadrillas → Análisis de Costos Unitarios → Recopilar Requisitos."
+    ],
+    ans: 2,
+    exp: "Regla de oro de la planificación: 'No puedes saber cuánto cuesta ni cuánto demora una obra si primero no sabes exactamente QUÉ vas a construir'. El alcance y la EDT son la base indispensable sobre la que se estiman duraciones, recursos y costos."
+  },
+  {
+    item: "Punto 4 · Identificar y clasificar interesados (Stakeholders)",
+    q: "Al estructurar la matriz de involucramiento y el registro de interesados, ¿cómo se analizan sus atributos y qué representa la brecha entre la posición 'Actual' y 'Deseada'?",
+    opts: [
+      "Se analizan cuatro atributos (poder, interés, influencia e impacto); la matriz compara el nivel de compromiso presente frente al requerido para el éxito del proyecto, formulando estrategias concretas de comunicación y gestión para cerrar esa brecha.",
+      "La posición deseada siempre debe ser de apoyo total (líder comprometido) para todos los involucrados sin excepción.",
+      "Poder e interés son términos idénticos que miden únicamente el aporte económico en soles de cada interesado.",
+      "Los interesados externos como comunidades campesinas o vecinos no se gestionan en la matriz porque no firman el contrato de obra."
+    ],
+    ans: 0,
+    exp: "Los 4 atributos son: Poder (influir en decisiones), Interés (compromiso con el entregable), Influencia (modificar conductas) e Impacto (generar cambios). No todos deben ser líderes; basta con mover a un interesado opositor a neutral o mantener informado al interesado con bajo poder y alto interés."
+  },
+  {
+    item: "Punto 5 · DBB vs. DB: diferencias operativas y de riesgo",
+    q: "En un esquema Design-Bid-Build (DBB: Diseño–Licitación–Construcción) frente a Design-Build (DB: Diseño–Construcción), ¿quién asume el riesgo de las deficiencias o errores del Expediente Técnico?",
+    opts: [
+      "En DBB el contratista constructor asume el riesgo del diseño; en DB lo asume el Estado.",
+      "En DBB el promotor/entidad asume el riesgo de las deficiencias del diseño (los errores del ET derivan en adicionales de obra a su costo); en DB un solo contratista diseña y construye, asumiendo él la responsabilidad e integración de ambas fases.",
+      "En ambos esquemas el riesgo del diseño es asumido exclusivamente por el Colegio de Ingenieros del Perú.",
+      "En Design-Build (DB) no se elabora expediente técnico, la obra se construye directamente sobre la marcha."
+    ],
+    ans: 1,
+    exp: "En DBB las fases van en serie: el promotor aprueba el ET y luego licita. Si el ET tiene errores o vacíos de suelo, el constructor tiene derecho a cobrar adicionales y ampliaciones de plazo al Estado. En DB (concurso oferta), el contratista diseña y construye, asumiendo la incompatibilidad entre diseño y obra."
+  },
+  {
+    item: "Punto 6 · Contratación pública bajo la Ley N° 32069",
+    q: "Bajo la Ley General de Contrataciones Públicas (Ley N° 32069), ¿cuáles son las tres etapas del proceso de contratación y qué condiciones deben cumplirse para iniciar el cómputo del plazo de ejecución de obra?",
+    opts: [
+      "Etapas: Requerimiento, Facturación y Arbitraje. Condiciones: Aprobación del adicional 1 y entrega de planos en AutoCAD.",
+      "Etapas: Convocatoria, Adjudicación y Liquidación. Condiciones: Pago del 50% de valorizaciones acumuladas.",
+      "Etapas: Actuaciones Preparatorias, Selección y Ejecución Contractual. Condiciones: Notificación del supervisor/inspector, entrega de terreno (total o parcial), entrega del adelanto directo (si se solicitó) y acreditación/instalación de la JPRD.",
+      "Etapas: Licitación, Conciliación y Liquidación. Condiciones: Conformidad expresa del sindicato de construcción civil."
+    ],
+    ans: 2,
+    exp: "La Ley N° 32069 se rige por el principio de 'Valor por el dinero' y la plataforma PLADICOP. Para que comience a correr el plazo contractual de obra se deben cumplir copulativamente: comunicación del supervisor, entrega del terreno, pago de adelanto directo y la JPRD instalada."
+  },
+  {
+    item: "Punto 7 · Sistemas de entrega y modalidades de pago",
+    q: "En relación con las modalidades de pago en contratación pública, ¿cómo se distribuye el riesgo de metrados entre Suma Alzada y Precios Unitarios?",
+    opts: [
+      "En Suma Alzada el contratista asume el riesgo de los metrados (se paga el monto fijo ofertado según planos y especificaciones); en Precios Unitarios el riesgo de metrados lo asume la entidad (se valorizan y pagan las cantidades realmente ejecutadas en campo).",
+      "En Suma Alzada la entidad paga por lo que realmente se ejecute mediante valorizaciones de metrados reales comprobados en obra.",
+      "En Precios Unitarios no existen adicionales de obra ni deductivos bajo ninguna circunstancia legal.",
+      "Suma Alzada es la modalidad recomendada para túneles y carreteras donde el terreno es desconocido y muy variable."
+    ],
+    ans: 0,
+    exp: "Suma Alzada se aplica cuando los planos y especificaciones están perfectamente definidos (edificaciones cerradas); el precio no cambia por errores en los metrados del presupuesto. Precios Unitarios es obligatorio en obras con alta incertidumbre de suelo (carreteras, presas, saneamiento), donde la entidad paga el metrado real ejecutado en obra."
+  },
+  {
+    item: "Punto 8 · Garantías, adelantos y solución de controversias",
+    q: "Bajo la Ley N° 32069, ¿en qué caso se permite la retención del 10% en lugar de presentar carta fianza de fiel cumplimiento, y cuál es el rol de la JPRD?",
+    opts: [
+      "La retención aplica en obras mayores a 50 millones; la JPRD solo emite opiniones no vinculantes que el contratista puede ignorar.",
+      "La retención del 10% procede en contratos de obra con plazo mayor a 60 días calendario y monto menor a 5 millones de soles (retenida en la primera mitad de los pagos); la JPRD emite decisiones técnicas vinculantes y de cumplimiento inmediato para evitar paralizaciones.",
+      "La carta fianza se puede reemplazar por un pagaré simple firmado por el residente de obra; la JPRD fue suprimida de la ley.",
+      "Los adelantos directo y de materiales no requieren ningún tipo de garantía financiera ante la entidad."
+    ],
+    ans: 1,
+    exp: "La garantía de fiel cumplimiento es del 10%. Para contratos con plazo > 60 días y monto < S/ 5 millones, se puede optar por retención del 10% en la primera mitad de las valorizaciones. La Junta de Prevención y Resolución de Disputas (JPRD) resuelve controversias técnicas y contractuales en tiempo real con decisiones obligatorias e inmediatas."
+  }
+];
+
+let quizU2 = { abierto: false, idx: 0, respuestas: {} };
+
+function renderQuizU2(){
+  const wrap = $("#quiz-u2-wrap");
+  const btnLbl = $("#lbl-btn-quiz-u2");
+  if(!wrap) return;
+  if(!quizU2.abierto){
+    wrap.hidden = true;
+    if(btnLbl) btnLbl.textContent = "Practicar con Quiz Didáctico (8 preguntas del Check-list)";
+    return;
+  }
+  wrap.hidden = false;
+  if(btnLbl) btnLbl.textContent = "Ocultar Quiz Didáctico";
+
+  if(quizU2.idx >= QUIZ_U2.length){
+    let aciertos = 0;
+    QUIZ_U2.forEach((q, i) => { if(quizU2.respuestas[i] === q.ans) aciertos++; });
+    const pctScore = Math.round((aciertos / QUIZ_U2.length) * 100);
+    const mensaje = aciertos === 8 
+      ? "¡Excelente! Dominas al 100% todos los puntos del check-list de la Unidad 2 para la práctica."
+      : aciertos >= 6 
+      ? "¡Muy buen puntaje! Tienes claros los conceptos esenciales para el examen."
+      : "Buen intento. Te recomendamos repasar los puntos marcados en las tarjetas desplegables de abajo.";
+
+    wrap.innerHTML = `
+      <div class="quiz-u2-scorebox">
+        <div style="font-size:2.5rem;margin-bottom:6px">🏆</div>
+        <h3 style="font-size:1.15rem;margin-bottom:4px;color:var(--ink)">¡Quiz de la Unidad 2 Completado!</h3>
+        <p class="subtle" style="margin-bottom:14px">${mensaje}</p>
+        <div style="display:inline-block;padding:12px 26px;background:var(--surface2);border-radius:var(--r-md);margin-bottom:16px;border:1px solid var(--line)">
+          <span style="font-size:2rem;font-weight:700;color:${aciertos>=6?'var(--good)':'var(--warn)'}">${aciertos} / ${QUIZ_U2.length}</span>
+          <span style="font-size:.85rem;color:var(--muted);display:block">aciertos (${pctScore}%)</span>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button class="btn" id="btn-quiz-restart" style="background:var(--brand);color:#fff">🔄 Repetir Quiz</button>
+          <button class="btn ghost" id="btn-quiz-close">Cerrar Quiz</button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  const q = QUIZ_U2[quizU2.idx];
+  const respActual = quizU2.respuestas[quizU2.idx];
+  const respondido = respActual !== undefined;
+  const aciertosHastaAhora = Object.keys(quizU2.respuestas).filter(k => quizU2.respuestas[k] === QUIZ_U2[k].ans).length;
+  const progresoPct = Math.round(((quizU2.idx) / QUIZ_U2.length) * 100);
+
+  wrap.innerHTML = `
+    <div class="quiz-u2-h">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span class="quiz-u2-badge">${q.item}</span>
+        <span class="subtle" style="font-size:.8rem">Pregunta ${quizU2.idx + 1} de ${QUIZ_U2.length}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="num subtle" style="font-size:.82rem;font-weight:600">Aciertos: ${aciertosHastaAhora} / ${quizU2.idx}</span>
+        <button class="btn ghost mini" id="btn-quiz-close" style="padding:2px 8px;font-size:.75rem">Cerrar</button>
+      </div>
+    </div>
+    <div class="quiz-u2-bar">
+      <div class="quiz-u2-bar-fill" style="width:${progresoPct}%"></div>
+    </div>
+    <div class="quiz-u2-q">${esc(q.q)}</div>
+    <div class="quiz-u2-opts">
+      ${q.opts.map((opt, i) => {
+        let cls = "quiz-u2-opt";
+        let icon = `<span class="num" style="font-weight:700;color:var(--muted);min-width:20px">${String.fromCharCode(65 + i)})</span>`;
+        if(respondido){
+          if(i === q.ans){
+            cls += " correct";
+            icon = `<span style="color:var(--good);font-weight:700;min-width:20px">✓</span>`;
+          } else if(i === respActual){
+            cls += " wrong";
+            icon = `<span style="color:var(--crit);font-weight:700;min-width:20px">✗</span>`;
+          }
+        }
+        return `
+          <button class="${cls}" data-quiz-opt="${i}" ${respondido ? "disabled" : ""}>
+            ${icon}
+            <span style="flex:1">${esc(opt)}</span>
+          </button>
+        `;
+      }).join("")}
+    </div>
+    ${respondido ? `
+      <div class="quiz-u2-feedback">
+        <div style="font-weight:700;margin-bottom:4px;color:${respActual === q.ans ? 'var(--goodText)' : 'var(--critText)'}">
+          ${respActual === q.ans ? '✓ ¡Respuesta Correcta!' : '✗ Respuesta Incorrecta'}
+        </div>
+        <div><b>💡 Justificación del Check-list:</b> ${esc(q.exp)}</div>
+      </div>
+      <div style="display:flex;justify-content:flex-end">
+        <button class="btn" id="btn-quiz-next" style="background:var(--brand);color:#fff;font-weight:600">
+          ${quizU2.idx === QUIZ_U2.length - 1 ? 'Ver Resultado Final 🏆' : 'Siguiente Pregunta ➔'}
+        </button>
+      </div>
+    ` : ''}
+  `;
+}
+
 /* ---------- lo esencial PC1 ---------- */
 function renderEsencial(){
   const d = diasHasta(PC1.fecha);
@@ -1751,9 +1966,16 @@ function renderEsencial(){
     </section>
 
     <!-- ===== BLOQUE 2: TEORÍA U2 ===== -->
-    <section class="esen-card cert-3">
+    <section class="esen-card cert-3" id="sec-u2-teoria">
       <div class="esen-h"><span class="cert">Certeza máxima</span><h3>2 · La teoría de la Unidad 2 (≈ 10 pts): los 8 puntos del check-list, respondidos</h3></div>
       <p class="why">"Si ustedes saben responder que todo va bien con cada uno de esos puntos, estarán listos para la práctica." Estas son las respuestas que yo daría, en el tamaño que cabe en un cuadernillo.</p>
+
+      <div style="margin:14px 0 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn" id="btn-quiz-u2" style="background:var(--brand);color:#fff;font-weight:600;display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:var(--r-md);box-shadow:var(--sh-xs);font-size:.88rem">
+          <span style="font-size:1.15rem">🎯</span> <span id="lbl-btn-quiz-u2">${quizU2.abierto ? 'Ocultar Quiz Didáctico' : 'Practicar con Quiz Didáctico (8 preguntas del Check-list)'}</span>
+        </button>
+      </div>
+      <div id="quiz-u2-wrap" class="quiz-u2" ${quizU2.abierto ? '' : 'hidden'}></div>
 
       <details class="resp-modelo" open><summary>1 · Portafolio, programa y proyecto, y cómo generan valor</summary><div>
         <p><b>Proyecto:</b> iniciativa temporal en un contexto único, emprendida para generar valor (PMI 2026); entrega un producto, servicio o resultado único. <b>Programa:</b> grupo de proyectos relacionados gestionados de forma coordinada para obtener beneficios que no se lograrían por separado. <b>Portafolio:</b> conjunto de programas, proyectos y operaciones alineado con los objetivos estratégicos de la organización.</p>
@@ -1897,6 +2119,7 @@ function renderEsencial(){
       <p class="subtle">Fuente de la apuesta: lo que la ingeniera dijo al cierre de la clase 8 (10-set, 1:36:30), sus propias correcciones en la Práctica 2 de 2024-II y el patrón de las 7 evaluaciones que tienes en "Qué cae".</p>
     </div>
   </div>`;
+  if(quizU2.abierto) renderQuizU2();
 }
 
 /* ---------- qué cae ---------- */
@@ -2098,6 +2321,40 @@ document.addEventListener("click", ev => {
   if(b.dataset.borrar){
     estado.extra = (estado.extra || []).filter(e => e.id !== b.dataset.borrar);
     guardar(); renderFiltros(); renderEjercicios(); renderHitos(); return;
+  }
+
+  if(b.id === "btn-quiz-u2"){
+    quizU2.abierto = !quizU2.abierto;
+    renderQuizU2();
+    if(quizU2.abierto){
+      const el = $("#quiz-u2-wrap");
+      if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+    }
+    return;
+  }
+  if(b.dataset.quizOpt !== undefined){
+    const optIdx = parseInt(b.dataset.quizOpt, 10);
+    if(quizU2.respuestas[quizU2.idx] === undefined){
+      quizU2.respuestas[quizU2.idx] = optIdx;
+      renderQuizU2();
+    }
+    return;
+  }
+  if(b.id === "btn-quiz-next"){
+    quizU2.idx++;
+    renderQuizU2();
+    return;
+  }
+  if(b.id === "btn-quiz-restart"){
+    quizU2.idx = 0;
+    quizU2.respuestas = {};
+    renderQuizU2();
+    return;
+  }
+  if(b.id === "btn-quiz-close"){
+    quizU2.abierto = false;
+    renderQuizU2();
+    return;
   }
 });
 
