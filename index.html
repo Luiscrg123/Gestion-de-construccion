@@ -1842,12 +1842,34 @@ function renderEsencial(){
       <div class="dos">
         <div class="caja">
           <h4>Obra por contrata</h4>
-          <p><b>Costo directo</b> (materiales + mano de obra + equipos) + <b>gastos generales</b> (relacionados y no relacionados con el tiempo de ejecución) + <b>utilidad</b> + <b>IGV</b> = costo total de obra. El IGV va separado; CD y GG se trabajan sin IGV. Cadena: alcance → recursos → análisis de costo unitario → presupuesto. Todas las partidas deben cubrir el 100 % de la obra; no hay formato oficial único.</p>
+          <p>El Estado contrata a una empresa constructora privada (un tercero). <b>Estructura:</b> Costo Directo (CD) + Gastos Generales (GG) + <b>Utilidad</b> (5–10 %) + <b>IGV (18 %)</b> = Presupuesto total.</p>
+          <p>• <b>Insumos sin IGV:</b> La empresa constructora maneja crédito fiscal; materiales y fletes entran netos (÷ 1.18) y el 18 % de IGV se suma al final sobre el subtotal.<br>
+          • <b>Maquinaria:</b> HM = Costo de Posesión (recuperar inversión de compra) + Costo de Operación.<br>
+          • <b>Utilidad:</b> Sí existe, es el margen comercial legítimo de la constructora.</p>
         </div>
         <div class="caja">
           <h4>Administración directa</h4>
-          <p>La entidad ejecuta con sus propios recursos: <b>utilidad = 0</b> y el IGV no aparece separado, está dentro de los precios de los insumos (por eso en PMPO se cotiza con IGV). Los gastos generales existen igual. En equipos: HM = solo costo de operación, sin costo de posesión.</p>
+          <p>La propia entidad pública (Municipalidad o Gobierno Regional) ejecuta la obra con su propio personal, almacenes y maquinaria. No hay contratista de por medio.</p>
+          <p>• <b>Utilidad = 0:</b> El Estado no es un negocio con fines de lucro; no puede "cobrarse a sí mismo" una ganancia.<br>
+          • <b>Insumos CON IGV (sin IGV al pie):</b> La entidad actúa como consumidor final; compra con factura en mostrador y no recupera crédito fiscal. El IGV ya está dentro del precio de cada insumo (en PMPO se calcula con IGV) y <u>no existe la fila de +18 % al pie del presupuesto</u>.<br>
+          • <b>Gastos generales sí existen:</b> Residente, inspector municipal, camioneta de supervisión, almacén, guardianía y ensayos de probetas de concreto.<br>
+          • <b>Equipos (HM = solo Operación):</b> La maquinaria ya le pertenece al Estado; costo de posesión = 0 (solo se gasta combustible, lubricantes y chofer/operador).</p>
         </div>
+      </div>
+      <div class="scroll-x" style="margin-top:12px">
+        <table class="tabla">
+          <thead>
+            <tr><th>Elemento del Presupuesto</th><th>Obra por Contrata</th><th>Administración Directa</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><b>¿Quién ejecuta?</b></td><td>Empresa constructora privada</td><td>La propia entidad pública</td></tr>
+            <tr><td><b>Precios de insumos (PMPO)</b></td><td><b>Sin IGV</b> (se divide entre 1.18)</td><td><b>Con IGV</b> (precio de mostrador tal cual)</td></tr>
+            <tr><td><b>Utilidad</b></td><td><b>Sí</b> (margen comercial del 5% al 10%)</td><td><b>CERO (S/ 0.00)</b></td></tr>
+            <tr><td><b>Fila de IGV al pie del presupuesto</b></td><td><b>Sí (+18% sobre el subtotal)</b></td><td><b>NO va</b> (ya está dentro de los insumos)</td></tr>
+            <tr><td><b>Gastos Generales</b></td><td>Sí (fijos y variables)</td><td><b>Sí existen</b> (residente, almacén, pruebas)</td></tr>
+            <tr><td><b>Hora-Máquina de equipo propio</b></td><td>Posesión + Operación</td><td><b>Solo Costo de Operación (CO)</b></td></tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
