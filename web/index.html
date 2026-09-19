@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de la Construcción · Simuladores UDEP</title>
+  <meta name="description" content="Herramientas de estudio para las prácticas calificadas de Gestión de la Construcción (02GDC) — Universidad de Piura.">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* Paleta institucional: azul UDEP como acento sobre una escala de grises fríos.
+       Los grises se eligieron con suficiente separación entre sí para que la página
+       se lea bien también en pantallas muy iluminadas. */
+    :root {
+      --udep-azul: #004b87;
+      --udep-azul-oscuro: #003663;
+      --udep-azul-tenue: #e8f0f7;
+
+      --gris-900: #0f172a;   /* títulos */
+      --gris-700: #334155;   /* texto corrido */
+      --gris-500: #475569;   /* secundario y titulos de tarjetas pendientes */
+      --gris-400: #5b6879;   /* texto de tarjetas pendientes: gris medio, legible */
+      --gris-300: #b0becd;   /* bordes marcados */
+      --gris-200: #e2e8f0;   /* separadores */
+      --gris-100: #f1f5f9;   /* fondo de tarjeta pendiente */
+      --fondo: #dbe2eb;      /* fondo de página: mismo gris que el simulador */
+
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--fondo);
+      color: var(--gris-700);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Franja institucional superior */
+    .barra-udep {
+      height: 4px;
+      background: linear-gradient(90deg, var(--udep-azul) 0%, var(--udep-azul-oscuro) 100%);
+    }
+
+    .cabecera {
+      background: #fff;
+      border-bottom: 1px solid var(--gris-300);
+    }
+
+    .hero-titulo {
+      color: var(--gris-900);
+      letter-spacing: -0.02em;
+    }
+
+    /* Regla corta bajo el título, como sello institucional */
+    .hero-titulo::after {
+      content: '';
+      display: block;
+      width: 46px;
+      height: 3px;
+      margin-top: 0.7rem;
+      border-radius: 2px;
+      background: var(--udep-azul);
+    }
+
+    /* ---------------------------------------------------------------
+       TARJETAS DE SIMULADOR
+       --------------------------------------------------------------- */
+    .sim-card {
+      background: #fff;
+      border: 1px solid var(--gris-300);
+      border-radius: 12px;
+      padding: 1.5rem 1.5rem 1.35rem;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+      transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+    }
+
+    /* La disponible lleva un filo azul a la izquierda: se distingue de un vistazo */
+    a.sim-card {
+      border-left: 3px solid var(--udep-azul);
+    }
+
+    a.sim-card:hover {
+      border-color: var(--udep-azul);
+      box-shadow: 0 8px 24px rgba(0, 75, 135, 0.14);
+      transform: translateY(-2px);
+    }
+
+    a.sim-card:focus-visible {
+      outline: 2px solid var(--udep-azul);
+      outline-offset: 3px;
+    }
+
+    /* Las pendientes se hunden: fondo gris y borde discontinuo, pero legibles */
+    .sim-card--pendiente {
+      background: var(--gris-100);
+      border-style: dashed;
+      border-color: var(--gris-300);
+      box-shadow: none;
+    }
+
+    .sim-card--pendiente .sim-card-titulo { color: var(--gris-500); }
+    .sim-card--pendiente .sim-card-desc,
+    .sim-card--pendiente .sim-temas { color: var(--gris-400); }
+    .sim-card--pendiente .sim-temas li::before { background: var(--gris-400); }
+
+    .sim-card-titulo {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--gris-900);
+      letter-spacing: -0.01em;
+    }
+
+    .sim-card-desc {
+      font-size: 0.86rem;
+      line-height: 1.6;
+      color: var(--gris-700);
+      margin-top: 0.5rem;
+    }
+
+    /* ---------------------------------------------------------------
+       ETIQUETAS DE ESTADO
+       --------------------------------------------------------------- */
+    .sim-etiqueta {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 0.22rem 0.6rem;
+      border-radius: 5px;
+      white-space: nowrap;
+      border: 1px solid transparent;
+    }
+
+    .sim-etiqueta--activo {
+      background: #dcfce7;
+      color: #15803d;
+      border-color: #86efac;
+    }
+
+    .sim-etiqueta--pendiente {
+      background: #fff;
+      color: var(--gris-500);
+      border-color: var(--gris-300);
+    }
+
+    /* ---------------------------------------------------------------
+       LISTA DE TEMAS
+       --------------------------------------------------------------- */
+    .sim-temas {
+      margin-top: 1rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid var(--gris-200);
+      font-size: 0.8rem;
+      color: var(--gris-700);
+      line-height: 1.8;
+    }
+
+    .sim-temas li { position: relative; padding-left: 1.05rem; }
+
+    /* Viñetas en gris medio: en la versión anterior eran casi blancas y
+       desaparecían en pantallas muy iluminadas. */
+    .sim-temas li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.68em;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--udep-azul);
+    }
+
+    .sim-abrir {
+      margin-top: 1.15rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid var(--gris-200);
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: var(--udep-azul);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    a.sim-card:hover .sim-abrir-flecha { transform: translateX(3px); }
+    .sim-abrir-flecha { transition: transform .18s ease; }
+
+    .pie {
+      border-top: 1px solid var(--gris-300);
+      background: #fff;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col">
+
+  <div class="barra-udep"></div>
+
+  <header class="cabecera px-6 py-3.5">
+    <div class="max-w-5xl mx-auto w-full flex items-center gap-3.5">
+      <span class="bg-[#004b87] text-white font-bold text-xs px-2.5 py-1 rounded tracking-wide">UDEP</span>
+      <div>
+        <h1 class="text-base font-semibold tracking-tight" style="color: var(--gris-900);">
+          Gestión de la Construcción · Simuladores
+        </h1>
+        <div class="text-xs" style="color: var(--gris-500);">Universidad de Piura • Facultad de Ingeniería • 02GDC 2026-2</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 px-6 py-10 sm:py-14">
+    <div class="max-w-5xl mx-auto w-full">
+
+      <section class="mb-10">
+        <h2 class="hero-titulo text-2xl sm:text-3xl font-bold">
+          Herramientas de estudio del curso
+        </h2>
+        <p class="mt-5 text-[0.95rem] leading-relaxed max-w-2xl" style="color: var(--gris-700);">
+          Herramientas para preparar las prácticas calificadas de <strong style="color: var(--gris-900);">Gestión de la
+          Construcción (GDC)</strong>. Los temas de cada práctica se toman de las prácticas de años anteriores y de lo
+          anunciado en clase; se confirman cuando la ingeniera publica el alcance.
+        </p>
+      </section>
+
+      <section class="grid gap-5 sm:grid-cols-2">
+
+        <!-- PC1 — disponible (cuaderno de obra) -->
+        <a href="../index.html" class="sim-card">
+          <div class="flex items-start justify-between gap-3">
+            <div class="sim-card-titulo">Práctica Calificada 1</div>
+            <span class="sim-etiqueta sim-etiqueta--activo">Disponible</span>
+          </div>
+          <p class="sim-card-desc">
+            Cuaderno de obra: temario, banco de ejercicios resueltos, qué cae en los exámenes, repaso rápido y avance.
+          </p>
+          <ul class="sim-temas flex-1">
+            <li>Los 8 ítems del check-list de la Unidad 2</li>
+            <li>Alcance del producto vs. alcance del proyecto</li>
+            <li>PMPO: precio de materiales con flete en dos tramos</li>
+            <li>Presupuesto por contrata vs. administración directa</li>
+          </ul>
+          <div class="sim-abrir">
+            Abrir cuaderno
+            <span class="sim-abrir-flecha" aria-hidden="true">→</span>
+          </div>
+        </a>
+
+        <div class="sim-card sim-card--pendiente">
+          <div class="flex items-start justify-between gap-3">
+            <div class="sim-card-titulo">Práctica Calificada 2</div>
+            <span class="sim-etiqueta sim-etiqueta--pendiente">Próximamente</span>
+          </div>
+          <p class="sim-card-desc">15 de octubre. Programación de obra, según las PC2 de años anteriores.</p>
+          <ul class="sim-temas flex-1">
+            <li>Red, ruta crítica y holguras</li>
+            <li>PERT y probabilidad de plazo</li>
+            <li>Gantt sobre calendario</li>
+            <li>Histograma y curva S</li>
+            <li>Aceleración (crashing) y mano de obra</li>
+          </ul>
+        </div>
+
+        <div class="sim-card sim-card--pendiente">
+          <div class="flex items-start justify-between gap-3">
+            <div class="sim-card-titulo">Práctica Calificada 3</div>
+            <span class="sim-etiqueta sim-etiqueta--pendiente">Próximamente</span>
+          </div>
+          <p class="sim-card-desc">29 de octubre. Control de costos y gestión de riesgos, según la PC3 de 2025-I.</p>
+          <ul class="sim-temas flex-1">
+            <li>Fórmula polinómica y reajuste</li>
+            <li>Valor ganado: SPI, CPI y proyección</li>
+            <li>Matriz de riesgos</li>
+            <li>Métricas de calidad</li>
+          </ul>
+        </div>
+
+        <div class="sim-card sim-card--pendiente">
+          <div class="flex items-start justify-between gap-3">
+            <div class="sim-card-titulo">Examen Final</div>
+            <span class="sim-etiqueta sim-etiqueta--pendiente">Próximamente</span>
+          </div>
+          <p class="sim-card-desc">Fecha según cronograma.</p>
+          <ul class="sim-temas flex-1">
+            <li>Integra programación, costos y control</li>
+            <li>Horas hombre, hora máquina y líneas de balance</li>
+          </ul>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="pie px-6 py-5 mt-10">
+    <div class="max-w-5xl mx-auto w-full text-xs leading-relaxed" style="color: var(--gris-500);">
+      Material de apoyo para el estudio del curso 02GDC (Mgtr. Ing. Gabriela Chávez, Universidad de Piura).
+      Los resultados son orientativos: contrasta siempre con el enunciado y el solucionario de tu práctica.
+    </div>
+  </footer>
+
+</body>
+</html>
